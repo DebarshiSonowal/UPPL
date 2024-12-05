@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:uppl/Constants/routes.dart';
 
 import '../../UI/AddMember/add_member_details_screen.dart';
@@ -7,15 +8,27 @@ import '../../UI/AddMember/save_member_details_screen.dart';
 import '../../UI/Auth/forget_password_screen.dart';
 import '../../UI/Auth/forgot_password_otp_screen.dart';
 import '../../UI/Auth/login_otp_screen.dart';
+import '../../UI/Auth/login_otp_verify_screen.dart';
 import '../../UI/Auth/login_screen.dart';
 import '../../UI/Auth/provide_details_screen.dart';
 import '../../UI/Auth/saved_details_screen.dart';
+import '../../UI/Auth/signup_otp_screen.dart';
 import '../../UI/Auth/signup_screen.dart';
+import '../../UI/Common/image_viewer.dart';
 import '../../UI/Dashboard/dashboard_screen.dart';
+import '../../UI/Dashboard/family_view_details_member.dart';
+import '../../UI/Dashboard/joined_referral_view_details_member.dart';
+import '../../UI/Dashboard/member_data_screen.dart';
+import '../../UI/Dashboard/referral_family_view_details_member.dart';
+import '../../UI/Dashboard/view_list_screen.dart';
+import '../../UI/Family/update_family_details_screen.dart';
 import '../../UI/Home/home_screen.dart';
+import '../../UI/Profile/Widgets/validation_screen.dart';
 import '../../UI/Profile/complete_profile.dart';
 import '../../UI/Profile/profile_screen.dart';
+import '../../UI/Profile/update_family_profile.dart';
 import '../../UI/Splash/splash_screen.dart';
+import '../../UI/Verified/verified_screen.dart';
 
 part 'app_router.gr.dart';
 
@@ -31,11 +44,19 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           path: CustomRoutes.loginScreen,
-          page: LoginRoute.page,
+          page: LoginOtpRoute.page,
         ),
         AutoRoute(
           path: CustomRoutes.loginOtpScreen,
           page: LoginOtpRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.loginOtpVerifyScreen,
+          page: LoginOtpVerifyRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.signupOtpVerifyScreen,
+          page: SignupOtpRoute.page,
         ),
         AutoRoute(
           path: CustomRoutes.signupScreen,
@@ -68,12 +89,36 @@ class AppRouter extends RootStackRouter {
           page: DashboardRoute.page,
         ),
         AutoRoute(
+          path: CustomRoutes.viewListScreen,
+          page: ViewListRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.viewDetailsMemberScreen,
+          page: JoinedReferralViewDetailsMemberRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.referralFamilyViewDetailsMemberScreen,
+          page: ReferralFamilyViewDetailsMemberRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.familyViewDetailsMemberScreen,
+          page: FamilyViewDetailsMemberRoute.page,
+        ),
+        AutoRoute(
           path: CustomRoutes.profileScreen,
           page: ProfileRoute.page,
         ),
         AutoRoute(
           path: CustomRoutes.completeProfileScreen,
           page: CompleteProfileRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.updateFamilyDetailsScreen,
+          page: UpdateFamilyDetailsRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.validationScreen,
+          page: ValidationRoute.page,
         ),
 
         //Add
@@ -88,6 +133,18 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: CustomRoutes.saveMemberDetailsScreen,
           page: SaveMemberDetailsRoute.page,
+        ),
+
+        //Image
+        AutoRoute(
+          path: CustomRoutes.customImageViewer,
+          page: CustomImageViewerRoute.page,
+        ),
+
+        //verification
+        AutoRoute(
+          path: CustomRoutes.verifiedScreen,
+          page: VerifiedRoute.page,
         ),
       ];
 }

@@ -57,6 +57,19 @@ dependencies:
   readmore: ^3.0.0
   fl_chart: ^0.69.0
   linear_progress_bar: ^1.1.2
+  flutter_svprogresshud: ^1.1.0
+  awesome_snackbar_content: ^0.1.4
+  flutter_datetime_picker_plus: ^2.2.0
+  tab_container: ^3.5.3
+  #  flutter_otp_text_field: ^1.2.0
+  screenshot: ^3.0.0
+  path_provider: ^2.1.5
+  #  file_picker: ^8.1.4
+  share_plus: ^10.1.2
+  image_picker: ^1.1.2
+  dropdown_search: ^6.0.1
+  pinput: ^5.0.0
+  open_file: ^3.5.10
 
 dev_dependencies:
   flutter_test:

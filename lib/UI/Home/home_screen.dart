@@ -1,15 +1,16 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uppl/API/api_services.dart';
 import 'package:uppl/Constants/configuration.dart';
-import 'package:uppl/Constants/routes.dart';
-import 'package:uppl/Navigation/Router/app_router.dart';
+import 'package:uppl/Repository/repository.dart';
 
 import '../../Constants/assets.dart';
+import '../../Constants/routes.dart';
+import '../../Models/Member/member_details_model.dart';
 import '../CommonWidgets/custom_nav_drawer.dart';
 
 @RoutePage()
@@ -50,108 +51,126 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 1.w,
-                          vertical: 2.h,
+                    GestureDetector(
+                      onTap: () {
+                        AutoRouter.of(context)
+                            .pushNamed(CustomRoutes.dashboardScreen);
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.dashboard,
-                              size: 35.sp,
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              "Dashboard",
-                              style: Configuration.primaryFont(
-                                fontSize: 15.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                // Add other text styling as needed
+                        child: Container(
+                          width: 30.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 1.w,
+                            vertical: 2.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.dashboard,
+                                size: 35.sp,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Dashboard",
+                                style: Configuration.primaryFont(
+                                  fontSize: 15.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  // Add other text styling as needed
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 1.w,
-                          vertical: 2.h,
+                    GestureDetector(
+                      onTap: () {
+                        AutoRouter.of(context)
+                            .pushNamed(CustomRoutes.addMemberScreen);
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.people,
-                              size: 35.sp,
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              "Add Member",
-                              style: Configuration.primaryFont(
-                                fontSize: 15.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                // Add other text styling as needed
+                        child: Container(
+                          width: 30.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 1.w,
+                            vertical: 2.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.people,
+                                size: 35.sp,
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Add Member",
+                                style: Configuration.primaryFont(
+                                  fontSize: 15.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  // Add other text styling as needed
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Container(
-                        width: 30.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 1.w,
-                          vertical: 2.h,
+                    GestureDetector(
+                      onTap: () {
+                        AutoRouter.of(context)
+                            .pushNamed(CustomRoutes.profileScreen);
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 35.sp,
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              "Your Profile",
-                              style: Configuration.primaryFont(
-                                fontSize: 15.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                // Add other text styling as needed
+                        child: Container(
+                          width: 30.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 1.w,
+                            vertical: 2.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.person,
+                                size: 35.sp,
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Your Profile",
+                                style: Configuration.primaryFont(
+                                  fontSize: 15.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  // Add other text styling as needed
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -189,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           "View All",
                           style: Configuration.primaryFont(
-                            fontSize: 13.sp,
+                            fontSize: 12.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             // Add other text styling as needed
@@ -323,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 "View All",
                                 style: Configuration.primaryFont(
-                                  fontSize: 13.sp,
+                                  fontSize: 12.sp,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   // Add other text styling as needed
@@ -483,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           "View All",
                           style: Configuration.primaryFont(
-                            fontSize: 13.sp,
+                            fontSize: 12.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             // Add other text styling as needed
@@ -621,7 +640,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Text(
                                           "View All",
                                           style: Configuration.primaryFont(
-                                            fontSize: 12.sp,
+                                            fontSize: 11.sp,
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             // Add other text styling as needed
@@ -678,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Text(
                                           "View All",
                                           style: Configuration.primaryFont(
-                                            fontSize: 12.sp,
+                                            fontSize: 11.sp,
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             // Add other text styling as needed
@@ -723,5 +742,93 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: Configuration.bottomNavigationBar(context),
     );
+  }
+
+  void fetchDetails(BuildContext context) async {
+    final responseJson = await ApiService.instance.getMemberDetails(context);
+    if (responseJson.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setData(responseJson.data as MemberDetailsData);
+    }
+    final response = await ApiService.instance.generateJSON(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false).setPartyDistricts(
+          response.intermediateData.data.partyDistricts ?? []);
+      Provider.of<Repository>(context, listen: false)
+          .setDistricts(response.intermediateData.data.districts ?? []);
+      Provider.of<Repository>(context, listen: false).setAssemblyConstituencies(
+          response.intermediateData.data.assemblyConstituencies ?? []);
+      final list = response
+          .intermediateData.data.btcAssemblyConstituencies?.values
+          .toList();
+      Provider.of<Repository>(context, listen: false)
+          .setConstituency(list ?? []);
+      final temp = response.intermediateData.data.btcPrimaries?.values.toList();
+      Provider.of<Repository>(context, listen: false).setBTCConstituency(
+          response.intermediateData.data.btcConstituency ?? []);
+      final tempList = (response.intermediateData.data.booths!.values.toList());
+      Provider.of<Repository>(context, listen: false)
+          .setBooths(tempList.expand((innerList) => innerList).toList());
+      Provider.of<Repository>(context, listen: false).setPrimary(temp ?? []);
+      Provider.of<Repository>(context, listen: false)
+          .setVillages(response.intermediateData.data.villages ?? []);
+      debugPrint(
+          "Setting ${response.intermediateData.data.partyDistricts?.length} ${response.intermediateData.data.districts?.length} ${response.intermediateData.data.assemblyConstituencies?.length} ${response.intermediateData.data.btcAssemblyConstituencies?.length} ${response.intermediateData.data.btcPrimaries?.values}");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchDetails(context);
+      fetchProfileData(context);
+      fetchDropdown(context);
+      setState(() {
+        Configuration.currentIndex = 0;
+      });
+    });
+  }
+
+  void fetchDropdown(BuildContext context) async {
+    final response = await ApiService.instance.getDropdownData(context);
+    response.map(
+        success: (val) {
+          if (response.status == 1) {
+            Provider.of<Repository>(context, listen: false)
+                .setCastes(val.data.castes ?? []);
+            var list = val.data.categories.values.toList();
+            Provider.of<Repository>(context, listen: false)
+                .setCategories(list ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setReligions(val.data.religions);
+            Provider.of<Repository>(context, listen: false)
+                .setProfessions(val.data.professions ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setCountry(val.data.country.values.toList() ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setMotherTounge(val.data.motherTongue);
+            Provider.of<Repository>(context, listen: false)
+                .setEducationLevels(val.data.educationLevels);
+            Provider.of<Repository>(context, listen: false).setRelationship(val
+                    .data.relationships.values
+                    .map((e) => e.toString())
+                    .toList() ??
+                []);
+          }
+        },
+        error: (err) {});
+  }
+
+  void fetchProfileData(BuildContext context) async {
+    final response = await ApiService.instance.getProfileData(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setProfileData(response.data.profileData);
+      Provider.of<Repository>(context, listen: false)
+          .setSocialData(response.data.socialDetails!);
+      Provider.of<Repository>(context, listen: false)
+          .setPersonalData(response.data.personalDetails);
+    }
   }
 }

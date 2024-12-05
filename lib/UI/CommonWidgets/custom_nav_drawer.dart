@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/Constants/routes.dart';
-import 'package:uppl/Navigation/Router/app_router.dart';
+import 'package:uppl/Helper/toast.dart';
+import 'package:uppl/Storage/config_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Constants/assets.dart';
 import '../../Constants/configuration.dart';
@@ -44,7 +46,7 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
           ),
         ),
         ListTile(
-          onTap: (){
+          onTap: () {
             AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
           },
           leading: Icon(
@@ -58,12 +60,16 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
+          onTap: () {
             // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
+            AutoRouter.of(context).pushNamed(CustomRoutes.dashboardScreen);
           },
           leading: Icon(
             Icons.dashboard,
@@ -76,11 +82,17 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
+          onTap: () {
+            CustomToast.showWarningToast(
+                context, "Coming Soon", "We are adding more features");
+            AutoRouter.of(context).popForced();
             // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
           },
           leading: Icon(
@@ -94,11 +106,17 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
+          onTap: () {
+            CustomToast.showWarningToast(
+                context, "Coming Soon", "We are adding more features");
+            AutoRouter.of(context).popForced();
             // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
           },
           leading: Icon(
@@ -112,11 +130,17 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
+          onTap: () {
+            CustomToast.showWarningToast(
+                context, "Coming Soon", "We are adding more features");
+            AutoRouter.of(context).popForced();
             // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
           },
           leading: Icon(
@@ -130,11 +154,17 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
+          onTap: () {
+            CustomToast.showWarningToast(
+                context, "Coming Soon", "We are adding more features");
+            AutoRouter.of(context).popForced();
             // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
           },
           leading: Icon(
@@ -148,11 +178,17 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
+          onTap: () {
+            CustomToast.showWarningToast(
+                context, "Coming Soon", "We are adding more features");
+            AutoRouter.of(context).popForced();
             // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
           },
           leading: Icon(
@@ -166,12 +202,18 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
         ListTile(
-          onTap: (){
-            AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
+          onTap: () {
+            // AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
+            CustomToast.showWarningToast(
+                context, "Coming Soon", "We are adding more features");
+            AutoRouter.of(context).popForced();
           },
           leading: Icon(
             Icons.currency_rupee,
@@ -184,9 +226,58 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
               fontSize: 15.sp,
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios,color: Configuration.secondaryColor,),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            color: Configuration.secondaryColor,
+          ),
         ),
         const Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                launchURL(
+                    "https://sites.google.com/view/www-upplofficial-org/data-deletion?authuser=6");
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 2.w,
+                  vertical: 1.h,
+                ),
+                child: Text(
+                  "Account Deletion",
+                  style: Configuration.primaryFont(
+                    color: Colors.black,
+                    fontSize: 12.sp,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                launchURL(
+                    "https://sites.google.com/view/www-upplofficial-org/privacy-policy");
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 2.w,
+                  vertical: 1.h,
+                ),
+                child: Text(
+                  "Privacy Policy",
+                  style: Configuration.primaryFont(
+                    color: Colors.black,
+                    fontSize: 12.sp,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // const Divider(),
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 10.w,
@@ -195,7 +286,11 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Configuration.primaryColor,
             ),
-            onPressed: () {},
+            onPressed: () {
+              ConfigStorage.instance.logout();
+              AutoRouter.of(context).popUntilRoot();
+              AutoRouter.of(context).pushNamed(CustomRoutes.splashScreen);
+            },
             child: Text(
               "Log Out",
               style: Configuration.primaryFont(
@@ -226,5 +321,13 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
         ),
       ],
     );
+  }
+
+  Future<void> launchURL(String s) async {
+    if (await canLaunchUrl(Uri.parse(s))) {
+      await launchUrl(Uri.parse(s));
+    } else {
+      throw 'Could not launch $s';
+    }
   }
 }

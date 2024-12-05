@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/Constants/assets.dart';
 import 'package:uppl/Constants/routes.dart';
+import 'package:uppl/UI/Common/membership_card_view.dart';
 
 class Configuration {
   static const primaryColor = Color(0xffFDEA00);
@@ -16,6 +17,10 @@ class Configuration {
   static const subTitleColor = Color(0xff2C8556);
   static const titleColor = Color(0xff008746);
   static const navBackgroundColor = Color(0xffFFFDEB);
+  static const errorColor = Colors.red;
+  static const successColor = Colors.green;
+
+  static int currentIndex = 0;
 
   /// This function generates a TextStyle with a fixed font family,
   /// allowing customizable size, color, and weight.
@@ -52,6 +57,36 @@ class Configuration {
     FontWeight? fontWeight,
   }) {
     return CupertinoButton(
+      padding: EdgeInsets.symmetric(
+        horizontal: 3.w,
+      ),
+      color: bgColor,
+      onPressed: () => onPressed(),
+      child: Text(
+        text,
+        style: primaryFont(
+          fontSize: fontSize ?? 14,
+          color: fontColor ?? Colors.white,
+          fontWeight: fontWeight ?? FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  static CupertinoButton rectangleButton2({
+    required Function onPressed,
+    required String text,
+    required Color bgColor,
+    double? fontSize,
+    Color? fontColor,
+    FontWeight? fontWeight,
+    double? height,
+  }) {
+    return CupertinoButton(
+      padding: EdgeInsets.symmetric(
+        horizontal: 3.w,
+        vertical: height != null ? height / 2 : 0,
+      ),
       color: bgColor,
       onPressed: () => onPressed(),
       child: Text(
@@ -139,29 +174,42 @@ class Configuration {
       ),
     ],
   );
-  static BottomNavigationBar bottomNavigationBar(BuildContext context)=>BottomNavigationBar(
-    selectedItemColor: Colors.black,
-    backgroundColor: Configuration.primaryColor,
-    onTap: (index){
-      switch (index) {
-        case 0: AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
-        case 1: AutoRouter.of(context).pushNamed(CustomRoutes.dashboardScreen);
-        case 2: AutoRouter.of(context).pushNamed(CustomRoutes.profileScreen);
-      }
-    },
-    items: const [
-      BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.dashboard),label: "Dashboard"),
-      BottomNavigationBarItem(icon: Icon(Icons.person),label: "Profile"),
 
-    ],
-  );
-
+  static BottomNavigationBar bottomNavigationBar(BuildContext context) =>
+      BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentIndex,
+        selectedItemColor: Colors.black,
+        backgroundColor: Configuration.primaryColor,
+        onTap: (index) async {
+          if (index != currentIndex) {
+            currentIndex = index;
+            switch (index) {
+              case 1:
+                AutoRouter.of(context).pushNamed(CustomRoutes.addMemberScreen);
+              case 2:
+                AutoRouter.of(context).pushNamed(CustomRoutes.dashboardScreen);
+              case 3:
+                AutoRouter.of(context).pushNamed(CustomRoutes.profileScreen);
+              default:
+                AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
+            }
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_add), label: "Add Person"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      );
 
   static Widget upwardAronai = SvgPicture.asset(
     CustomAssets.aronaiUpwards,
     fit: BoxFit.cover,
-      width: 100.w,
+    width: 100.w,
   );
   static Widget upwardAronaiColor = SvgPicture.asset(
     CustomAssets.aronaiUpwardsColored,
@@ -190,7 +238,10 @@ class Configuration {
     end: Alignment.bottomCenter,
   );
   static const LinearGradient addMemberGradient = LinearGradient(
-    colors: [Color(0xFFD1E3FF), Color(0xFFFFF689),],
+    colors: [
+      Color(0xFFD1E3FF),
+      Color(0xFFFFF689),
+    ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
@@ -202,4 +253,26 @@ class Configuration {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
+
+  static Future<void> showMembershipCard({
+    required BuildContext context,
+    required String name,
+    required String district,
+    required String photo,
+    required int memberId,
+    required String joiningDate,
+  }) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return MembershipCardView(
+          name: name,
+          district: district,
+          photo: photo,
+          memberId: "$memberId",
+          joiningDate: joiningDate,
+        );
+      },
+    );
+  }
 }

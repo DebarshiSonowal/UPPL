@@ -1,11 +1,15 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uppl/Constants/routes.dart';
+import 'package:uppl/Repository/repository.dart';
 
+import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
-import '../../Constants/routes.dart';
+import '../../Navigation/Router/app_router.dart';
 import '../CommonWidgets/custom_nav_drawer.dart';
 import '../CommonWidgets/pie_chart.dart';
 
@@ -18,6 +22,21 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  int start = 0, length = 10;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchAudienceDemographic(context);
+      fetchFamilyData(context);
+      fetchJoinedBy();
+      setState(() {
+        Configuration.currentIndex = 2;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,67 +55,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: EdgeInsets.symmetric(
                   horizontal: 6.w,
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Configuration.primaryColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
+                child: Consumer<Repository>(builder: (context, data, _) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Configuration.primaryColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.black,
+                      ),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                            data.memberData?.membershipCardData.photo ?? ""),
+                      ),
                     ),
-                  ),
-                  height: 25.w,
-                  width: 25.w,
-                ),
+                    height: 25.w,
+                    width: 25.w,
+                  );
+                }),
               ),
               SizedBox(
                 height: 1.h,
               ),
-              Text(
-                "Rajesh Chauhan",
-                style: Configuration.primaryFont(
-                  fontSize: 17.sp,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  // Add other text styling as needed
-                ),
-              ),
+              Consumer<Repository>(builder: (context, data, _) {
+                return Text(
+                  "${data.memberData?.membershipCardData.name}",
+                  style: Configuration.primaryFont(
+                    fontSize: 17.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    // Add other text styling as needed
+                  ),
+                );
+              }),
               SizedBox(
                 height: 0.3.h,
               ),
-              Text(
-                "My Rank : 10",
-                style: Configuration.primaryFont(
-                  fontSize: 15.sp,
-                  color: Configuration.thirdColor,
-                  fontWeight: FontWeight.bold,
-                  // Add other text styling as needed
-                ),
-              ),
+              Consumer<Repository>(builder: (context, data, _) {
+                return Text(
+                  "My Rank : ${data.demographyData?.rank}",
+                  style: Configuration.primaryFont(
+                    fontSize: 15.sp,
+                    color: Configuration.thirdColor,
+                    fontWeight: FontWeight.bold,
+                    // Add other text styling as needed
+                  ),
+                );
+              }),
               SizedBox(
                 height: 0.3.h,
               ),
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: "My Referral Code: ",
-                    style: Configuration.primaryFont(
-                      fontSize: 15.sp,
-                      color: Configuration.subTextColor,
-                      fontWeight: FontWeight.bold,
-                      // Add other text styling as needed
+              Consumer<Repository>(builder: (context, data, _) {
+                return RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: "My Referral Code: ",
+                      style: Configuration.primaryFont(
+                        fontSize: 15.sp,
+                        color: Configuration.subTextColor,
+                        fontWeight: FontWeight.bold,
+                        // Add other text styling as needed
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: "DDCCBX",
-                    style: Configuration.primaryFont(
-                      fontSize: 15.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      // Add other text styling as needed
+                    TextSpan(
+                      text: "${data.memberData?.membershipCardData.refCode}",
+                      style: Configuration.primaryFont(
+                        fontSize: 15.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        // Add other text styling as needed
+                      ),
                     ),
-                  ),
-                ]),
-              ),
+                  ]),
+                );
+              }),
               SizedBox(
                 height: 0.5.h,
               ),
@@ -120,25 +151,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   horizontal: 4.w,
                 ),
                 decoration: BoxDecoration(
-                  color: Configuration.thirdColor,
+                  // color: Configuration.thirdColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      "10000",
-                      style: Configuration.primaryFont(
-                        fontSize: 22.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
-                      ),
-                    ),
+                    Consumer<Repository>(builder: (context, data, _) {
+                      return Text(
+                        "${data.joinedByReferralMember.length}",
+                        style: Configuration.primaryFont(
+                          fontSize: 22.sp,
+                          color: Configuration.thirdColor,
+                          fontWeight: FontWeight.bold,
+                          // Add other text styling as needed
+                        ),
+                      );
+                    }),
                     Text(
                       "Total Referred Members",
                       style: Configuration.primaryFont(
                         fontSize: 16.sp,
-                        color: Colors.white,
+                        color: Configuration.thirdColor,
                         fontWeight: FontWeight.bold,
                         // Add other text styling as needed
                       ),
@@ -149,39 +182,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 0.5.h,
               ),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  vertical: 1.5.h,
-                ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                ),
-                decoration: BoxDecoration(
-                  color: Configuration.thirdColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      "View List",
-                      style: Configuration.primaryFont(
-                        fontSize: 22.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
+              GestureDetector(
+                onTap: () {
+                  context.router.pushNamed(CustomRoutes.viewListScreen);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 1.5.h,
+                  ),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 4.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Configuration.thirdColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "View List",
+                        style: Configuration.primaryFont(
+                          fontSize: 22.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          // Add other text styling as needed
+                        ),
                       ),
-                    ),
-                    Text(
-                      "View Referred Members",
-                      style: Configuration.primaryFont(
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
+                      Text(
+                        "View Referred Members",
+                        style: Configuration.primaryFont(
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          // Add other text styling as needed
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -224,119 +262,156 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 2.h,
               ),
-              Text(
-                "Family Members",
-                style: Configuration.primaryFont(
-                  fontSize: 17.5.sp,
-                  color: Configuration.thirdColor,
-                  fontWeight: FontWeight.bold,
-                  // Add other text styling as needed
+              Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xfffff9b7),
                 ),
-              ),
-              SizedBox(
-                height: 3.h,
-              ),
-              Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 10.w,
+                  horizontal: 3.w,
+                  vertical: 1.h,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                width: double.infinity,
+                child: Column(
                   children: [
-                    SizedBox(
-                      width: 42.w,
-                      child: Text(
-                        "Mr Rahul Boro",
-                        style: Configuration.primaryFont(
-                          fontSize: 17.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          // Add other text styling as needed
+                    Row(
+                      children: [
+                        Text(
+                          "Family Members",
+                          style: Configuration.primaryFont(
+                            fontSize: 17.5.sp,
+                            color: Configuration.thirdColor,
+                            fontWeight: FontWeight.bold,
+                            // Add other text styling as needed
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    Text(
-                      "21 Years",
-                      style: Configuration.primaryFont(
-                        fontSize: 15.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
-                      ),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    Consumer<Repository>(builder: (context, data, _) {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          var item = data.familyDetail[index];
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 25.w,
+                                child: Center(
+                                  child: Text(
+                                    item.personalDetails.name,
+                                    style: Configuration.primaryFont(
+                                      fontSize: 14.sp,
+                                      color: Colors.black,
+                                      // fontWeight: FontWeight.bold,
+                                      // Add other text styling as needed
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              (item.membershipCard.userId == 0)
+                                  ? SizedBox(
+                                      width: 22.w,
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 2.w,
+                                            vertical: 1.h,
+                                          ),
+                                          child: Text(
+                                            "Validate",
+                                            style: Configuration.primaryFont(
+                                              fontSize: 14.sp,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold,
+                                              // Add other text styling as needed
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      width: 22.w,
+                                      child: Center(
+                                        child: Text(
+                                          "Verified",
+                                          style: Configuration.primaryFont(
+                                            fontSize: 14.sp,
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                            // Add other text styling as needed
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                              GestureDetector(
+                                onTap: () {
+                                  Configuration.showMembershipCard(
+                                      context: context,
+                                      name: item.membershipCard.name ?? "",
+                                      district:
+                                          item.membershipCard.district.name ??
+                                              "",
+                                      photo: item.membershipCard.photo ?? "",
+                                      memberId: item.membershipCard.id ?? 0,
+                                      joiningDate:
+                                          item.membershipCard!.joiningDate);
+                                },
+                                child: (item.membershipCard.userId == 0)
+                                    ? Icon(
+                                        FontAwesomeIcons.download,
+                                        size: 16.sp,
+                                        color: Colors.grey,
+                                      )
+                                    : Icon(
+                                        FontAwesomeIcons.download,
+                                        size: 16.sp,
+                                        color: Configuration.thirdColor,
+                                      ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  AutoRouter.of(context)
+                                      .push(FamilyViewDetailsMemberRoute(
+                                          id: item.membershipCard.id))
+                                      .then((_) {
+                                    fetchFamilyData(context);
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.remove_red_eye,
+                                  size: 16.sp,
+                                  color: Configuration.thirdColor,
+                                ),
+                              ),
+                              // Text(
+                              //   "${calculateAge(item.personalDetails.dateOfBirth)} Years",
+                              //   style: Configuration.primaryFont(
+                              //     fontSize: 15.sp,
+                              //     color: Colors.black,
+                              //     // fontWeight: FontWeight.bold,
+                              //     // Add other text styling as needed
+                              //   ),
+                              // ),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            height: 1.h,
+                          );
+                        },
+                        itemCount: data.familyDetail.length,
+                      );
+                    }),
+                    SizedBox(
+                      height: 3.h,
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10.w,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 42.w,
-                      child: Text(
-                        "Mrs Rimjim Boro",
-                        style: Configuration.primaryFont(
-                          fontSize: 17.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          // Add other text styling as needed
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "69 Years",
-                      style: Configuration.primaryFont(
-                        fontSize: 15.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10.w,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 42.w,
-                      child: Text(
-                        "Miss Tina Boro",
-                        style: Configuration.primaryFont(
-                          fontSize: 17.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          // Add other text styling as needed
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "21 Years",
-                      style: Configuration.primaryFont(
-                        fontSize: 15.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 3.h,
               ),
               GestureDetector(
                 onTap: () {
@@ -377,5 +452,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       bottomNavigationBar: Configuration.bottomNavigationBar(context),
     );
+  }
+
+  void fetchAudienceDemographic(BuildContext context) async {
+    final response = await ApiService.instance.getAudienceDemography(context);
+    final result = response.map(
+      success: (success) {
+        if (success.status == 1) {
+          // Access the data in the success case
+          Provider.of<Repository>(context, listen: false)
+              .setDemographyData(success.data);
+        }
+      },
+      error: (error) {
+        // Handle error case here
+      },
+    );
+  }
+
+  void fetchFamilyData(BuildContext context) async {
+    final response = await ApiService.instance.getFamilyDetails(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setFamilyDetails(response.data.familyDetails);
+    }
+  }
+
+  int calculateAge(String dateOfBirth) {
+    // Parse the input date
+    DateTime birthDate = DateTime.parse(dateOfBirth);
+    DateTime today = DateTime.now();
+
+    // Calculate age
+    int age = today.year - birthDate.year;
+
+    // Adjust age if the birthday hasn't occurred yet this year
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
+    }
+
+    return age;
+  }
+
+  void fetchJoinedBy() async {
+    final response =
+        await ApiService.instance.joinedByList(context, start, length);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setJoinedByReferralMember(response.data.data);
+    }
+    final response1 = await ApiService.instance
+        .unverifiedJoinedByList(context, start, length);
+    if (response1.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setUnverifiedJoinedByReferralMember(response1.data.data);
+    }
   }
 }

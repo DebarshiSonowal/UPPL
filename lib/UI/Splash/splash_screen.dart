@@ -1,12 +1,11 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/Constants/assets.dart';
 import 'package:uppl/Constants/configuration.dart';
 import 'package:uppl/Constants/routes.dart';
 import 'package:uppl/Navigation/Router/app_router.dart';
+import 'package:uppl/Storage/config_storage.dart';
 
 @RoutePage()
 class SplashScreen extends StatefulWidget {
@@ -71,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 80.w,
                 child: Configuration.rectangleButton(
                   onPressed: () {
-                    context.router.pushNamed(CustomRoutes.loginScreen);
+                    context.router.pushNamed(CustomRoutes.loginOtpScreen);
                   },
                   text: 'Log in Here',
                   bgColor: Configuration.thirdColor,
@@ -92,9 +91,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Future.delayed(const Duration(seconds: 2),(){
-    //   print("Something");
-    //     AutoRouter.of(context).push(const PageRouteInfo(HomeRoute.name));
-    // });
+    Future.delayed(const Duration(seconds: 0), () {
+      if (ConfigStorage.instance.isLoggedIn) {
+        AutoRouter.of(context).push(const PageRouteInfo(HomeRoute.name));
+      }
+    });
   }
 }

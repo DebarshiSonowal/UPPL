@@ -1,9 +1,9 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uppl/API/api_services.dart';
 import 'package:uppl/Constants/configuration.dart';
-import 'package:uppl/Constants/routes.dart';
+import 'package:uppl/Helper/toast.dart';
 import 'package:uppl/Navigation/Router/app_router.dart';
 
 import '../../Constants/assets.dart';
@@ -18,6 +18,7 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   bool agreed = false;
+  final mobile = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +81,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               horizontal: 4.w,
                             ),
                             child: TextField(
+                              controller: mobile,
                               cursorColor: Colors.black,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
@@ -117,17 +119,17 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
                                   width: 4.w,
                                   child: Checkbox(
                                       fillColor: WidgetStateProperty.all(
-                                        Configuration.thirdColor,
+                                        Colors.white,
                                       ),
                                       value: agreed,
-                                      checkColor: Colors.white,
+                                      activeColor: Colors.white,
+                                      checkColor: Configuration.thirdColor,
                                       onChanged: (val) {
                                         setState(() {
                                           agreed = val ?? false;
@@ -162,8 +164,24 @@ class _SignupScreenState extends State<SignupScreen> {
                                 backgroundColor: Color(0xffE4E4E4),
                               ),
                               onPressed: () {
-                                AutoRouter.of(context).pushNamed(
-                                    CustomRoutes.provideDetailsScreen);
+                                if (mobile.text.isEmpty ||
+                                    mobile.text.length != 10) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Please enter a valid 10-digit mobile number'),
+                                    ),
+                                  );
+                                } else if (!agreed) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Please agree to the terms and conditions'),
+                                    ),
+                                  );
+                                } else {
+                                  sendOtp(mobile.text);
+                                }
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -210,5 +228,17 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  void sendOtp(String mobile) async {
+    final response =
+        await ApiService.instance.sendRegistrationOTP(mobile, context);
+    if (response.status == 1) {
+      CustomToast.showSuccessToast(context, "Otp Sent", response.message);
+      AutoRouter.of(context).push(SignupOtpRoute(phonenumber: mobile));
+    } else {
+      CustomToast.showWarningToast(
+          context, "Otp Sent Failed", response.message);
+    }
   }
 }
