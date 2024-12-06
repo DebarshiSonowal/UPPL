@@ -24,8 +24,8 @@ mixin _$AudienceDemographyModel {
     required TResult Function(
             int status, String message, AudienceDemographyData? data, int code)
         success,
-    required TResult Function(
-            int status, String message, AudienceDemographyError error, int code)
+    required TResult Function(int status, String message,
+            AudienceDemographyError? error, int code)
         error,
   }) =>
       throw _privateConstructorUsedError;
@@ -34,8 +34,8 @@ mixin _$AudienceDemographyModel {
     TResult? Function(
             int status, String message, AudienceDemographyData? data, int code)?
         success,
-    TResult? Function(int status, String message, AudienceDemographyError error,
-            int code)?
+    TResult? Function(int status, String message,
+            AudienceDemographyError? error, int code)?
         error,
   }) =>
       throw _privateConstructorUsedError;
@@ -44,7 +44,7 @@ mixin _$AudienceDemographyModel {
     TResult Function(
             int status, String message, AudienceDemographyData? data, int code)?
         success,
-    TResult Function(int status, String message, AudienceDemographyError error,
+    TResult Function(int status, String message, AudienceDemographyError? error,
             int code)?
         error,
     required TResult orElse(),
@@ -242,8 +242,8 @@ class _$SuccessResponseImpl implements SuccessResponse {
     required TResult Function(
             int status, String message, AudienceDemographyData? data, int code)
         success,
-    required TResult Function(
-            int status, String message, AudienceDemographyError error, int code)
+    required TResult Function(int status, String message,
+            AudienceDemographyError? error, int code)
         error,
   }) {
     return success(status, message, data, code);
@@ -255,8 +255,8 @@ class _$SuccessResponseImpl implements SuccessResponse {
     TResult? Function(
             int status, String message, AudienceDemographyData? data, int code)?
         success,
-    TResult? Function(int status, String message, AudienceDemographyError error,
-            int code)?
+    TResult? Function(int status, String message,
+            AudienceDemographyError? error, int code)?
         error,
   }) {
     return success?.call(status, message, data, code);
@@ -268,7 +268,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
     TResult Function(
             int status, String message, AudienceDemographyData? data, int code)?
         success,
-    TResult Function(int status, String message, AudienceDemographyError error,
+    TResult Function(int status, String message, AudienceDemographyError? error,
             int code)?
         error,
     required TResult orElse(),
@@ -343,9 +343,9 @@ abstract class _$$ErrorResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int status, String message, AudienceDemographyError error, int code});
+      {int status, String message, AudienceDemographyError? error, int code});
 
-  $AudienceDemographyErrorCopyWith<$Res> get error;
+  $AudienceDemographyErrorCopyWith<$Res>? get error;
 }
 
 /// @nodoc
@@ -363,7 +363,7 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? error = null,
+    Object? error = freezed,
     Object? code = null,
   }) {
     return _then(_$ErrorResponseImpl(
@@ -375,10 +375,10 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      error: null == error
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as AudienceDemographyError,
+              as AudienceDemographyError?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -390,8 +390,12 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AudienceDemographyErrorCopyWith<$Res> get error {
-    return $AudienceDemographyErrorCopyWith<$Res>(_value.error, (value) {
+  $AudienceDemographyErrorCopyWith<$Res>? get error {
+    if (_value.error == null) {
+      return null;
+    }
+
+    return $AudienceDemographyErrorCopyWith<$Res>(_value.error!, (value) {
       return _then(_value.copyWith(error: value));
     });
   }
@@ -403,7 +407,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   const _$ErrorResponseImpl(
       {required this.status,
       required this.message,
-      required this.error,
+      this.error,
       required this.code});
 
   @override
@@ -411,7 +415,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @override
   final String message;
   @override
-  final AudienceDemographyError error;
+  final AudienceDemographyError? error;
   @override
   final int code;
 
@@ -448,8 +452,8 @@ class _$ErrorResponseImpl implements ErrorResponse {
     required TResult Function(
             int status, String message, AudienceDemographyData? data, int code)
         success,
-    required TResult Function(
-            int status, String message, AudienceDemographyError error, int code)
+    required TResult Function(int status, String message,
+            AudienceDemographyError? error, int code)
         error,
   }) {
     return error(status, message, this.error, code);
@@ -461,8 +465,8 @@ class _$ErrorResponseImpl implements ErrorResponse {
     TResult? Function(
             int status, String message, AudienceDemographyData? data, int code)?
         success,
-    TResult? Function(int status, String message, AudienceDemographyError error,
-            int code)?
+    TResult? Function(int status, String message,
+            AudienceDemographyError? error, int code)?
         error,
   }) {
     return error?.call(status, message, this.error, code);
@@ -474,7 +478,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
     TResult Function(
             int status, String message, AudienceDemographyData? data, int code)?
         success,
-    TResult Function(int status, String message, AudienceDemographyError error,
+    TResult Function(int status, String message, AudienceDemographyError? error,
             int code)?
         error,
     required TResult orElse(),
@@ -521,14 +525,14 @@ abstract class ErrorResponse implements AudienceDemographyModel {
   const factory ErrorResponse(
       {required final int status,
       required final String message,
-      required final AudienceDemographyError error,
+      final AudienceDemographyError? error,
       required final int code}) = _$ErrorResponseImpl;
 
   @override
   int get status;
   @override
   String get message;
-  AudienceDemographyError get error;
+  AudienceDemographyError? get error;
   @override
   int get code;
 
