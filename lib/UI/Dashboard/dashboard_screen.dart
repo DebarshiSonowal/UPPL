@@ -455,13 +455,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void fetchAudienceDemographic(BuildContext context) async {
-    final response = await ApiService.instance.getAudienceDemography(context);
+    final response =
+        await ApiService.instance(context).getAudienceDemography(context);
     final result = response.map(
       success: (success) {
         if (success.status == 1) {
           // Access the data in the success case
           Provider.of<Repository>(context, listen: false)
-              .setDemographyData(success.data);
+              .setDemographyData(success.data!);
         }
       },
       error: (error) {
@@ -471,10 +472,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void fetchFamilyData(BuildContext context) async {
-    final response = await ApiService.instance.getFamilyDetails(context);
+    final response =
+        await ApiService.instance(context).getFamilyDetails(context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setFamilyDetails(response.data.familyDetails);
+          .setFamilyDetails(response.data!.familyDetails);
     }
   }
 
@@ -497,16 +499,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void fetchJoinedBy() async {
     final response =
-        await ApiService.instance.joinedByList(context, start, length);
+        await ApiService.instance(context).joinedByList(context, start, length);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setJoinedByReferralMember(response.data.data);
+          .setJoinedByReferralMember(response.data!.data);
     }
-    final response1 = await ApiService.instance
+    final response1 = await ApiService.instance(context)
         .unverifiedJoinedByList(context, start, length);
     if (response1.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setUnverifiedJoinedByReferralMember(response1.data.data);
+          .setUnverifiedJoinedByReferralMember(response1.data!.data);
     }
   }
 }

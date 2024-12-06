@@ -232,7 +232,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void sendOtp(String mobile) async {
     final response =
-        await ApiService.instance.sendRegistrationOTP(mobile, context);
+        await ApiService.instance(context).sendRegistrationOTP(mobile, context);
     if (response.status == 1) {
       CustomToast.showSuccessToast(context, "Otp Sent", response.message);
       AutoRouter.of(context).push(SignupOtpRoute(phonenumber: mobile));

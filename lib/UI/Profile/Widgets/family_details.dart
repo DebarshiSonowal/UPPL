@@ -609,7 +609,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
 
   void addFamilyDetails(BuildContext context) async {
     final data = Provider.of<Repository>(context, listen: false);
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .updateFamilyMemberPersonalDetails(
             context,
             null,
@@ -640,8 +640,8 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
   }
 
   void fetchFamilyDetails(BuildContext context, int? memberId) async {
-    final response =
-        await ApiService.instance.getReferredFamilyDetails(context, memberId);
+    final response = await ApiService.instance(context)
+        .getReferredFamilyDetails(context, memberId);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setReferredMemberFamilyDetails(response.data.familyDetails);

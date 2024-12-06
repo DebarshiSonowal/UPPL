@@ -294,8 +294,13 @@ class _SocialScreenState extends State<SocialScreen> {
         .memberData
         ?.personalDetails
         .memberId;
-    final response = await ApiService.instance.updateSocialDetails(context, id,
-        whatsapp.text, facebook.text, twitter.text, instagram.text);
+    final response = await ApiService.instance(context).updateSocialDetails(
+        context,
+        id,
+        whatsapp.text,
+        facebook.text,
+        twitter.text,
+        instagram.text);
     if (response.status == 1) {
       whatsapp.text = response.data.member.first.alternateNumber ?? "";
       facebook.text = response.data.member.first.facebookUrl ?? "";
@@ -318,12 +323,12 @@ class _SocialScreenState extends State<SocialScreen> {
   }
 
   void fetchProfileData(BuildContext context) async {
-    final response = await ApiService.instance.getProfileData(context);
+    final response = await ApiService.instance(context).getProfileData(context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setProfileData(response.data.profileData);
+          .setProfileData(response.data!.profileData);
       Provider.of<Repository>(context, listen: false)
-          .setSocialData(response.data.socialDetails);
+          .setSocialData(response.data!.socialDetails);
     }
   }
 }

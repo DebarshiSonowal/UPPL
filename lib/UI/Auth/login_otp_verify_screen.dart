@@ -196,8 +196,8 @@ class _LoginOtpVerifyScreenState extends State<LoginOtpVerifyScreen> {
   }
 
   void login(BuildContext context, otp) async {
-    final response =
-        await ApiService.instance.login(widget.phonenumber, otp, context);
+    final response = await ApiService.instance(context)
+        .login(widget.phonenumber, otp, context);
     if (response.status == 1) {
       AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
     }

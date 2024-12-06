@@ -19,24 +19,39 @@ mixin _$RegenerateTokenModel {
   String get message => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)
+    TResult Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)
         $default, {
     required TResult Function(String message) withError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)?
+    TResult? Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)?
         $default, {
     TResult? Function(String message)? withError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)?
+    TResult Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)?
         $default, {
     TResult Function(String message)? withError,
     required TResult orElse(),
@@ -116,6 +131,7 @@ abstract class _$$RegenerateTokenModelImplCopyWith<$Res>
   $Res call(
       {int status,
       String message,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       RegenerateTokenData? data,
       RegenerateTokenError? error,
       int code});
@@ -202,7 +218,7 @@ class _$RegenerateTokenModelImpl implements _RegenerateTokenModel {
   const _$RegenerateTokenModelImpl(
       {required this.status,
       required this.message,
-      this.data,
+      @JsonKey(includeFromJson: false, includeToJson: false) this.data,
       this.error,
       required this.code});
 
@@ -211,6 +227,7 @@ class _$RegenerateTokenModelImpl implements _RegenerateTokenModel {
   @override
   final String message;
   @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final RegenerateTokenData? data;
   @override
   final RegenerateTokenError? error;
@@ -251,8 +268,13 @@ class _$RegenerateTokenModelImpl implements _RegenerateTokenModel {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)
+    TResult Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)
         $default, {
     required TResult Function(String message) withError,
   }) {
@@ -262,8 +284,13 @@ class _$RegenerateTokenModelImpl implements _RegenerateTokenModel {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)?
+    TResult? Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)?
         $default, {
     TResult? Function(String message)? withError,
   }) {
@@ -273,8 +300,13 @@ class _$RegenerateTokenModelImpl implements _RegenerateTokenModel {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)?
+    TResult Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)?
         $default, {
     TResult Function(String message)? withError,
     required TResult orElse(),
@@ -321,6 +353,7 @@ abstract class _RegenerateTokenModel implements RegenerateTokenModel {
   const factory _RegenerateTokenModel(
       {required final int status,
       required final String message,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       final RegenerateTokenData? data,
       final RegenerateTokenError? error,
       required final int code}) = _$RegenerateTokenModelImpl;
@@ -328,6 +361,7 @@ abstract class _RegenerateTokenModel implements RegenerateTokenModel {
   int get status;
   @override
   String get message;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   RegenerateTokenData? get data;
   RegenerateTokenError? get error;
   int get code;
@@ -416,8 +450,13 @@ class _$RegenerateTokenModelWithErrorImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)
+    TResult Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)
         $default, {
     required TResult Function(String message) withError,
   }) {
@@ -427,8 +466,13 @@ class _$RegenerateTokenModelWithErrorImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)?
+    TResult? Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)?
         $default, {
     TResult? Function(String message)? withError,
   }) {
@@ -438,8 +482,13 @@ class _$RegenerateTokenModelWithErrorImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int status, String message, RegenerateTokenData? data,
-            RegenerateTokenError? error, int code)?
+    TResult Function(
+            int status,
+            String message,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            RegenerateTokenData? data,
+            RegenerateTokenError? error,
+            int code)?
         $default, {
     TResult Function(String message)? withError,
     required TResult orElse(),

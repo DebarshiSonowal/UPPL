@@ -1227,7 +1227,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     final data = Provider.of<Repository>(context, listen: false)
         .memberData
         ?.personalDetails;
-    final response = await ApiService.instance.updatePersonalDetails(
+    final response = await ApiService.instance(context).updatePersonalDetails(
       data?.memberId,
       fullname.text,
       email.text,

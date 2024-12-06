@@ -33,6 +33,16 @@ class LoginModel with _$LoginModel {
     if (json['data'] != null && json['data'] is Map<String, dynamic>) {
       final dataMap = json['data'] as Map<String, dynamic>;
 
+      // Handle error response first
+      if (dataMap.containsKey('errors')) {
+        return LoginModel.error(
+          status: json['status'] as int,
+          message: json['message'] as String,
+          data: ErrorData.fromJson(dataMap),
+          code: json['code'] as int,
+        );
+      }
+
       // Check for access_token for success response
       if (dataMap.containsKey('access_token')) {
         return LoginModel.success(
@@ -44,8 +54,7 @@ class LoginModel with _$LoginModel {
       }
 
       // Check for phone_number for OTP response
-      if (dataMap.containsKey('phone_number') &&
-          !dataMap.containsKey('errors')) {
+      if (dataMap.containsKey('phone_number')) {
         return LoginModel.otp(
           status: json['status'] as int,
           message: json['message'] as String,
@@ -53,19 +62,17 @@ class LoginModel with _$LoginModel {
           code: json['code'] as int,
         );
       }
-
-      // Error response
-      if (dataMap.containsKey('errors')) {
-        return LoginModel.error(
-          status: json['status'] as int,
-          message: json['message'] as String,
-          data: ErrorData.fromJson(dataMap),
-          code: json['code'] as int,
-        );
-      }
     }
 
-    throw Exception('Unhandled JSON structure: $json');
+    // If the structure doesn't match any known pattern, return error
+    return LoginModel.error(
+      status: json['status'] as int? ?? 0,
+      message: json['message'] as String? ?? 'Unknown error',
+      data: ErrorData(errors: {
+        'unknown': ['Unhandled JSON structure']
+      }),
+      code: json['code'] as int? ?? 500,
+    );
   }
 }
 
@@ -110,7 +117,7 @@ class MembershipCardData with _$MembershipCardData {
     @JsonKey(name: "mobile_no") required String mobileNo,
     String? email,
     @JsonKey(name: "date_of_birth") String? dateOfBirth,
-    int? gender, // Updated to int?
+    int? gender,
     String? photo,
     String? district,
     @JsonKey(name: "ref_code") String? refCode,

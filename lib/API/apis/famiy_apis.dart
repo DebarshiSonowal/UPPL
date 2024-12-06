@@ -8,10 +8,7 @@ import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:uppl/Models/family/referred_family_details_model.dart';
 
 import '../../Models/family/family_details_model.dart';
-import '../../Storage/config_storage.dart';
-import '../api_services.dart';
 import '../errors/generic_error_handler.dart';
-import 'auth_api.dart';
 
 class GetFamilyService {
   GetFamilyService._(); // Private constructor to prevent direct instantiation
@@ -19,44 +16,10 @@ class GetFamilyService {
   static final GetFamilyService instance =
       GetFamilyService._(); // Singleton instance
 
-  Future<FamilyDetailsModel> getFamilyDetails(context) async {
+  Future<FamilyDetailsModel> getFamilyDetails(context, Dio dio) async {
     SVProgressHUD.show();
     try {
       String endpoint = 'get-family-members-details';
-
-      final dio = Dio(BaseOptions(
-        baseUrl: "${ApiService.baseUrl}/${ApiService.path}/",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ));
-
-      dio.interceptors.add(InterceptorsWrapper(
-        onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-          options.headers['Authorization'] =
-              'Bearer ${ConfigStorage.instance.token}';
-          return handler.next(options);
-        },
-        onError: (DioError e, ErrorInterceptorHandler handler) async {
-          if (e.response?.statusCode == 401) {
-            SVProgressHUD.dismiss();
-            try {
-              await GetAuthService.instance.regenerateToken(
-                  ConfigStorage.instance.refreshToken, context);
-              final options = e.requestOptions;
-              options.headers['Authorization'] =
-                  'Bearer ${ConfigStorage.instance.token}';
-              final Response retryResponse = await dio.fetch(options);
-              return handler.resolve(retryResponse);
-            } catch (error) {
-              debugPrint("Token refresh error: $error");
-            }
-          }
-          return handler.next(e);
-        },
-      ));
-
       final Response response = await dio.get(endpoint);
 
       debugPrint(
@@ -80,42 +43,8 @@ class GetFamilyService {
   }
 
   Future<ReferredFamilyDetailsModel> getReferredFamilyDetails(
-      BuildContext context, dynamic memberId) async {
+      BuildContext context, dynamic memberId, Dio dio) async {
     SVProgressHUD.show();
-
-    final Dio dio = Dio(BaseOptions(
-      baseUrl: "${ApiService.baseUrl}/${ApiService.path}/",
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    ));
-
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        SVProgressHUD.show();
-        return handler.next(options);
-      },
-      onError: (DioError e, ErrorInterceptorHandler handler) async {
-        if (e.response?.statusCode == 401) {
-          SVProgressHUD.dismiss();
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-            final options = e.requestOptions;
-            options.headers['Authorization'] =
-                'Bearer ${ConfigStorage.instance.token}';
-            final Response retryResponse = await dio.fetch(options);
-            return handler.resolve(retryResponse);
-          } catch (error) {
-            debugPrint("Token refresh error: $error");
-          }
-        }
-        return handler.next(e);
-      },
-    ));
 
     try {
       var requestJson = {

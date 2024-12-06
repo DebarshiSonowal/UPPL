@@ -8,6 +8,7 @@ class RegenerateTokenModel with _$RegenerateTokenModel {
   const factory RegenerateTokenModel({
     required int status,
     required String message,
+    @JsonKey(includeFromJson: false, includeToJson: false)
     RegenerateTokenData? data,
     RegenerateTokenError? error,
     required int code,

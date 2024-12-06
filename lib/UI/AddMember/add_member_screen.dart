@@ -315,7 +315,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   }
 
   Future<void> sendOTP() async {
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .sendRegistrationOTP(mobileNumber.text, context);
     if (response.status == 1) {
       CustomToast.showSuccessToast(
@@ -330,7 +330,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   }
 
   Future<void> verifyOTP() async {
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .verifyOTP("verify-otp", mobileNumber.text, otp, 1, context);
     if (response.status == 1) {
       CustomToast.showSuccessToast(

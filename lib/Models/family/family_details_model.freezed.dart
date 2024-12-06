@@ -22,7 +22,7 @@ FamilyDetailsModel _$FamilyDetailsModelFromJson(Map<String, dynamic> json) {
 mixin _$FamilyDetailsModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  Data get data => throw _privateConstructorUsedError;
+  Data? get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this FamilyDetailsModel to a JSON map.
@@ -41,9 +41,9 @@ abstract class $FamilyDetailsModelCopyWith<$Res> {
           FamilyDetailsModel value, $Res Function(FamilyDetailsModel) then) =
       _$FamilyDetailsModelCopyWithImpl<$Res, FamilyDetailsModel>;
   @useResult
-  $Res call({int status, String message, Data data, int code});
+  $Res call({int status, String message, Data? data, int code});
 
-  $DataCopyWith<$Res> get data;
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -63,7 +63,7 @@ class _$FamilyDetailsModelCopyWithImpl<$Res, $Val extends FamilyDetailsModel>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_value.copyWith(
@@ -75,10 +75,10 @@ class _$FamilyDetailsModelCopyWithImpl<$Res, $Val extends FamilyDetailsModel>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as Data?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -90,8 +90,12 @@ class _$FamilyDetailsModelCopyWithImpl<$Res, $Val extends FamilyDetailsModel>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $DataCopyWith<$Res> get data {
-    return $DataCopyWith<$Res>(_value.data, (value) {
+  $DataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $DataCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value) as $Val);
     });
   }
@@ -105,10 +109,10 @@ abstract class _$$FamilyDetailsModelImplCopyWith<$Res>
       __$$FamilyDetailsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, Data data, int code});
+  $Res call({int status, String message, Data? data, int code});
 
   @override
-  $DataCopyWith<$Res> get data;
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -126,7 +130,7 @@ class __$$FamilyDetailsModelImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_$FamilyDetailsModelImpl(
@@ -138,10 +142,10 @@ class __$$FamilyDetailsModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as Data?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -156,7 +160,7 @@ class _$FamilyDetailsModelImpl implements _FamilyDetailsModel {
   const _$FamilyDetailsModelImpl(
       {required this.status,
       required this.message,
-      required this.data,
+      this.data,
       required this.code});
 
   factory _$FamilyDetailsModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -167,7 +171,7 @@ class _$FamilyDetailsModelImpl implements _FamilyDetailsModel {
   @override
   final String message;
   @override
-  final Data data;
+  final Data? data;
   @override
   final int code;
 
@@ -212,7 +216,7 @@ abstract class _FamilyDetailsModel implements FamilyDetailsModel {
   const factory _FamilyDetailsModel(
       {required final int status,
       required final String message,
-      required final Data data,
+      final Data? data,
       required final int code}) = _$FamilyDetailsModelImpl;
 
   factory _FamilyDetailsModel.fromJson(Map<String, dynamic> json) =
@@ -223,7 +227,7 @@ abstract class _FamilyDetailsModel implements FamilyDetailsModel {
   @override
   String get message;
   @override
-  Data get data;
+  Data? get data;
   @override
   int get code;
 

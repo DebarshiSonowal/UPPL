@@ -12,56 +12,20 @@ import '../../Models/Member/member_social_details_model.dart';
 import '../../Models/Member/update_member_family_details_model.dart';
 import '../../Models/Member/update_member_personal_details_model.dart';
 import '../../Models/Referal/joined_by_referral_model.dart';
-import '../../Storage/config_storage.dart';
 import '../api_services.dart';
 import '../errors/generic_error_handler.dart';
-import 'auth_api.dart';
 
 class GetMemberService {
   GetMemberService._(); // Private constructor to prevent direct instantiation
 
   static final GetMemberService instance =
       GetMemberService._(); // Singleton instance
-  Future<MemberDetailsModel> getMemberDetails(context,
+  Future<MemberDetailsModel> getMemberDetails(context, dio,
       {bool shouldRetry = true}) async {
     SVProgressHUD.show();
 
-    String endpoint = 'details'; // Endpoint for member details
-    final dio = Dio(BaseOptions(
-        baseUrl:
-            "${ApiService.baseUrl}/${ApiService.path}/${ApiService.type}/"));
-
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401 && shouldRetry) {
-          debugPrint(
-              "MemberDetailsModel error: ${ConfigStorage.instance.token} ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-            // Retry the failed request with updated token
-            return handler.resolve(await dio.request(e.requestOptions.path,
-                options: Options(
-                  method: e.requestOptions.method,
-                ),
-                data: e.requestOptions.data,
-                queryParameters: e.requestOptions.queryParameters));
-          } catch (error) {
-            return handler
-                .next(e); // Propagate the error if it cannot be handled here
-          }
-        } else {
-          return handler.next(e); // Continue with the error handling
-        }
-      },
-    ));
+    String endpoint =
+        '${ApiService.type}/details'; // Endpoint for member details
 
     // Handle the response based on status code
     try {
@@ -87,55 +51,13 @@ class GetMemberService {
     }
   }
 
-  Future<JoinedByReferralModel> joinedByList(context, start, length,
+  Future<JoinedByReferralModel> joinedByList(context, start, length, dio,
       {bool shouldRetry = true}) async {
-    String endpoint = 'member-list/joined/by/referral/code';
+    String endpoint = '${ApiService.type}/member-list/joined/by/referral/code';
     final Map<String, dynamic> requestBody = {
       "start": start,
       "length": length,
     };
-
-    final dio = Dio(BaseOptions(
-        baseUrl:
-            "${ApiService.baseUrl}/${ApiService.path}/${ApiService.type}/"));
-
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401) {
-          debugPrint("JoinedByReferralModel error: ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-            // Retry the failed request with updated token
-            var options = e.requestOptions;
-            options.headers['Authorization'] =
-                'Bearer ${ConfigStorage.instance.token}';
-            final newResponse = await dio.request(
-              options.path,
-              options: Options(
-                method: options.method,
-                headers: options.headers,
-              ),
-              data: options.data,
-              queryParameters: options.queryParameters,
-            );
-            return handler.resolve(newResponse);
-          } catch (error) {
-            return handler
-                .next(e); // Propagate the error if it cannot be handled here
-          }
-        } else {
-          return handler.next(e); // Continue with the error handling
-        }
-      },
-    ));
 
     try {
       final Response response = await dio.post(
@@ -158,57 +80,15 @@ class GetMemberService {
     }
   }
 
-  Future<JoinedByReferralModel> unverifiedJoinedByList(context, start, length,
+  Future<JoinedByReferralModel> unverifiedJoinedByList(
+      context, start, length, dio,
       {bool shouldRetry = true}) async {
-    String endpoint = 'unverified-member-list/joined/by/referral/code';
+    String endpoint =
+        '${ApiService.type}/unverified-member-list/joined/by/referral/code';
     final Map<String, dynamic> requestBody = {
       "start": start,
       "length": length,
     };
-
-    final dio = Dio(BaseOptions(
-        baseUrl:
-            "${ApiService.baseUrl}/${ApiService.path}/${ApiService.type}/"));
-
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401 && shouldRetry) {
-          debugPrint(
-              "UnverifiedJoinedByReferralModel error: ${ConfigStorage.instance.token} ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-
-            // Retry the failed request with updated token
-            var options = e.requestOptions;
-            options.headers['Authorization'] =
-                'Bearer ${ConfigStorage.instance.token}';
-            final newResponse = await dio.request(
-              options.path,
-              options: Options(
-                method: options.method,
-                headers: options.headers,
-              ),
-              data: options.data,
-              queryParameters: options.queryParameters,
-            );
-            return handler.resolve(newResponse);
-          } catch (error) {
-            return handler
-                .next(e); // Propagate the error if it cannot be handled here
-          }
-        } else {
-          return handler.next(e); // Continue with the error handling
-        }
-      },
-    ));
 
     try {
       final Response response = await dio.post(
@@ -232,53 +112,11 @@ class GetMemberService {
     }
   }
 
-  Future<AudienceDemographyModel> getAudienceDemography(context,
+  Future<AudienceDemographyModel> getAudienceDemography(context, dio,
       {bool shouldRetry = true}) async {
     SVProgressHUD.show();
 
-    String endpoint = 'audience-demographic';
-    final dio = Dio(BaseOptions(
-        baseUrl:
-            "${ApiService.baseUrl}/${ApiService.path}/${ApiService.type}/"));
-
-    // Add an interceptor for handling token retries
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401 && shouldRetry) {
-          // If we have a 401 error, try to refresh the token
-          debugPrint("audience-demographic error: ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-            // Retry the failed request with updated token
-            var options = e.requestOptions;
-            options.headers['Authorization'] =
-                'Bearer ${ConfigStorage.instance.token}';
-            final newResponse = await dio.request(
-              options.path,
-              options: Options(
-                method: options.method,
-                headers: options.headers,
-              ),
-              data: options.data,
-              queryParameters: options.queryParameters,
-            );
-            return handler.resolve(newResponse);
-          } catch (error) {
-            return handler.next(e);
-          }
-        } else {
-          return handler.next(e);
-        }
-      },
-    ));
+    String endpoint = '${ApiService.type}/audience-demographic';
 
     try {
       final Response response = await dio.get(endpoint);
@@ -301,56 +139,12 @@ class GetMemberService {
     }
   }
 
-  Future<ProfileDataModel> getProfileData(context,
+  Future<ProfileDataModel> getProfileData(context, dio,
       {bool shouldRetry = true}) async {
     SVProgressHUD.show();
 
-    final dio = Dio(BaseOptions(
-        baseUrl:
-            "${ApiService.baseUrl}/${ApiService.path}/${ApiService.type}/"));
-
-    // Add an interceptor for handling token retries
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401 && shouldRetry) {
-          // If we have a 401 error, try to refresh the token
-          debugPrint("ProfileDataModel error: ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-
-            // Retry the failed request with updated token
-            var options = e.requestOptions;
-            options.headers['Authorization'] =
-                'Bearer ${ConfigStorage.instance.token}';
-            final newResponse = await dio.request(
-              options.path,
-              options: Options(
-                method: options.method,
-                headers: options.headers,
-              ),
-              data: options.data,
-              queryParameters: options.queryParameters,
-            );
-            return handler.resolve(newResponse);
-          } catch (error) {
-            return handler.next(e);
-          }
-        } else {
-          return handler.next(e);
-        }
-      },
-    ));
-
     try {
-      String endpoint = 'profile-data';
+      String endpoint = '${ApiService.type}/profile-data';
       final Response response = await dio.get(endpoint);
       debugPrint(
           "ProfileDataModel response: ${dio.options.baseUrl} ${response.data}");
@@ -454,21 +248,23 @@ class GetMemberService {
   // }
 
   Future<UpdateMemberPersonalDetailsModel> updatePersonalDetails(
-      member_id,
-      name,
-      email,
-      date_of_birth,
-      gender,
-      religion,
-      category,
-      profession,
-      education,
-      aadhaar_no,
-      voter_id,
-      mother_tounge,
-      other_profession,
-      other_education,
-      context) async {
+    member_id,
+    name,
+    email,
+    date_of_birth,
+    gender,
+    religion,
+    category,
+    profession,
+    education,
+    aadhaar_no,
+    voter_id,
+    mother_tounge,
+    other_profession,
+    other_education,
+    context,
+    dio,
+  ) async {
     SVProgressHUD.show();
 
     String endpoint = 'member-personal-details-update/$member_id';
@@ -526,47 +322,6 @@ class GetMemberService {
 
     debugPrint("${json.encode(requestBody)}");
 
-    final dio = Dio(BaseOptions(
-      baseUrl: "${ApiService.baseUrl}/${ApiService.path}/",
-    ));
-
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers = {
-          'Authorization': 'Bearer ${ConfigStorage.instance.token}',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        };
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401) {
-          debugPrint(
-              "UpdateMemberPersonalDetailsModel error: ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-            // Retry the failed request with updated token
-            var options = e.requestOptions;
-            final newResponse = await dio.request(
-              options.path,
-              options: Options(
-                method: options.method,
-                headers: options.headers,
-              ),
-              data: options.data,
-              queryParameters: options.queryParameters,
-            );
-            return handler.resolve(newResponse);
-          } catch (error) {
-            return handler.next(e);
-          }
-        } else {
-          return handler.next(e);
-        }
-      },
-    ));
-
     try {
       final Response response = await dio.post(
         endpoint,
@@ -593,7 +348,7 @@ class GetMemberService {
   }
 
   Future<MemberSocialDetailsModel> updateSocialDetails(context, member_id,
-      aleternate_number, facebook_url, twitter_url, instagram_url,
+      aleternate_number, facebook_url, twitter_url, instagram_url, dio,
       {bool shouldRetry = false}) async {
     SVProgressHUD.show();
     String endpoint = 'member-social-details-update';
@@ -605,47 +360,6 @@ class GetMemberService {
       "twitter_url": twitter_url,
       "instagram_url": instagram_url,
     };
-
-    final dio = Dio(
-      BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"),
-    );
-
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Authorization'] =
-            'Bearer ${ConfigStorage.instance.token}';
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        return handler.next(options);
-      },
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401 && !shouldRetry) {
-          debugPrint("MemberSocialDetailsModel error: ${e.response?.data}");
-          try {
-            await GetAuthService.instance
-                .regenerateToken(ConfigStorage.instance.refreshToken, context);
-            // Retry the failed request with updated token
-            var options = e.requestOptions;
-            options.headers['Authorization'] =
-                'Bearer ${ConfigStorage.instance.token}';
-            final newResponse = await dio.request(
-              options.path,
-              options: Options(
-                method: options.method,
-                headers: options.headers,
-              ),
-              data: options.data,
-              queryParameters: options.queryParameters,
-            );
-            return handler.resolve(newResponse);
-          } catch (error) {
-            return handler.next(e);
-          }
-        } else {
-          return handler.next(e);
-        }
-      },
-    ));
 
     try {
       final Response response = await dio.post(
@@ -685,6 +399,7 @@ class GetMemberService {
       ref_id,
       aadhaar_no,
       voter_id,
+      dio,
       {bool shouldRetry = true}) async {
     try {
       String endpoint = 'member-family-details-create-or-update';
@@ -714,47 +429,6 @@ class GetMemberService {
         ));
       }
       debugPrint("${formData.fields}");
-
-      final dio = Dio(
-          BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"));
-
-      dio.interceptors.add(InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.headers['Authorization'] =
-              'Bearer ${ConfigStorage.instance.token}';
-          options.headers['Content-Type'] = 'application/json';
-          options.headers['Accept'] = 'application/json';
-          return handler.next(options);
-        },
-        onError: (DioException e, handler) async {
-          if (e.response?.statusCode == 401 && shouldRetry) {
-            debugPrint(
-                "UpdateMemberFamilyDetailsModel error: ${e.response?.data}");
-            try {
-              await GetAuthService.instance.regenerateToken(
-                  ConfigStorage.instance.refreshToken, context);
-              // Retry the failed request with updated token
-              var options = e.requestOptions;
-              options.headers['Authorization'] =
-                  'Bearer ${ConfigStorage.instance.token}';
-              final newResponse = await dio.request(
-                options.path,
-                options: Options(
-                  method: options.method,
-                  headers: options.headers,
-                ),
-                data: options.data,
-                queryParameters: options.queryParameters,
-              );
-              return handler.resolve(newResponse);
-            } catch (error) {
-              return handler.next(e);
-            }
-          } else {
-            return handler.next(e);
-          }
-        },
-      ));
 
       final Response response = await dio.post(
         endpoint,

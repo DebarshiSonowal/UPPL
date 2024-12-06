@@ -22,7 +22,7 @@ ProfileDataModel _$ProfileDataModelFromJson(Map<String, dynamic> json) {
 mixin _$ProfileDataModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  ProfileDataWrapper get data => throw _privateConstructorUsedError;
+  ProfileDataWrapper? get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this ProfileDataModel to a JSON map.
@@ -41,9 +41,9 @@ abstract class $ProfileDataModelCopyWith<$Res> {
           ProfileDataModel value, $Res Function(ProfileDataModel) then) =
       _$ProfileDataModelCopyWithImpl<$Res, ProfileDataModel>;
   @useResult
-  $Res call({int status, String message, ProfileDataWrapper data, int code});
+  $Res call({int status, String message, ProfileDataWrapper? data, int code});
 
-  $ProfileDataWrapperCopyWith<$Res> get data;
+  $ProfileDataWrapperCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -63,7 +63,7 @@ class _$ProfileDataModelCopyWithImpl<$Res, $Val extends ProfileDataModel>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_value.copyWith(
@@ -75,10 +75,10 @@ class _$ProfileDataModelCopyWithImpl<$Res, $Val extends ProfileDataModel>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as ProfileDataWrapper,
+              as ProfileDataWrapper?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -90,8 +90,12 @@ class _$ProfileDataModelCopyWithImpl<$Res, $Val extends ProfileDataModel>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ProfileDataWrapperCopyWith<$Res> get data {
-    return $ProfileDataWrapperCopyWith<$Res>(_value.data, (value) {
+  $ProfileDataWrapperCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $ProfileDataWrapperCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value) as $Val);
     });
   }
@@ -105,10 +109,10 @@ abstract class _$$ProfileDataModelImplCopyWith<$Res>
       __$$ProfileDataModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, ProfileDataWrapper data, int code});
+  $Res call({int status, String message, ProfileDataWrapper? data, int code});
 
   @override
-  $ProfileDataWrapperCopyWith<$Res> get data;
+  $ProfileDataWrapperCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -126,7 +130,7 @@ class __$$ProfileDataModelImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_$ProfileDataModelImpl(
@@ -138,10 +142,10 @@ class __$$ProfileDataModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as ProfileDataWrapper,
+              as ProfileDataWrapper?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -156,7 +160,7 @@ class _$ProfileDataModelImpl implements _ProfileDataModel {
   const _$ProfileDataModelImpl(
       {required this.status,
       required this.message,
-      required this.data,
+      this.data,
       required this.code});
 
   factory _$ProfileDataModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -167,7 +171,7 @@ class _$ProfileDataModelImpl implements _ProfileDataModel {
   @override
   final String message;
   @override
-  final ProfileDataWrapper data;
+  final ProfileDataWrapper? data;
   @override
   final int code;
 
@@ -212,7 +216,7 @@ abstract class _ProfileDataModel implements ProfileDataModel {
   const factory _ProfileDataModel(
       {required final int status,
       required final String message,
-      required final ProfileDataWrapper data,
+      final ProfileDataWrapper? data,
       required final int code}) = _$ProfileDataModelImpl;
 
   factory _ProfileDataModel.fromJson(Map<String, dynamic> json) =
@@ -223,7 +227,7 @@ abstract class _ProfileDataModel implements ProfileDataModel {
   @override
   String get message;
   @override
-  ProfileDataWrapper get data;
+  ProfileDataWrapper? get data;
   @override
   int get code;
 

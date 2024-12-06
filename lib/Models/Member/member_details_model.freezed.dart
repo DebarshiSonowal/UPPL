@@ -18,12 +18,12 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MemberDetailsModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  Object get data => throw _privateConstructorUsedError;
+  Object? get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int status, String message, MemberDetailsData data, int code)
+            int status, String message, MemberDetailsData? data, int code)
         success,
     required TResult Function(
             int status, String message, MemberDetailsError data, int code)
@@ -33,7 +33,7 @@ mixin _$MemberDetailsModel {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status, String message, MemberDetailsData data, int code)?
+            int status, String message, MemberDetailsData? data, int code)?
         success,
     TResult? Function(
             int status, String message, MemberDetailsError data, int code)?
@@ -43,7 +43,7 @@ mixin _$MemberDetailsModel {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status, String message, MemberDetailsData data, int code)?
+            int status, String message, MemberDetailsData? data, int code)?
         success,
     TResult Function(
             int status, String message, MemberDetailsError data, int code)?
@@ -131,9 +131,9 @@ abstract class _$$SuccessResponseImplCopyWith<$Res>
       __$$SuccessResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, MemberDetailsData data, int code});
+  $Res call({int status, String message, MemberDetailsData? data, int code});
 
-  $MemberDetailsDataCopyWith<$Res> get data;
+  $MemberDetailsDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -151,7 +151,7 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_$SuccessResponseImpl(
@@ -163,10 +163,10 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as MemberDetailsData,
+              as MemberDetailsData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -178,8 +178,12 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $MemberDetailsDataCopyWith<$Res> get data {
-    return $MemberDetailsDataCopyWith<$Res>(_value.data, (value) {
+  $MemberDetailsDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $MemberDetailsDataCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value));
     });
   }
@@ -191,7 +195,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   const _$SuccessResponseImpl(
       {required this.status,
       required this.message,
-      required this.data,
+      this.data,
       required this.code});
 
   @override
@@ -199,7 +203,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @override
   final String message;
   @override
-  final MemberDetailsData data;
+  final MemberDetailsData? data;
   @override
   final int code;
 
@@ -235,7 +239,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int status, String message, MemberDetailsData data, int code)
+            int status, String message, MemberDetailsData? data, int code)
         success,
     required TResult Function(
             int status, String message, MemberDetailsError data, int code)
@@ -248,7 +252,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status, String message, MemberDetailsData data, int code)?
+            int status, String message, MemberDetailsData? data, int code)?
         success,
     TResult? Function(
             int status, String message, MemberDetailsError data, int code)?
@@ -261,7 +265,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status, String message, MemberDetailsData data, int code)?
+            int status, String message, MemberDetailsData? data, int code)?
         success,
     TResult Function(
             int status, String message, MemberDetailsError data, int code)?
@@ -310,7 +314,7 @@ abstract class SuccessResponse implements MemberDetailsModel {
   const factory SuccessResponse(
       {required final int status,
       required final String message,
-      required final MemberDetailsData data,
+      final MemberDetailsData? data,
       required final int code}) = _$SuccessResponseImpl;
 
   @override
@@ -318,7 +322,7 @@ abstract class SuccessResponse implements MemberDetailsModel {
   @override
   String get message;
   @override
-  MemberDetailsData get data;
+  MemberDetailsData? get data;
   @override
   int get code;
 
@@ -441,7 +445,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int status, String message, MemberDetailsData data, int code)
+            int status, String message, MemberDetailsData? data, int code)
         success,
     required TResult Function(
             int status, String message, MemberDetailsError data, int code)
@@ -454,7 +458,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status, String message, MemberDetailsData data, int code)?
+            int status, String message, MemberDetailsData? data, int code)?
         success,
     TResult? Function(
             int status, String message, MemberDetailsError data, int code)?
@@ -467,7 +471,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status, String message, MemberDetailsData data, int code)?
+            int status, String message, MemberDetailsData? data, int code)?
         success,
     TResult Function(
             int status, String message, MemberDetailsError data, int code)?

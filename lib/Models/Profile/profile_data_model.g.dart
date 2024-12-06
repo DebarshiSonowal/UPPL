@@ -11,7 +11,9 @@ _$ProfileDataModelImpl _$$ProfileDataModelImplFromJson(
     _$ProfileDataModelImpl(
       status: (json['status'] as num).toInt(),
       message: json['message'] as String,
-      data: ProfileDataWrapper.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] == null
+          ? null
+          : ProfileDataWrapper.fromJson(json['data'] as Map<String, dynamic>),
       code: (json['code'] as num).toInt(),
     );
 

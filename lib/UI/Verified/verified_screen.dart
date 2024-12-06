@@ -97,7 +97,7 @@ class _VerifiedScreenState extends State<VerifiedScreen> {
   }
 
   void login() async {
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .sendRegistrationOTP(phoneController.text, context);
     if (response.status == 1) {
       CustomToast.showSuccessToast(
@@ -112,7 +112,7 @@ class _VerifiedScreenState extends State<VerifiedScreen> {
   }
 
   void verifyOTP() async {
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .verifyOTP("verify-otp", phoneController.text, otp, 1, context);
     if (response.status == 1) {
       CustomToast.showSuccessToast(

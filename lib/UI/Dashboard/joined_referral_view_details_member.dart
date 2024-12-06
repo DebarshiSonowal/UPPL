@@ -696,8 +696,8 @@ class _JoinedReferralViewDetailsMemberScreenState
   ]);
 
   void fetchFamilyDetails(BuildContext context, int? memberId) async {
-    final response =
-        await ApiService.instance.getReferredFamilyDetails(context, memberId);
+    final response = await ApiService.instance(context)
+        .getReferredFamilyDetails(context, memberId);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setReferredMemberFamilyDetails(response.data.familyDetails);
@@ -710,7 +710,7 @@ class _JoinedReferralViewDetailsMemberScreenState
     ReferredMemberFamilyDetails? referredItem,
   ) async {
     if (item != null) {
-      final response = await ApiService.instance
+      final response = await ApiService.instance(context)
           .updateFamilyMemberPersonalDetails(
               context,
               item.memberId,
@@ -733,7 +733,7 @@ class _JoinedReferralViewDetailsMemberScreenState
       }
     } else {
       debugPrint("Profile Update 2");
-      final response = await ApiService.instance
+      final response = await ApiService.instance(context)
           .updateFamilyMemberPersonalDetails(
               context,
               referredItem?.membershipCard.id,

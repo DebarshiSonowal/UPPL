@@ -9,7 +9,7 @@ class JoinedByReferralModel with _$JoinedByReferralModel {
   const factory JoinedByReferralModel({
     required int status,
     required String message,
-    required JoinedByReferralData data,
+    JoinedByReferralData? data,
     required int code,
   }) = _JoinedByReferralModel;
 

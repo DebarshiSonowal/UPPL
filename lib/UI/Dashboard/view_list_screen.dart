@@ -208,16 +208,16 @@ class _ViewListScreenState extends State<ViewListScreen>
 
   void fetchJoinedBy() async {
     final response =
-        await ApiService.instance.joinedByList(context, start, length);
+        await ApiService.instance(context).joinedByList(context, start, length);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setJoinedByReferralMember(response.data.data);
+          .setJoinedByReferralMember(response.data!.data);
     }
-    final response1 = await ApiService.instance
+    final response1 = await ApiService.instance(context)
         .unverifiedJoinedByList(context, start, length);
     if (response1.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setUnverifiedJoinedByReferralMember(response1.data.data);
+          .setUnverifiedJoinedByReferralMember(response1.data!.data);
     }
   }
 }

@@ -1288,7 +1288,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
   }
 
   void register(BuildContext context) async {
-    final response = await ApiService.instance.registration(
+    final response = await ApiService.instance(context).registration(
         mobile.text,
         name.text,
         DateFormat("yyyy-mm-dd")
@@ -1454,7 +1454,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
 
   void verifyReferCode() async {
     try {
-      final response = await ApiService.instance
+      final response = await ApiService.instance(context)
           .checkMobileOrCodeVerify(referral.text, context);
       if (response.status == 1) {
         selectedValidateMemberData = response.data;
@@ -1474,7 +1474,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
   }
 
   Future<void> fetchDetails() async {
-    final response = await ApiService.instance.generateJSON(context);
+    final response = await ApiService.instance(context).generateJSON(context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false).setPartyDistricts(
           response.intermediateData.data.partyDistricts ?? []);

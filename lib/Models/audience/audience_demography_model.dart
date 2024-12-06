@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'audience_demography_model.freezed.dart';
+
 part 'audience_demography_model.g.dart';
 
 @freezed
@@ -8,14 +9,14 @@ class AudienceDemographyModel with _$AudienceDemographyModel {
   const factory AudienceDemographyModel.success({
     required int status,
     required String message,
-    required AudienceDemographyData data,
+    AudienceDemographyData? data,
     required int code,
   }) = SuccessResponse;
 
   const factory AudienceDemographyModel.error({
     required int status,
     required String message,
-    required AudienceDemographyError error,
+    AudienceDemographyError? error,
     required int code,
   }) = ErrorResponse;
 

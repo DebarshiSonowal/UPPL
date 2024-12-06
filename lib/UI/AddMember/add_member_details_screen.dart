@@ -17,6 +17,7 @@ import 'package:uppl/Repository/repository.dart';
 
 import '../../Constants/configuration.dart';
 import '../../Models/JSON/generate_json_model.dart';
+import '../../Models/Referal/validate_referal_code_model.dart';
 
 @RoutePage()
 class AddMemberDetailsScreen extends StatefulWidget {
@@ -55,6 +56,7 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
   final voterId = TextEditingController();
   final referral = TextEditingController();
   File? selectedFile;
+  ValidateMemberData? selectedValidateMemberData;
 
   @override
   void initState() {
@@ -1099,7 +1101,7 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
                     TextField(
                       controller: referral,
                       cursorColor: Colors.black,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -1126,20 +1128,42 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
                             color: Colors.black,
                           ),
                         ),
-                        suffix: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 2.w,
-                            vertical: 0.2.h,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Configuration.primaryColor,
-                          ),
-                          child: Text(
-                            "Validate",
-                            style: Configuration.primaryFont(
-                              fontSize: 13.sp,
-                              color: Colors.black87,
+                        suffix: GestureDetector(
+                          onTap: () {
+                            if (selectedValidateMemberData == null &&
+                                referral.text.isNotEmpty) {
+                              verifyReferCode();
+                            } else if (selectedValidateMemberData != null) {
+                              setState(() {
+                                selectedValidateMemberData = null;
+                                referral.clear();
+                              });
+                              CustomToast.showWarningToast(context, "Info",
+                                  "Validation canceled. You can enter a new code.");
+                            } else {
+                              CustomToast.showWarningToast(context, "Warning",
+                                  "Please enter valid code");
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 2.w,
+                              vertical: 0.2.h,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: selectedValidateMemberData == null
+                                  ? Configuration.primaryColor
+                                  : Colors.red,
+                            ),
+                            child: Text(
+                              selectedValidateMemberData == null
+                                  ? "Validate"
+                                  : "Cancel",
+                              style: Configuration.primaryFont(
+                                fontSize: 13.sp,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ),
@@ -1388,7 +1412,7 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
   }
 
   void SaveDetails() async {
-    final response = await ApiService.instance.registration(
+    final response = await ApiService.instance(context).registration(
         mobile.text,
         name.text,
         DateFormat("yyyy-mm-dd")
@@ -1405,7 +1429,7 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
         selectedBooth!,
         otherVillage ?? "",
         selectedVillage ?? "other",
-        Provider.of<Repository>(context, listen: false).profileData?.refId ?? 0,
+        selectedValidateMemberData?.refId ?? 0,
         1,
         [selectedFile!.path],
         context);
@@ -1418,5 +1442,26 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
       CustomToast.showFailureToast(
           context, "Failed to Register", response.message);
     }
+  }
+
+  void verifyReferCode() async {
+    try {
+      final response = await ApiService.instance(context)
+          .checkMobileOrCodeVerify(referral.text, context);
+      if (response.status == 1) {
+        selectedValidateMemberData = response.data;
+        setState(() {});
+        CustomToast.showSuccessToast(
+            context, "Verification Done", response.message);
+      } else {
+        CustomToast.showFailureToast(
+            context, "Verification Failed", response.message);
+      }
+    } catch (e) {
+      print(e);
+      CustomToast.showFailureToast(
+          context, "Verification Failed", "Member Not Found");
+    }
+    //selectedValidateMemberData
   }
 }

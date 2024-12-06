@@ -178,9 +178,11 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   void sendOTP(mobile_number) async {
     try {
       final LoginModel response =
-          await ApiService.instance.sendOTP(mobile_number, context);
+          await ApiService.instance(context).sendOTP(mobile_number, context);
       if (response.status == 1) {
         context.router.push(LoginOtpVerifyRoute(phonenumber: mobile_number));
+      } else {
+        CustomToast.showFailureToast(context, "Error", response.message);
       }
     } catch (e) {
       print(e);

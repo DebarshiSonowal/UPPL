@@ -23,7 +23,7 @@ JoinedByReferralModel _$JoinedByReferralModelFromJson(
 mixin _$JoinedByReferralModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  JoinedByReferralData get data => throw _privateConstructorUsedError;
+  JoinedByReferralData? get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this JoinedByReferralModel to a JSON map.
@@ -42,9 +42,9 @@ abstract class $JoinedByReferralModelCopyWith<$Res> {
           $Res Function(JoinedByReferralModel) then) =
       _$JoinedByReferralModelCopyWithImpl<$Res, JoinedByReferralModel>;
   @useResult
-  $Res call({int status, String message, JoinedByReferralData data, int code});
+  $Res call({int status, String message, JoinedByReferralData? data, int code});
 
-  $JoinedByReferralDataCopyWith<$Res> get data;
+  $JoinedByReferralDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -65,7 +65,7 @@ class _$JoinedByReferralModelCopyWithImpl<$Res,
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_value.copyWith(
@@ -77,10 +77,10 @@ class _$JoinedByReferralModelCopyWithImpl<$Res,
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as JoinedByReferralData,
+              as JoinedByReferralData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -92,8 +92,12 @@ class _$JoinedByReferralModelCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $JoinedByReferralDataCopyWith<$Res> get data {
-    return $JoinedByReferralDataCopyWith<$Res>(_value.data, (value) {
+  $JoinedByReferralDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $JoinedByReferralDataCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value) as $Val);
     });
   }
@@ -108,10 +112,10 @@ abstract class _$$JoinedByReferralModelImplCopyWith<$Res>
       __$$JoinedByReferralModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, JoinedByReferralData data, int code});
+  $Res call({int status, String message, JoinedByReferralData? data, int code});
 
   @override
-  $JoinedByReferralDataCopyWith<$Res> get data;
+  $JoinedByReferralDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -130,7 +134,7 @@ class __$$JoinedByReferralModelImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_$JoinedByReferralModelImpl(
@@ -142,10 +146,10 @@ class __$$JoinedByReferralModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as JoinedByReferralData,
+              as JoinedByReferralData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -160,7 +164,7 @@ class _$JoinedByReferralModelImpl implements _JoinedByReferralModel {
   const _$JoinedByReferralModelImpl(
       {required this.status,
       required this.message,
-      required this.data,
+      this.data,
       required this.code});
 
   factory _$JoinedByReferralModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -171,7 +175,7 @@ class _$JoinedByReferralModelImpl implements _JoinedByReferralModel {
   @override
   final String message;
   @override
-  final JoinedByReferralData data;
+  final JoinedByReferralData? data;
   @override
   final int code;
 
@@ -216,7 +220,7 @@ abstract class _JoinedByReferralModel implements JoinedByReferralModel {
   const factory _JoinedByReferralModel(
       {required final int status,
       required final String message,
-      required final JoinedByReferralData data,
+      final JoinedByReferralData? data,
       required final int code}) = _$JoinedByReferralModelImpl;
 
   factory _JoinedByReferralModel.fromJson(Map<String, dynamic> json) =
@@ -227,7 +231,7 @@ abstract class _JoinedByReferralModel implements JoinedByReferralModel {
   @override
   String get message;
   @override
-  JoinedByReferralData get data;
+  JoinedByReferralData? get data;
   @override
   int get code;
 

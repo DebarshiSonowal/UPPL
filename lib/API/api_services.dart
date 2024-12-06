@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:uppl/API/apis/dropdown_api.dart';
 import 'package:uppl/API/apis/json_apis.dart';
 import 'package:uppl/API/apis/member_api.dart';
@@ -19,25 +21,34 @@ import '../Models/Membership/membership_card_model.dart';
 import '../Models/Profile/profile_data_model.dart';
 import '../Models/Referal/joined_by_referral_model.dart';
 import '../Models/Referal/validate_referal_code_model.dart';
+import '../Models/Token/regenerate_token_model.dart';
 import '../Models/Verify/generate_verify_otp_model.dart';
 import '../Models/audience/audience_demography_model.dart';
 import '../Models/family/family_details_model.dart';
 import '../Models/family/referred_family_details_model.dart';
+import '../Storage/config_storage.dart';
 import 'apis/auth_api.dart';
 import 'apis/famiy_apis.dart';
 import 'apis/membership_api.dart';
 
 class ApiService {
-  ApiService._();
+  final BuildContext context;
 
-  static final ApiService instance = ApiService._();
+  ApiService._(this.context);
+
+  static ApiService? _instance;
+
+  static ApiService instance(BuildContext context) {
+    _instance ??= ApiService._(context);
+    return _instance!;
+  }
 
   static const String baseUrl = "https://upplofficial.org";
   static const String path = "api";
   static const String type = "member";
 
   // Make dio3 a static field to share it across instances
-  static final Dio dio3 = Dio(BaseOptions(baseUrl: "$baseUrl/$path/"));
+  static final Dio dio = _createDioInstance();
 
   // Add a flag to control request execution
   static bool _isHalted = false;
@@ -59,7 +70,53 @@ class ApiService {
     }
   }
 
+  static Dio _createDioInstance() {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: "$baseUrl/$path/",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+        options.headers['Authorization'] =
+            'Bearer ${ConfigStorage.instance.token}';
+        return handler.next(options);
+      },
+      onError: (DioException e, ErrorInterceptorHandler handler) async {
+        if (e.response?.statusCode == 401) {
+          SVProgressHUD.dismiss();
+          try {
+            final regenerateTokenModel = await GetAuthService.instance
+                .regenerateToken(
+                    ConfigStorage.instance.refreshToken, _instance!.context);
+            debugPrint("regenerateToken ISSUES ${regenerateTokenModel}");
+            if (regenerateTokenModel.message ==
+                "Another token is already regenerated") {
+              return handler.next(e); // Retry the original response
+            }
+            return handler.resolve(e.response!);
+          } catch (error) {
+            debugPrint("Token refresh error:  $error");
+          }
+        }
+        return handler.next(e);
+      },
+    ));
+    return dio;
+  }
+
 //Auth
+  Future<RegenerateTokenModel> regenerateToken(
+    String refreshToken,
+    context,
+  ) async {
+    return GetAuthService.instance.regenerateToken(refreshToken, context);
+  }
+
   Future<RegistrationResponseModel> registration(
     String mobile_no,
     String name,
@@ -166,17 +223,17 @@ class ApiService {
 
   Future<MemberDetailsModel> getMemberDetails(context) async {
     await _checkHaltStatus();
-    return GetMemberService.instance.getMemberDetails(context);
+    return GetMemberService.instance.getMemberDetails(context, dio);
   }
 
   Future<AudienceDemographyModel> getAudienceDemography(context) async {
     await _checkHaltStatus();
-    return GetMemberService.instance.getAudienceDemography(context);
+    return GetMemberService.instance.getAudienceDemography(context, dio);
   }
 
   Future<ProfileDataModel> getProfileData(context) async {
     await _checkHaltStatus();
-    return GetMemberService.instance.getProfileData(context);
+    return GetMemberService.instance.getProfileData(context, dio);
   }
 
   Future<DropDownDataModel> getDropdownData(context) async {
@@ -186,7 +243,7 @@ class ApiService {
 
   Future<FamilyDetailsModel> getFamilyDetails(context) async {
     await _checkHaltStatus();
-    return GetFamilyService.instance.getFamilyDetails(context);
+    return GetFamilyService.instance.getFamilyDetails(context, dio);
   }
 
   Future<ValidateMemberModel> checkMobileOrCodeVerify(
@@ -200,20 +257,20 @@ class ApiService {
       context, member_id) async {
     await _checkHaltStatus();
     return GetFamilyService.instance
-        .getReferredFamilyDetails(context, member_id);
+        .getReferredFamilyDetails(context, member_id, dio);
   }
 
   Future<JoinedByReferralModel> joinedByList(context, start, length,
       {bool shouldRetry = true}) async {
     await _checkHaltStatus();
-    return GetMemberService.instance.joinedByList(context, start, length);
+    return GetMemberService.instance.joinedByList(context, start, length, dio);
   }
 
   Future<JoinedByReferralModel> unverifiedJoinedByList(context, start, length,
       {bool shouldRetry = true}) async {
     await _checkHaltStatus();
     return GetMemberService.instance
-        .unverifiedJoinedByList(context, start, length);
+        .unverifiedJoinedByList(context, start, length, dio);
   }
 
   Future<UpdateMemberPersonalDetailsModel> updatePersonalDetails(
@@ -250,6 +307,7 @@ class ApiService {
       other_profession,
       other_education,
       context,
+      dio,
     );
   }
 
@@ -257,7 +315,7 @@ class ApiService {
       aleternate_number, facebook_url, twitter_url, instagram_url) async {
     await _checkHaltStatus();
     return GetMemberService.instance.updateSocialDetails(context, member_id,
-        aleternate_number, facebook_url, twitter_url, instagram_url);
+        aleternate_number, facebook_url, twitter_url, instagram_url, dio);
   }
 
   Future<UpdateMemberFamilyDetailsModel> updateFamilyMemberPersonalDetails(
@@ -287,6 +345,7 @@ class ApiService {
         photo,
         ref_id,
         aadhaar_no,
-        voter_id);
+        voter_id,
+        dio);
   }
 }

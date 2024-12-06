@@ -22,7 +22,7 @@ mixin _$AudienceDemographyModel {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int status, String message, AudienceDemographyData data, int code)
+            int status, String message, AudienceDemographyData? data, int code)
         success,
     required TResult Function(
             int status, String message, AudienceDemographyError error, int code)
@@ -32,7 +32,7 @@ mixin _$AudienceDemographyModel {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status, String message, AudienceDemographyData data, int code)?
+            int status, String message, AudienceDemographyData? data, int code)?
         success,
     TResult? Function(int status, String message, AudienceDemographyError error,
             int code)?
@@ -42,7 +42,7 @@ mixin _$AudienceDemographyModel {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status, String message, AudienceDemographyData data, int code)?
+            int status, String message, AudienceDemographyData? data, int code)?
         success,
     TResult Function(int status, String message, AudienceDemographyError error,
             int code)?
@@ -132,9 +132,9 @@ abstract class _$$SuccessResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int status, String message, AudienceDemographyData data, int code});
+      {int status, String message, AudienceDemographyData? data, int code});
 
-  $AudienceDemographyDataCopyWith<$Res> get data;
+  $AudienceDemographyDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -152,7 +152,7 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_$SuccessResponseImpl(
@@ -164,10 +164,10 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as AudienceDemographyData,
+              as AudienceDemographyData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -179,8 +179,12 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AudienceDemographyDataCopyWith<$Res> get data {
-    return $AudienceDemographyDataCopyWith<$Res>(_value.data, (value) {
+  $AudienceDemographyDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $AudienceDemographyDataCopyWith<$Res>(_value.data!, (value) {
       return _then(_value.copyWith(data: value));
     });
   }
@@ -192,7 +196,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   const _$SuccessResponseImpl(
       {required this.status,
       required this.message,
-      required this.data,
+      this.data,
       required this.code});
 
   @override
@@ -200,7 +204,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @override
   final String message;
   @override
-  final AudienceDemographyData data;
+  final AudienceDemographyData? data;
   @override
   final int code;
 
@@ -236,7 +240,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int status, String message, AudienceDemographyData data, int code)
+            int status, String message, AudienceDemographyData? data, int code)
         success,
     required TResult Function(
             int status, String message, AudienceDemographyError error, int code)
@@ -249,7 +253,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status, String message, AudienceDemographyData data, int code)?
+            int status, String message, AudienceDemographyData? data, int code)?
         success,
     TResult? Function(int status, String message, AudienceDemographyError error,
             int code)?
@@ -262,7 +266,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status, String message, AudienceDemographyData data, int code)?
+            int status, String message, AudienceDemographyData? data, int code)?
         success,
     TResult Function(int status, String message, AudienceDemographyError error,
             int code)?
@@ -311,14 +315,14 @@ abstract class SuccessResponse implements AudienceDemographyModel {
   const factory SuccessResponse(
       {required final int status,
       required final String message,
-      required final AudienceDemographyData data,
+      final AudienceDemographyData? data,
       required final int code}) = _$SuccessResponseImpl;
 
   @override
   int get status;
   @override
   String get message;
-  AudienceDemographyData get data;
+  AudienceDemographyData? get data;
   @override
   int get code;
 
@@ -442,7 +446,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            int status, String message, AudienceDemographyData data, int code)
+            int status, String message, AudienceDemographyData? data, int code)
         success,
     required TResult Function(
             int status, String message, AudienceDemographyError error, int code)
@@ -455,7 +459,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status, String message, AudienceDemographyData data, int code)?
+            int status, String message, AudienceDemographyData? data, int code)?
         success,
     TResult? Function(int status, String message, AudienceDemographyError error,
             int code)?
@@ -468,7 +472,7 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status, String message, AudienceDemographyData data, int code)?
+            int status, String message, AudienceDemographyData? data, int code)?
         success,
     TResult Function(int status, String message, AudienceDemographyError error,
             int code)?

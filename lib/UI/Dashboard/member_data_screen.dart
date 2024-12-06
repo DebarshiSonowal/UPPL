@@ -298,7 +298,7 @@ class _MemberDataScreenState extends State<MemberDataScreen> {
 
   void showImage() async {
     final profile = Provider.of<Repository>(context, listen: false).memberData;
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .getMembershipCard(profile!.personalDetails.mobileNo, context);
 
     response.when(

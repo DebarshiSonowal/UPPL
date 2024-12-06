@@ -8,7 +8,7 @@ class FamilyDetailsModel with _$FamilyDetailsModel {
   const factory FamilyDetailsModel({
     required int status,
     required String message,
-    required Data data,
+    Data? data,
     required int code,
   }) = _FamilyDetailsModel;
 

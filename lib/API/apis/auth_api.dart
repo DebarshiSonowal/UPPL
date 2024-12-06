@@ -405,7 +405,8 @@ class GetAuthService {
       SVProgressHUD.dismiss();
       debugPrint("Unexpected error in regenerateToken: $e");
       _isRegenerating = false;
-      return RegenerateTokenModel.withError("An unexpected error occurred");
+      return const RegenerateTokenModel.withError(
+          "An unexpected error occurred");
     }
   }
 

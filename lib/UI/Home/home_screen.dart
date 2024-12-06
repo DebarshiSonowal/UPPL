@@ -745,12 +745,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchDetails(BuildContext context) async {
-    final responseJson = await ApiService.instance.getMemberDetails(context);
+    final responseJson =
+        await ApiService.instance(context).getMemberDetails(context);
     if (responseJson.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setData(responseJson.data as MemberDetailsData);
     }
-    final response = await ApiService.instance.generateJSON(context);
+    final response = await ApiService.instance(context).generateJSON(context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false).setPartyDistricts(
           response.intermediateData.data.partyDistricts ?? []);
@@ -791,7 +792,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchDropdown(BuildContext context) async {
-    final response = await ApiService.instance.getDropdownData(context);
+    final response =
+        await ApiService.instance(context).getDropdownData(context);
     response.map(
         success: (val) {
           if (response.status == 1) {
@@ -821,14 +823,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchProfileData(BuildContext context) async {
-    final response = await ApiService.instance.getProfileData(context);
+    final response = await ApiService.instance(context).getProfileData(context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
-          .setProfileData(response.data.profileData);
+          .setProfileData(response.data!.profileData);
       Provider.of<Repository>(context, listen: false)
-          .setSocialData(response.data.socialDetails!);
+          .setSocialData(response.data!.socialDetails);
       Provider.of<Repository>(context, listen: false)
-          .setPersonalData(response.data.personalDetails);
+          .setPersonalData(response.data!.personalDetails);
     }
   }
 }

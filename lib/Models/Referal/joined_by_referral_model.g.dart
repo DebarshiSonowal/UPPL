@@ -11,7 +11,9 @@ _$JoinedByReferralModelImpl _$$JoinedByReferralModelImplFromJson(
     _$JoinedByReferralModelImpl(
       status: (json['status'] as num).toInt(),
       message: json['message'] as String,
-      data: JoinedByReferralData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] == null
+          ? null
+          : JoinedByReferralData.fromJson(json['data'] as Map<String, dynamic>),
       code: (json['code'] as num).toInt(),
     );
 

@@ -157,7 +157,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreen> {
 
   void verifyOTP(BuildContext context, String otp) async {
     debugPrint("Verify");
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .verifyOTP("verify-otp", widget.phonenumber, otp, "1", context);
     if (response.status == 1) {
       AutoRouter.of(context)

@@ -1325,7 +1325,7 @@ mixin _$MembershipCardData {
   String? get email => throw _privateConstructorUsedError;
   @JsonKey(name: "date_of_birth")
   String? get dateOfBirth => throw _privateConstructorUsedError;
-  int? get gender => throw _privateConstructorUsedError; // Updated to int?
+  int? get gender => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
   String? get district => throw _privateConstructorUsedError;
   @JsonKey(name: "ref_code")
@@ -1587,7 +1587,6 @@ class _$MembershipCardDataImpl implements _MembershipCardData {
   final String? dateOfBirth;
   @override
   final int? gender;
-// Updated to int?
   @override
   final String? photo;
   @override
@@ -1703,7 +1702,7 @@ abstract class _MembershipCardData implements MembershipCardData {
   @JsonKey(name: "date_of_birth")
   String? get dateOfBirth;
   @override
-  int? get gender; // Updated to int?
+  int? get gender;
   @override
   String? get photo;
   @override

@@ -801,7 +801,7 @@ class _FamilyViewDetailsMemberScreenState
 
   void showImage(mobileNo) async {
     final response =
-        await ApiService.instance.getMembershipCard(mobileNo, context);
+        await ApiService.instance(context).getMembershipCard(mobileNo, context);
 
     response.when(
       success: (status, message, data, code) {
@@ -838,8 +838,8 @@ class _FamilyViewDetailsMemberScreenState
   ]);
 
   void fetchFamilyDetails(BuildContext context, int? memberId) async {
-    final response =
-        await ApiService.instance.getReferredFamilyDetails(context, memberId);
+    final response = await ApiService.instance(context)
+        .getReferredFamilyDetails(context, memberId);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setReferredMemberFamilyDetails(response.data.familyDetails);
@@ -850,7 +850,7 @@ class _FamilyViewDetailsMemberScreenState
     String result,
     FamilyDetail? referredItem,
   ) async {
-    final response = await ApiService.instance
+    final response = await ApiService.instance(context)
         .updateFamilyMemberPersonalDetails(
             context,
             referredItem?.membershipCard.id,

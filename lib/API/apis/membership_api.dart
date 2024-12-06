@@ -28,6 +28,7 @@ class GetMembershipService {
       };
       final dio = Dio(
           BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"));
+      // dio.options.baseUrl = "${ApiService.baseUrl}/${ApiService.path}/";
       // Handle the response based on status code
       final Response response = await dio.post(
         endpoint, // No need to construct the full URL; Dio uses the base URL
@@ -42,10 +43,10 @@ class GetMembershipService {
         return MembershipCardModel.fromJson(response.data);
       }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401 ?? false) {
-        debugPrint("MembershipCardModel error: ${e.response?.data}");
-        return MembershipCardModel.fromJson(e.response?.data);
-      }
+      // if (e.response?.statusCode == 401 ?? false) {
+      //   debugPrint("MembershipCardModel error: ${e.response?.data}");
+      //   return MembershipCardModel.fromJson(e.response?.data);
+      // }
       // Re-throw the exception so the error handler can catch it
       debugPrint("MembershipCardModel error1: ${e.message} ${e.response}");
       return ErrorHandler.handleDioError(e, context, (val) {

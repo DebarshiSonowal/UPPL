@@ -8,7 +8,7 @@ class MemberDetailsModel with _$MemberDetailsModel {
   const factory MemberDetailsModel.success({
     required int status,
     required String message,
-    required MemberDetailsData data,
+    MemberDetailsData? data,
     required int code,
   }) = SuccessResponse;
 

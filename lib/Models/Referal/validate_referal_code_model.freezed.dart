@@ -27,7 +27,7 @@ mixin _$ValidateMemberModel {
   ValidateMemberData? get data =>
       throw _privateConstructorUsedError; // Optional data field for successful responses
   ValidateMemberError? get error =>
-      throw _privateConstructorUsedError; // Optional error field for errors
+      throw _privateConstructorUsedError; // Now required to handle errors in the response
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this ValidateMemberModel to a JSON map.
@@ -220,7 +220,7 @@ class _$ValidateMemberModelImpl implements _ValidateMemberModel {
 // Optional data field for successful responses
   @override
   final ValidateMemberError? error;
-// Optional error field for errors
+// Now required to handle errors in the response
   @override
   final int code;
 
@@ -281,7 +281,8 @@ abstract class _ValidateMemberModel implements ValidateMemberModel {
   @override
   ValidateMemberData? get data; // Optional data field for successful responses
   @override
-  ValidateMemberError? get error; // Optional error field for errors
+  ValidateMemberError?
+      get error; // Now required to handle errors in the response
   @override
   int get code;
 

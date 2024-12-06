@@ -8,7 +8,7 @@ class ProfileDataModel with _$ProfileDataModel {
   const factory ProfileDataModel({
     required int status,
     required String message,
-    required ProfileDataWrapper data,
+    ProfileDataWrapper? data,
     required int code,
   }) = _ProfileDataModel;
 
