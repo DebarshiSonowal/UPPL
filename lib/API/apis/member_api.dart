@@ -12,8 +12,10 @@ import '../../Models/Member/member_social_details_model.dart';
 import '../../Models/Member/update_member_family_details_model.dart';
 import '../../Models/Member/update_member_personal_details_model.dart';
 import '../../Models/Referal/joined_by_referral_model.dart';
+import '../../Storage/config_storage.dart';
 import '../api_services.dart';
 import '../errors/generic_error_handler.dart';
+import 'auth_api.dart';
 
 class GetMemberService {
   GetMemberService._(); // Private constructor to prevent direct instantiation
@@ -39,12 +41,21 @@ class GetMemberService {
         return MemberDetailsModel.fromJson(response.data);
       } else {
         SVProgressHUD.dismiss();
-        debugPrint("MemberDetailsModel error: ${response.data}");
+        debugPrint(
+            "MemberDetailsModel error: ${response.statusCode} ${response.data}");
         return MemberDetailsModel.fromJson(response.data);
       }
     } on DioException catch (e) {
       SVProgressHUD.dismiss();
       debugPrint("MemberDetailsModel error1: ${e.message} ${e.response}");
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        final response = await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        // Update dio's Authorization header with new access token
+        dio.options.headers['Authorization'] = 'Bearer ${response}';
+        return getMemberDetails(context, dio, shouldRetry: false);
+      }
       return ErrorHandler.handleDioError(e, context, (val) {
         return MemberDetailsModel.fromJson(e.response?.data);
       });
@@ -74,6 +85,12 @@ class GetMemberService {
       }
     } on DioException catch (e) {
       debugPrint("JoinedByReferralModel error1: ${e.message} ${e.response}");
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return joinedByList(context, start, length, dio, shouldRetry: false);
+      }
       return ErrorHandler.handleDioError(e, context, (val) {
         return JoinedByReferralModel.fromJson(e.response?.data);
       });
@@ -106,6 +123,13 @@ class GetMemberService {
     } on DioException catch (e) {
       debugPrint(
           "UnverifiedJoinedByReferralModel error1: ${e.message} ${e.response}");
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return unverifiedJoinedByList(context, start, length, dio,
+            shouldRetry: false);
+      }
       return ErrorHandler.handleDioError(e, context, (val) {
         return JoinedByReferralModel.fromJson(e.response?.data);
       });
@@ -133,6 +157,12 @@ class GetMemberService {
     } on DioException catch (e) {
       SVProgressHUD.dismiss();
       debugPrint("audience-demographic error1: ${e.message} ${e.response}");
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return getAudienceDemography(context, dio, shouldRetry: false);
+      }
       return ErrorHandler.handleDioError(e, context, (val) {
         return AudienceDemographyModel.fromJson(e.response?.data);
       });
@@ -159,6 +189,12 @@ class GetMemberService {
     } on DioException catch (e) {
       SVProgressHUD.dismiss();
       debugPrint("ProfileDataModel error1: ${e.message} ${e.response}");
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return getProfileData(context, dio, shouldRetry: false);
+      }
       return ErrorHandler.handleDioError(e, context, (val) {
         return ProfileDataModel.fromJson(e.response?.data);
       });
@@ -263,8 +299,9 @@ class GetMemberService {
     other_profession,
     other_education,
     context,
-    dio,
-  ) async {
+    dio, {
+    bool shouldRetry = true,
+  }) async {
     SVProgressHUD.show();
 
     String endpoint = 'member-personal-details-update/$member_id';
@@ -295,7 +332,7 @@ class GetMemberService {
       requestBody["category"] = category;
     }
 
-    if (profession != null && profession != "" && profession >= 1) {
+    if (profession != null && profession != "" && profession >= 0) {
       requestBody["profession"] = profession;
     }
 
@@ -341,6 +378,32 @@ class GetMemberService {
       SVProgressHUD.dismiss();
       debugPrint(
           "UpdateMemberPersonalDetailsModel error1: ${e.message} ${e.response}");
+
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return updatePersonalDetails(
+          member_id,
+          name,
+          email,
+          date_of_birth,
+          gender,
+          religion,
+          category,
+          profession,
+          education,
+          aadhaar_no,
+          voter_id,
+          mother_tounge,
+          other_profession,
+          other_education,
+          context,
+          dio,
+          shouldRetry: false,
+        );
+      }
+
       return ErrorHandler.handleDioError(e, context, (val) {
         return UpdateMemberPersonalDetailsModel.fromJson(e.response?.data);
       });
@@ -349,7 +412,7 @@ class GetMemberService {
 
   Future<MemberSocialDetailsModel> updateSocialDetails(context, member_id,
       aleternate_number, facebook_url, twitter_url, instagram_url, dio,
-      {bool shouldRetry = false}) async {
+      {bool shouldRetry = true}) async {
     SVProgressHUD.show();
     String endpoint = 'member-social-details-update';
 
@@ -379,6 +442,23 @@ class GetMemberService {
     } on DioException catch (e) {
       SVProgressHUD.dismiss();
       debugPrint("MemberSocialDetailsModel error1: ${e.message} ${e.response}");
+
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return updateSocialDetails(
+          context,
+          member_id,
+          aleternate_number,
+          facebook_url,
+          twitter_url,
+          instagram_url,
+          dio,
+          shouldRetry: false,
+        );
+      }
+
       return ErrorHandler.handleDioError(e, context, (val) {
         return MemberSocialDetailsModel.fromError(
             "${e.response?.data['message']}");
@@ -445,6 +525,27 @@ class GetMemberService {
     } on DioException catch (e) {
       debugPrint(
           "UpdateMemberPersonalDetailsModel error1: ${e.message} ${e.response}");
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return updateFamilyMemberPersonalDetails(
+          context,
+          member_id,
+          head_member_id,
+          name,
+          date_of_birth,
+          gender,
+          relationship,
+          mobile_no,
+          photo,
+          ref_id,
+          aadhaar_no,
+          voter_id,
+          dio,
+          shouldRetry: false,
+        );
+      }
       return ErrorHandler.handleDioError(e, context, (val) {
         return UpdateMemberFamilyDetailsModel.fromJson(e.response?.data);
       });

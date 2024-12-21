@@ -9,10 +9,12 @@ part of 'referred_family_details_model.dart';
 _$ReferredFamilyDetailsModelImpl _$$ReferredFamilyDetailsModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ReferredFamilyDetailsModelImpl(
-      status: (json['status'] as num).toInt(),
-      message: json['message'] as String,
-      data: FamilyData.fromJson(json['data'] as Map<String, dynamic>),
-      code: (json['code'] as num).toInt(),
+      status: (json['status'] as num?)?.toInt() ?? 0,
+      message: json['message'] as String? ?? 'Unauthorized',
+      data: json['data'] == null
+          ? const FamilyData(familyDetails: [])
+          : FamilyData.fromJson(json['data'] as Map<String, dynamic>),
+      code: (json['code'] as num?)?.toInt() ?? 401,
     );
 
 Map<String, dynamic> _$$ReferredFamilyDetailsModelImplToJson(
@@ -76,6 +78,7 @@ _$MembershipCardImpl _$$MembershipCardImplFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updated_at'] as String,
       village: json['village'] as String,
       photo: json['photo'] as String?,
+      primaryName: json['primary_name'] as String?,
       district: District.fromJson(json['district'] as Map<String, dynamic>),
       districtId: (json['district_id'] as num?)?.toInt(),
       name: json['name'] as String,
@@ -112,6 +115,7 @@ Map<String, dynamic> _$$MembershipCardImplToJson(
       'updated_at': instance.updatedAt,
       'village': instance.village,
       'photo': instance.photo,
+      'primary_name': instance.primaryName,
       'district': instance.district,
       'district_id': instance.districtId,
       'name': instance.name,

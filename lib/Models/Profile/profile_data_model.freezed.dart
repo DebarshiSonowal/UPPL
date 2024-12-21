@@ -14,19 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ProfileDataModel _$ProfileDataModelFromJson(Map<String, dynamic> json) {
-  return _ProfileDataModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$ProfileDataModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   ProfileDataWrapper? get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
-
-  /// Serializes this ProfileDataModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of ProfileDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -155,16 +148,13 @@ class __$$ProfileDataModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$ProfileDataModelImpl implements _ProfileDataModel {
   const _$ProfileDataModelImpl(
       {required this.status,
       required this.message,
       this.data,
       required this.code});
-
-  factory _$ProfileDataModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ProfileDataModelImplFromJson(json);
 
   @override
   final int status;
@@ -191,7 +181,6 @@ class _$ProfileDataModelImpl implements _ProfileDataModel {
             (identical(other.code, code) || other.code == code));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, status, message, data, code);
 
@@ -203,13 +192,6 @@ class _$ProfileDataModelImpl implements _ProfileDataModel {
   _$$ProfileDataModelImplCopyWith<_$ProfileDataModelImpl> get copyWith =>
       __$$ProfileDataModelImplCopyWithImpl<_$ProfileDataModelImpl>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ProfileDataModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _ProfileDataModel implements ProfileDataModel {
@@ -218,9 +200,6 @@ abstract class _ProfileDataModel implements ProfileDataModel {
       required final String message,
       final ProfileDataWrapper? data,
       required final int code}) = _$ProfileDataModelImpl;
-
-  factory _ProfileDataModel.fromJson(Map<String, dynamic> json) =
-      _$ProfileDataModelImpl.fromJson;
 
   @override
   int get status;
@@ -501,7 +480,7 @@ mixin _$ProfileData {
   @JsonKey(name: 'ref_id')
   int get refId => throw _privateConstructorUsedError;
   @JsonKey(name: 'old_ref_code')
-  String? get oldRefCode => throw _privateConstructorUsedError; // Nullable
+  String? get oldRefCode => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
   @JsonKey(name: 'pin_code')
@@ -530,7 +509,7 @@ mixin _$ProfileData {
   String get updatedAt => throw _privateConstructorUsedError;
   String get village => throw _privateConstructorUsedError;
   @JsonKey(name: 'photo')
-  String? get photo => throw _privateConstructorUsedError; // Nullable
+  String? get photo => throw _privateConstructorUsedError;
   String get district => throw _privateConstructorUsedError;
   @JsonKey(name: 'district_id')
   int get districtId => throw _privateConstructorUsedError;
@@ -544,9 +523,9 @@ mixin _$ProfileData {
   int get gender => throw _privateConstructorUsedError;
   @JsonKey(name: 'date_of_birth')
   String get dateOfBirth => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError; // Nullable
+  String? get email => throw _privateConstructorUsedError;
   @JsonKey(name: 'mother_tounge')
-  int? get motherTounge => throw _privateConstructorUsedError; // Nullable
+  int? get motherTounge => throw _privateConstructorUsedError;
   @JsonKey(name: 'other_mother_tounge')
   String? get otherMotherTounge => throw _privateConstructorUsedError;
 
@@ -1046,7 +1025,6 @@ class _$ProfileDataImpl implements _ProfileData {
   @override
   @JsonKey(name: 'old_ref_code')
   final String? oldRefCode;
-// Nullable
   @override
   final String title;
   @override
@@ -1092,7 +1070,6 @@ class _$ProfileDataImpl implements _ProfileData {
   @override
   @JsonKey(name: 'photo')
   final String? photo;
-// Nullable
   @override
   final String district;
   @override
@@ -1116,11 +1093,9 @@ class _$ProfileDataImpl implements _ProfileData {
   final String dateOfBirth;
   @override
   final String? email;
-// Nullable
   @override
   @JsonKey(name: 'mother_tounge')
   final int? motherTounge;
-// Nullable
   @override
   @JsonKey(name: 'other_mother_tounge')
   final String? otherMotherTounge;
@@ -1290,7 +1265,7 @@ abstract class _ProfileData implements ProfileData {
   int get refId;
   @override
   @JsonKey(name: 'old_ref_code')
-  String? get oldRefCode; // Nullable
+  String? get oldRefCode;
   @override
   String get title;
   @override
@@ -1335,7 +1310,7 @@ abstract class _ProfileData implements ProfileData {
   String get village;
   @override
   @JsonKey(name: 'photo')
-  String? get photo; // Nullable
+  String? get photo;
   @override
   String get district;
   @override
@@ -1358,10 +1333,10 @@ abstract class _ProfileData implements ProfileData {
   @JsonKey(name: 'date_of_birth')
   String get dateOfBirth;
   @override
-  String? get email; // Nullable
+  String? get email;
   @override
   @JsonKey(name: 'mother_tounge')
-  int? get motherTounge; // Nullable
+  int? get motherTounge;
   @override
   @JsonKey(name: 'other_mother_tounge')
   String? get otherMotherTounge;
@@ -1386,27 +1361,27 @@ mixin _$PersonalDetails {
   @JsonKey(name: 'date_of_birth')
   String get dateOfBirth => throw _privateConstructorUsedError;
   int get gender => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError; // Nullable
+  String? get email => throw _privateConstructorUsedError;
   @JsonKey(name: 'religion')
-  int? get religion => throw _privateConstructorUsedError; // Nullable
+  int? get religion => throw _privateConstructorUsedError;
   @JsonKey(name: 'other_religion')
-  String? get otherReligion => throw _privateConstructorUsedError; // Nullable
-  String? get caste => throw _privateConstructorUsedError; // Nullable
-  int? get category => throw _privateConstructorUsedError; // Nullable
-  int? get profession => throw _privateConstructorUsedError; // Nullable
+  String? get otherReligion => throw _privateConstructorUsedError;
+  String? get caste => throw _privateConstructorUsedError;
+  int? get category => throw _privateConstructorUsedError;
+  int? get profession => throw _privateConstructorUsedError;
   @JsonKey(name: 'other_profession')
-  String? get otherProfession => throw _privateConstructorUsedError; // Nullable
+  String? get otherProfession => throw _privateConstructorUsedError;
   int? get education => throw _privateConstructorUsedError;
   @JsonKey(name: 'other_education')
-  String? get otherEducation => throw _privateConstructorUsedError; // Nullable
+  String? get otherEducation => throw _privateConstructorUsedError;
   @JsonKey(name: 'aadhaar_no')
-  String? get aadhaarNo => throw _privateConstructorUsedError; // Nullable
+  String? get aadhaarNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'voter_id')
-  String? get voterId => throw _privateConstructorUsedError; // Nullable
+  String? get voterId => throw _privateConstructorUsedError;
   @JsonKey(name: 'mobile_no')
   String get mobileNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'mother_tounge')
-  int? get motherTounge => throw _privateConstructorUsedError; // Nullable
+  int? get motherTounge => throw _privateConstructorUsedError;
   @JsonKey(name: 'other_mother_tounge')
   String? get otherMotherTounge => throw _privateConstructorUsedError;
 
@@ -1734,49 +1709,38 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
   final int gender;
   @override
   final String? email;
-// Nullable
   @override
   @JsonKey(name: 'religion')
   final int? religion;
-// Nullable
   @override
   @JsonKey(name: 'other_religion')
   final String? otherReligion;
-// Nullable
   @override
   final String? caste;
-// Nullable
   @override
   final int? category;
-// Nullable
   @override
   final int? profession;
-// Nullable
   @override
   @JsonKey(name: 'other_profession')
   final String? otherProfession;
-// Nullable
   @override
   final int? education;
   @override
   @JsonKey(name: 'other_education')
   final String? otherEducation;
-// Nullable
   @override
   @JsonKey(name: 'aadhaar_no')
   final String? aadhaarNo;
-// Nullable
   @override
   @JsonKey(name: 'voter_id')
   final String? voterId;
-// Nullable
   @override
   @JsonKey(name: 'mobile_no')
   final String mobileNo;
   @override
   @JsonKey(name: 'mother_tounge')
   final int? motherTounge;
-// Nullable
   @override
   @JsonKey(name: 'other_mother_tounge')
   final String? otherMotherTounge;
@@ -1900,39 +1864,39 @@ abstract class _PersonalDetails implements PersonalDetails {
   @override
   int get gender;
   @override
-  String? get email; // Nullable
+  String? get email;
   @override
   @JsonKey(name: 'religion')
-  int? get religion; // Nullable
+  int? get religion;
   @override
   @JsonKey(name: 'other_religion')
-  String? get otherReligion; // Nullable
+  String? get otherReligion;
   @override
-  String? get caste; // Nullable
+  String? get caste;
   @override
-  int? get category; // Nullable
+  int? get category;
   @override
-  int? get profession; // Nullable
+  int? get profession;
   @override
   @JsonKey(name: 'other_profession')
-  String? get otherProfession; // Nullable
+  String? get otherProfession;
   @override
   int? get education;
   @override
   @JsonKey(name: 'other_education')
-  String? get otherEducation; // Nullable
+  String? get otherEducation;
   @override
   @JsonKey(name: 'aadhaar_no')
-  String? get aadhaarNo; // Nullable
+  String? get aadhaarNo;
   @override
   @JsonKey(name: 'voter_id')
-  String? get voterId; // Nullable
+  String? get voterId;
   @override
   @JsonKey(name: 'mobile_no')
   String get mobileNo;
   @override
   @JsonKey(name: 'mother_tounge')
-  int? get motherTounge; // Nullable
+  int? get motherTounge;
   @override
   @JsonKey(name: 'other_mother_tounge')
   String? get otherMotherTounge;
@@ -1952,14 +1916,13 @@ SocialDetails _$SocialDetailsFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SocialDetails {
   @JsonKey(name: 'member_id')
-  int? get memberId => throw _privateConstructorUsedError; // Nullable
+  int? get memberId => throw _privateConstructorUsedError;
   @JsonKey(name: 'aleternate_number')
-  String? get aleternateNumber =>
-      throw _privateConstructorUsedError; // Nullable
+  String? get aleternateNumber => throw _privateConstructorUsedError;
   @JsonKey(name: 'facebook_url')
-  String? get facebookUrl => throw _privateConstructorUsedError; // Nullable
+  String? get facebookUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'twitter_url')
-  String? get twitterUrl => throw _privateConstructorUsedError; // Nullable
+  String? get twitterUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'instagram_url')
   String? get instagramUrl => throw _privateConstructorUsedError;
 
@@ -2109,19 +2072,15 @@ class _$SocialDetailsImpl implements _SocialDetails {
   @override
   @JsonKey(name: 'member_id')
   final int? memberId;
-// Nullable
   @override
   @JsonKey(name: 'aleternate_number')
   final String? aleternateNumber;
-// Nullable
   @override
   @JsonKey(name: 'facebook_url')
   final String? facebookUrl;
-// Nullable
   @override
   @JsonKey(name: 'twitter_url')
   final String? twitterUrl;
-// Nullable
   @override
   @JsonKey(name: 'instagram_url')
   final String? instagramUrl;
@@ -2183,16 +2142,16 @@ abstract class _SocialDetails implements SocialDetails {
 
   @override
   @JsonKey(name: 'member_id')
-  int? get memberId; // Nullable
+  int? get memberId;
   @override
   @JsonKey(name: 'aleternate_number')
-  String? get aleternateNumber; // Nullable
+  String? get aleternateNumber;
   @override
   @JsonKey(name: 'facebook_url')
-  String? get facebookUrl; // Nullable
+  String? get facebookUrl;
   @override
   @JsonKey(name: 'twitter_url')
-  String? get twitterUrl; // Nullable
+  String? get twitterUrl;
   @override
   @JsonKey(name: 'instagram_url')
   String? get instagramUrl;

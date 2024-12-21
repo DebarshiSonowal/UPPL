@@ -9,6 +9,8 @@ import 'package:uppl/Repository/repository.dart';
 
 import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
+import '../../Helper/toast.dart';
+import '../../Models/Member/member_details_model.dart';
 import '../../Navigation/Router/app_router.dart';
 import '../CommonWidgets/custom_nav_drawer.dart';
 import '../CommonWidgets/pie_chart.dart';
@@ -31,6 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       fetchAudienceDemographic(context);
       fetchFamilyData(context);
       fetchJoinedBy();
+      fetchProfileData(context);
       setState(() {
         Configuration.currentIndex = 2;
       });
@@ -65,7 +68,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
-                            data.memberData?.membershipCardData.photo ?? ""),
+                          data.memberData?.membershipCardData.photo ?? "",
+                        ),
+                        fit: BoxFit.fill,
                       ),
                     ),
                     height: 25.w,
@@ -315,7 +320,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ? SizedBox(
                                       width: 22.w,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          try {
+                                            AutoRouter.of(context).pushNamed(
+                                                CustomRoutes
+                                                    .updateFamilyDetailsScreen);
+                                          } catch (e) {
+                                            CustomToast.showWarningToast(
+                                                context,
+                                                "Oops!",
+                                                "Something Went Wrong. Please try again later.");
+                                          }
+                                        },
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                             horizontal: 2.w,
@@ -413,39 +429,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  // AutoRouter.of(context).pushNamed(CustomRoutes.addMemberScreen);
-                },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Configuration.thirdColor,
-                  ),
-                  width: double.infinity,
-                  height: 8.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.download,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      Text(
-                        "Download Family Membership Card",
-                        style: Configuration.primaryFont(
-                          fontSize: 15.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          // Add other text styling as needed
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     // AutoRouter.of(context).pushNamed(CustomRoutes.addMemberScreen);
+              //   },
+              //   child: Container(
+              //     decoration: const BoxDecoration(
+              //       color: Configuration.thirdColor,
+              //     ),
+              //     width: double.infinity,
+              //     height: 8.h,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         const Icon(
+              //           FontAwesomeIcons.download,
+              //           color: Colors.white,
+              //         ),
+              //         SizedBox(
+              //           width: 5.w,
+              //         ),
+              //         Text(
+              //           "Download Family Membership Card",
+              //           style: Configuration.primaryFont(
+              //             fontSize: 15.sp,
+              //             color: Colors.white,
+              //             fontWeight: FontWeight.bold,
+              //             // Add other text styling as needed
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -509,6 +525,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (response1.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setUnverifiedJoinedByReferralMember(response1.data!.data);
+    }
+  }
+
+  void fetchProfileData(BuildContext context) async {
+    final responseJson =
+        await ApiService.instance(context).getMemberDetails(context);
+    if (responseJson.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setData(responseJson.data as MemberDetailsData);
+    }
+    final response = await ApiService.instance(context).getProfileData(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setProfileData(response.data!.profileData);
+      Provider.of<Repository>(context, listen: false)
+          .setSocialData(response.data!.socialDetails);
+      Provider.of<Repository>(context, listen: false)
+          .setPersonalData(response.data!.personalDetails);
     }
   }
 }

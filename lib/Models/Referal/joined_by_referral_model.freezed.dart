@@ -14,20 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-JoinedByReferralModel _$JoinedByReferralModelFromJson(
-    Map<String, dynamic> json) {
-  return _JoinedByReferralModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$JoinedByReferralModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   JoinedByReferralData? get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
-
-  /// Serializes this JoinedByReferralModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of JoinedByReferralModel
   /// with the given fields replaced by the non-null parameter values.
@@ -159,16 +151,13 @@ class __$$JoinedByReferralModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$JoinedByReferralModelImpl implements _JoinedByReferralModel {
   const _$JoinedByReferralModelImpl(
       {required this.status,
       required this.message,
       this.data,
       required this.code});
-
-  factory _$JoinedByReferralModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$JoinedByReferralModelImplFromJson(json);
 
   @override
   final int status;
@@ -195,7 +184,6 @@ class _$JoinedByReferralModelImpl implements _JoinedByReferralModel {
             (identical(other.code, code) || other.code == code));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, status, message, data, code);
 
@@ -207,13 +195,6 @@ class _$JoinedByReferralModelImpl implements _JoinedByReferralModel {
   _$$JoinedByReferralModelImplCopyWith<_$JoinedByReferralModelImpl>
       get copyWith => __$$JoinedByReferralModelImplCopyWithImpl<
           _$JoinedByReferralModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$JoinedByReferralModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _JoinedByReferralModel implements JoinedByReferralModel {
@@ -222,9 +203,6 @@ abstract class _JoinedByReferralModel implements JoinedByReferralModel {
       required final String message,
       final JoinedByReferralData? data,
       required final int code}) = _$JoinedByReferralModelImpl;
-
-  factory _JoinedByReferralModel.fromJson(Map<String, dynamic> json) =
-      _$JoinedByReferralModelImpl.fromJson;
 
   @override
   int get status;

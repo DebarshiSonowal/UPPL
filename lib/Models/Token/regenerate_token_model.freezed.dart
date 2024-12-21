@@ -14,68 +14,94 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+RegenerateTokenModel _$RegenerateTokenModelFromJson(Map<String, dynamic> json) {
+  switch (json['runtimeType']) {
+    case 'success':
+      return RegenerateTokenModelSuccess.fromJson(json);
+    case 'error':
+      return RegenerateTokenModelError.fromJson(json);
+    case 'withError':
+      return RegenerateTokenModelWithError.fromJson(json);
+
+    default:
+      throw CheckedFromJsonException(
+          json,
+          'runtimeType',
+          'RegenerateTokenModel',
+          'Invalid union type "${json['runtimeType']}"!');
+  }
+}
+
 /// @nodoc
 mixin _$RegenerateTokenModel {
+  int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
+  int get code => throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)
-        $default, {
-    required TResult Function(String message) withError,
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int status, String message, RegenerateTokenData data, int code)
+        success,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        error,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        withError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
+  TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)?
-        $default, {
-    TResult? Function(String message)? withError,
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
+  TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)?
-        $default, {
-    TResult Function(String message)? withError,
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_RegenerateTokenModel value) $default, {
-    required TResult Function(_RegenerateTokenModelWithError value) withError,
+  TResult map<TResult extends Object?>({
+    required TResult Function(RegenerateTokenModelSuccess value) success,
+    required TResult Function(RegenerateTokenModelError value) error,
+    required TResult Function(RegenerateTokenModelWithError value) withError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_RegenerateTokenModel value)? $default, {
-    TResult? Function(_RegenerateTokenModelWithError value)? withError,
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(RegenerateTokenModelSuccess value)? success,
+    TResult? Function(RegenerateTokenModelError value)? error,
+    TResult? Function(RegenerateTokenModelWithError value)? withError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_RegenerateTokenModel value)? $default, {
-    TResult Function(_RegenerateTokenModelWithError value)? withError,
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RegenerateTokenModelSuccess value)? success,
+    TResult Function(RegenerateTokenModelError value)? error,
+    TResult Function(RegenerateTokenModelWithError value)? withError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this RegenerateTokenModel to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of RegenerateTokenModel
   /// with the given fields replaced by the non-null parameter values.
@@ -90,7 +116,7 @@ abstract class $RegenerateTokenModelCopyWith<$Res> {
           $Res Function(RegenerateTokenModel) then) =
       _$RegenerateTokenModelCopyWithImpl<$Res, RegenerateTokenModel>;
   @useResult
-  $Res call({String message});
+  $Res call({int status, String message, int code});
 }
 
 /// @nodoc
@@ -109,43 +135,49 @@ class _$RegenerateTokenModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? status = null,
     Object? message = null,
+    Object? code = null,
   }) {
     return _then(_value.copyWith(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$RegenerateTokenModelImplCopyWith<$Res>
+abstract class _$$RegenerateTokenModelSuccessImplCopyWith<$Res>
     implements $RegenerateTokenModelCopyWith<$Res> {
-  factory _$$RegenerateTokenModelImplCopyWith(_$RegenerateTokenModelImpl value,
-          $Res Function(_$RegenerateTokenModelImpl) then) =
-      __$$RegenerateTokenModelImplCopyWithImpl<$Res>;
+  factory _$$RegenerateTokenModelSuccessImplCopyWith(
+          _$RegenerateTokenModelSuccessImpl value,
+          $Res Function(_$RegenerateTokenModelSuccessImpl) then) =
+      __$$RegenerateTokenModelSuccessImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int status,
-      String message,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      RegenerateTokenData? data,
-      RegenerateTokenError? error,
-      int code});
+  $Res call({int status, String message, RegenerateTokenData data, int code});
 
-  $RegenerateTokenDataCopyWith<$Res>? get data;
-  $RegenerateTokenErrorCopyWith<$Res>? get error;
+  $RegenerateTokenDataCopyWith<$Res> get data;
 }
 
 /// @nodoc
-class __$$RegenerateTokenModelImplCopyWithImpl<$Res>
-    extends _$RegenerateTokenModelCopyWithImpl<$Res, _$RegenerateTokenModelImpl>
-    implements _$$RegenerateTokenModelImplCopyWith<$Res> {
-  __$$RegenerateTokenModelImplCopyWithImpl(_$RegenerateTokenModelImpl _value,
-      $Res Function(_$RegenerateTokenModelImpl) _then)
+class __$$RegenerateTokenModelSuccessImplCopyWithImpl<$Res>
+    extends _$RegenerateTokenModelCopyWithImpl<$Res,
+        _$RegenerateTokenModelSuccessImpl>
+    implements _$$RegenerateTokenModelSuccessImplCopyWith<$Res> {
+  __$$RegenerateTokenModelSuccessImplCopyWithImpl(
+      _$RegenerateTokenModelSuccessImpl _value,
+      $Res Function(_$RegenerateTokenModelSuccessImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of RegenerateTokenModel
@@ -155,11 +187,10 @@ class __$$RegenerateTokenModelImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = freezed,
-    Object? error = freezed,
+    Object? data = null,
     Object? code = null,
   }) {
-    return _then(_$RegenerateTokenModelImpl(
+    return _then(_$RegenerateTokenModelSuccessImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -168,14 +199,10 @@ class __$$RegenerateTokenModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: freezed == data
+      data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as RegenerateTokenData?,
-      error: freezed == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as RegenerateTokenError?,
+              as RegenerateTokenData,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -187,190 +214,426 @@ class __$$RegenerateTokenModelImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $RegenerateTokenDataCopyWith<$Res>? get data {
-    if (_value.data == null) {
-      return null;
-    }
-
-    return $RegenerateTokenDataCopyWith<$Res>(_value.data!, (value) {
+  $RegenerateTokenDataCopyWith<$Res> get data {
+    return $RegenerateTokenDataCopyWith<$Res>(_value.data, (value) {
       return _then(_value.copyWith(data: value));
-    });
-  }
-
-  /// Create a copy of RegenerateTokenModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $RegenerateTokenErrorCopyWith<$Res>? get error {
-    if (_value.error == null) {
-      return null;
-    }
-
-    return $RegenerateTokenErrorCopyWith<$Res>(_value.error!, (value) {
-      return _then(_value.copyWith(error: value));
     });
   }
 }
 
 /// @nodoc
-
-class _$RegenerateTokenModelImpl implements _RegenerateTokenModel {
-  const _$RegenerateTokenModelImpl(
+@JsonSerializable()
+class _$RegenerateTokenModelSuccessImpl implements RegenerateTokenModelSuccess {
+  const _$RegenerateTokenModelSuccessImpl(
       {required this.status,
       required this.message,
-      @JsonKey(includeFromJson: false, includeToJson: false) this.data,
-      this.error,
-      required this.code});
+      required this.data,
+      required this.code,
+      final String? $type})
+      : $type = $type ?? 'success';
+
+  factory _$RegenerateTokenModelSuccessImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$RegenerateTokenModelSuccessImplFromJson(json);
 
   @override
   final int status;
   @override
   final String message;
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final RegenerateTokenData? data;
-  @override
-  final RegenerateTokenError? error;
+  final RegenerateTokenData data;
   @override
   final int code;
 
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
   @override
   String toString() {
-    return 'RegenerateTokenModel(status: $status, message: $message, data: $data, error: $error, code: $code)';
+    return 'RegenerateTokenModel.success(status: $status, message: $message, data: $data, code: $code)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RegenerateTokenModelImpl &&
+            other is _$RegenerateTokenModelSuccessImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.data, data) || other.data == data) &&
-            (identical(other.error, error) || other.error == error) &&
             (identical(other.code, code) || other.code == code));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, status, message, data, error, code);
+  int get hashCode => Object.hash(runtimeType, status, message, data, code);
 
   /// Create a copy of RegenerateTokenModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$RegenerateTokenModelImplCopyWith<_$RegenerateTokenModelImpl>
-      get copyWith =>
-          __$$RegenerateTokenModelImplCopyWithImpl<_$RegenerateTokenModelImpl>(
-              this, _$identity);
+  _$$RegenerateTokenModelSuccessImplCopyWith<_$RegenerateTokenModelSuccessImpl>
+      get copyWith => __$$RegenerateTokenModelSuccessImplCopyWithImpl<
+          _$RegenerateTokenModelSuccessImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)
-        $default, {
-    required TResult Function(String message) withError,
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int status, String message, RegenerateTokenData data, int code)
+        success,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        error,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        withError,
   }) {
-    return $default(status, message, data, error, code);
+    return success(status, message, data, code);
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
+  TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)?
-        $default, {
-    TResult? Function(String message)? withError,
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
   }) {
-    return $default?.call(status, message, data, error, code);
+    return success?.call(status, message, data, code);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
+  TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)?
-        $default, {
-    TResult Function(String message)? withError,
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
     required TResult orElse(),
   }) {
-    if ($default != null) {
-      return $default(status, message, data, error, code);
+    if (success != null) {
+      return success(status, message, data, code);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_RegenerateTokenModel value) $default, {
-    required TResult Function(_RegenerateTokenModelWithError value) withError,
+  TResult map<TResult extends Object?>({
+    required TResult Function(RegenerateTokenModelSuccess value) success,
+    required TResult Function(RegenerateTokenModelError value) error,
+    required TResult Function(RegenerateTokenModelWithError value) withError,
   }) {
-    return $default(this);
+    return success(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_RegenerateTokenModel value)? $default, {
-    TResult? Function(_RegenerateTokenModelWithError value)? withError,
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(RegenerateTokenModelSuccess value)? success,
+    TResult? Function(RegenerateTokenModelError value)? error,
+    TResult? Function(RegenerateTokenModelWithError value)? withError,
   }) {
-    return $default?.call(this);
+    return success?.call(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_RegenerateTokenModel value)? $default, {
-    TResult Function(_RegenerateTokenModelWithError value)? withError,
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RegenerateTokenModelSuccess value)? success,
+    TResult Function(RegenerateTokenModelError value)? error,
+    TResult Function(RegenerateTokenModelWithError value)? withError,
     required TResult orElse(),
   }) {
-    if ($default != null) {
-      return $default(this);
+    if (success != null) {
+      return success(this);
     }
     return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RegenerateTokenModelSuccessImplToJson(
+      this,
+    );
   }
 }
 
-abstract class _RegenerateTokenModel implements RegenerateTokenModel {
-  const factory _RegenerateTokenModel(
+abstract class RegenerateTokenModelSuccess implements RegenerateTokenModel {
+  const factory RegenerateTokenModelSuccess(
       {required final int status,
       required final String message,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final RegenerateTokenData? data,
-      final RegenerateTokenError? error,
-      required final int code}) = _$RegenerateTokenModelImpl;
+      required final RegenerateTokenData data,
+      required final int code}) = _$RegenerateTokenModelSuccessImpl;
 
+  factory RegenerateTokenModelSuccess.fromJson(Map<String, dynamic> json) =
+      _$RegenerateTokenModelSuccessImpl.fromJson;
+
+  @override
   int get status;
   @override
   String get message;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  RegenerateTokenData? get data;
-  RegenerateTokenError? get error;
+  RegenerateTokenData get data;
+  @override
   int get code;
 
   /// Create a copy of RegenerateTokenModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RegenerateTokenModelImplCopyWith<_$RegenerateTokenModelImpl>
+  _$$RegenerateTokenModelSuccessImplCopyWith<_$RegenerateTokenModelSuccessImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RegenerateTokenModelErrorImplCopyWith<$Res>
+    implements $RegenerateTokenModelCopyWith<$Res> {
+  factory _$$RegenerateTokenModelErrorImplCopyWith(
+          _$RegenerateTokenModelErrorImpl value,
+          $Res Function(_$RegenerateTokenModelErrorImpl) then) =
+      __$$RegenerateTokenModelErrorImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int status, String message, RegenerateTokenError error, int code});
+
+  $RegenerateTokenErrorCopyWith<$Res> get error;
+}
+
+/// @nodoc
+class __$$RegenerateTokenModelErrorImplCopyWithImpl<$Res>
+    extends _$RegenerateTokenModelCopyWithImpl<$Res,
+        _$RegenerateTokenModelErrorImpl>
+    implements _$$RegenerateTokenModelErrorImplCopyWith<$Res> {
+  __$$RegenerateTokenModelErrorImplCopyWithImpl(
+      _$RegenerateTokenModelErrorImpl _value,
+      $Res Function(_$RegenerateTokenModelErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of RegenerateTokenModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? status = null,
+    Object? message = null,
+    Object? error = null,
+    Object? code = null,
+  }) {
+    return _then(_$RegenerateTokenModelErrorImpl(
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as RegenerateTokenError,
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+
+  /// Create a copy of RegenerateTokenModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RegenerateTokenErrorCopyWith<$Res> get error {
+    return $RegenerateTokenErrorCopyWith<$Res>(_value.error, (value) {
+      return _then(_value.copyWith(error: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RegenerateTokenModelErrorImpl implements RegenerateTokenModelError {
+  const _$RegenerateTokenModelErrorImpl(
+      {required this.status,
+      required this.message,
+      required this.error,
+      required this.code,
+      final String? $type})
+      : $type = $type ?? 'error';
+
+  factory _$RegenerateTokenModelErrorImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RegenerateTokenModelErrorImplFromJson(json);
+
+  @override
+  final int status;
+  @override
+  final String message;
+  @override
+  final RegenerateTokenError error;
+  @override
+  final int code;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'RegenerateTokenModel.error(status: $status, message: $message, error: $error, code: $code)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegenerateTokenModelErrorImpl &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.code, code) || other.code == code));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, status, message, error, code);
+
+  /// Create a copy of RegenerateTokenModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RegenerateTokenModelErrorImplCopyWith<_$RegenerateTokenModelErrorImpl>
+      get copyWith => __$$RegenerateTokenModelErrorImplCopyWithImpl<
+          _$RegenerateTokenModelErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int status, String message, RegenerateTokenData data, int code)
+        success,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        error,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        withError,
+  }) {
+    return error(status, message, this.error, code);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
+  }) {
+    return error?.call(status, message, this.error, code);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(status, message, this.error, code);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(RegenerateTokenModelSuccess value) success,
+    required TResult Function(RegenerateTokenModelError value) error,
+    required TResult Function(RegenerateTokenModelWithError value) withError,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(RegenerateTokenModelSuccess value)? success,
+    TResult? Function(RegenerateTokenModelError value)? error,
+    TResult? Function(RegenerateTokenModelWithError value)? withError,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RegenerateTokenModelSuccess value)? success,
+    TResult Function(RegenerateTokenModelError value)? error,
+    TResult Function(RegenerateTokenModelWithError value)? withError,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RegenerateTokenModelErrorImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class RegenerateTokenModelError implements RegenerateTokenModel {
+  const factory RegenerateTokenModelError(
+      {required final int status,
+      required final String message,
+      required final RegenerateTokenError error,
+      required final int code}) = _$RegenerateTokenModelErrorImpl;
+
+  factory RegenerateTokenModelError.fromJson(Map<String, dynamic> json) =
+      _$RegenerateTokenModelErrorImpl.fromJson;
+
+  @override
+  int get status;
+  @override
+  String get message;
+  RegenerateTokenError get error;
+  @override
+  int get code;
+
+  /// Create a copy of RegenerateTokenModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RegenerateTokenModelErrorImplCopyWith<_$RegenerateTokenModelErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -383,7 +646,9 @@ abstract class _$$RegenerateTokenModelWithErrorImplCopyWith<$Res>
       __$$RegenerateTokenModelWithErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message});
+  $Res call({int status, String message, RegenerateTokenError error, int code});
+
+  $RegenerateTokenErrorCopyWith<$Res> get error;
 }
 
 /// @nodoc
@@ -401,29 +666,73 @@ class __$$RegenerateTokenModelWithErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? status = null,
     Object? message = null,
+    Object? error = null,
+    Object? code = null,
   }) {
     return _then(_$RegenerateTokenModelWithErrorImpl(
-      null == message
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int,
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as RegenerateTokenError,
+      code: null == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
+  }
+
+  /// Create a copy of RegenerateTokenModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RegenerateTokenErrorCopyWith<$Res> get error {
+    return $RegenerateTokenErrorCopyWith<$Res>(_value.error, (value) {
+      return _then(_value.copyWith(error: value));
+    });
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$RegenerateTokenModelWithErrorImpl
-    implements _RegenerateTokenModelWithError {
-  const _$RegenerateTokenModelWithErrorImpl(this.message);
+    implements RegenerateTokenModelWithError {
+  const _$RegenerateTokenModelWithErrorImpl(
+      {required this.status,
+      required this.message,
+      required this.error,
+      required this.code,
+      final String? $type})
+      : $type = $type ?? 'withError';
+
+  factory _$RegenerateTokenModelWithErrorImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$RegenerateTokenModelWithErrorImplFromJson(json);
 
   @override
+  final int status;
+  @override
   final String message;
+  @override
+  final RegenerateTokenError error;
+  @override
+  final int code;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
-    return 'RegenerateTokenModel.withError(message: $message)';
+    return 'RegenerateTokenModel.withError(status: $status, message: $message, error: $error, code: $code)';
   }
 
   @override
@@ -431,11 +740,15 @@ class _$RegenerateTokenModelWithErrorImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RegenerateTokenModelWithErrorImpl &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.code, code) || other.code == code));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, message);
+  int get hashCode => Object.hash(runtimeType, status, message, error, code);
 
   /// Create a copy of RegenerateTokenModel
   /// with the given fields replaced by the non-null parameter values.
@@ -449,79 +762,82 @@ class _$RegenerateTokenModelWithErrorImpl
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)
-        $default, {
-    required TResult Function(String message) withError,
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int status, String message, RegenerateTokenData data, int code)
+        success,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        error,
+    required TResult Function(
+            int status, String message, RegenerateTokenError error, int code)
+        withError,
   }) {
-    return withError(message);
+    return withError(status, message, this.error, code);
   }
 
   @override
   @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
+  TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)?
-        $default, {
-    TResult? Function(String message)? withError,
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult? Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
   }) {
-    return withError?.call(message);
+    return withError?.call(status, message, this.error, code);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
+  TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            int status,
-            String message,
-            @JsonKey(includeFromJson: false, includeToJson: false)
-            RegenerateTokenData? data,
-            RegenerateTokenError? error,
-            int code)?
-        $default, {
-    TResult Function(String message)? withError,
+            int status, String message, RegenerateTokenData data, int code)?
+        success,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        error,
+    TResult Function(
+            int status, String message, RegenerateTokenError error, int code)?
+        withError,
     required TResult orElse(),
   }) {
     if (withError != null) {
-      return withError(message);
+      return withError(status, message, this.error, code);
     }
     return orElse();
   }
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_RegenerateTokenModel value) $default, {
-    required TResult Function(_RegenerateTokenModelWithError value) withError,
+  TResult map<TResult extends Object?>({
+    required TResult Function(RegenerateTokenModelSuccess value) success,
+    required TResult Function(RegenerateTokenModelError value) error,
+    required TResult Function(RegenerateTokenModelWithError value) withError,
   }) {
     return withError(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_RegenerateTokenModel value)? $default, {
-    TResult? Function(_RegenerateTokenModelWithError value)? withError,
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(RegenerateTokenModelSuccess value)? success,
+    TResult? Function(RegenerateTokenModelError value)? error,
+    TResult? Function(RegenerateTokenModelWithError value)? withError,
   }) {
     return withError?.call(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_RegenerateTokenModel value)? $default, {
-    TResult Function(_RegenerateTokenModelWithError value)? withError,
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RegenerateTokenModelSuccess value)? success,
+    TResult Function(RegenerateTokenModelError value)? error,
+    TResult Function(RegenerateTokenModelWithError value)? withError,
     required TResult orElse(),
   }) {
     if (withError != null) {
@@ -529,14 +845,32 @@ class _$RegenerateTokenModelWithErrorImpl
     }
     return orElse();
   }
-}
-
-abstract class _RegenerateTokenModelWithError implements RegenerateTokenModel {
-  const factory _RegenerateTokenModelWithError(final String message) =
-      _$RegenerateTokenModelWithErrorImpl;
 
   @override
+  Map<String, dynamic> toJson() {
+    return _$$RegenerateTokenModelWithErrorImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class RegenerateTokenModelWithError implements RegenerateTokenModel {
+  const factory RegenerateTokenModelWithError(
+      {required final int status,
+      required final String message,
+      required final RegenerateTokenError error,
+      required final int code}) = _$RegenerateTokenModelWithErrorImpl;
+
+  factory RegenerateTokenModelWithError.fromJson(Map<String, dynamic> json) =
+      _$RegenerateTokenModelWithErrorImpl.fromJson;
+
+  @override
+  int get status;
+  @override
   String get message;
+  RegenerateTokenError get error;
+  @override
+  int get code;
 
   /// Create a copy of RegenerateTokenModel
   /// with the given fields replaced by the non-null parameter values.

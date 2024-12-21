@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/API/api_services.dart';
@@ -257,31 +256,19 @@ class _SocialScreenState extends State<SocialScreen> {
             SizedBox(
               height: 2.5.h,
             ),
-            Padding(
+            Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
                 horizontal: 5.w,
               ),
-              child: SwipeButton.expand(
-                thumb: const Icon(
-                  Icons.double_arrow_rounded,
-                  color: Colors.white,
-                ),
-                activeThumbColor: Configuration.thirdColor,
-                activeTrackColor: Configuration.primaryColor,
-                inactiveTrackColor: Colors.white,
-                onSwipe: () {
-                  updateSocialData(context);
-                },
-                child: Text(
-                  "Save",
-                  style: Configuration.primaryFont(
-                    fontSize: 16.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    // Add other text styling as needed
-                  ),
-                ),
-              ),
+              child: Configuration.rectangleButton(
+                  onPressed: () {
+                    updateSocialData(context);
+                  },
+                  text: "Save",
+                  fontSize: 15.sp,
+                  fontColor: Colors.black,
+                  bgColor: Configuration.primaryColor),
             ),
           ],
         ),

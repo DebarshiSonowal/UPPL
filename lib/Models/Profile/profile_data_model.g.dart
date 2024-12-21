@@ -6,26 +6,6 @@ part of 'profile_data_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProfileDataModelImpl _$$ProfileDataModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ProfileDataModelImpl(
-      status: (json['status'] as num).toInt(),
-      message: json['message'] as String,
-      data: json['data'] == null
-          ? null
-          : ProfileDataWrapper.fromJson(json['data'] as Map<String, dynamic>),
-      code: (json['code'] as num).toInt(),
-    );
-
-Map<String, dynamic> _$$ProfileDataModelImplToJson(
-        _$ProfileDataModelImpl instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-      'data': instance.data,
-      'code': instance.code,
-    };
-
 _$ProfileDataWrapperImpl _$$ProfileDataWrapperImplFromJson(
         Map<String, dynamic> json) =>
     _$ProfileDataWrapperImpl(

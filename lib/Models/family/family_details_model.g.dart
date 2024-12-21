@@ -73,6 +73,7 @@ _$FamilyMembershipCardImpl _$$FamilyMembershipCardImplFromJson(
       updateCount: (json['update_count'] as num).toInt(),
       createdAt: json['created_at'] as String,
       updatedAt: json['updated_at'] as String,
+      primaryName: json['primary_name'] as String?,
       village: json['village'] as String,
       photo: json['photo'] as String?,
       district:
@@ -111,6 +112,7 @@ Map<String, dynamic> _$$FamilyMembershipCardImplToJson(
       'update_count': instance.updateCount,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
+      'primary_name': instance.primaryName,
       'village': instance.village,
       'photo': instance.photo,
       'district': instance.district,

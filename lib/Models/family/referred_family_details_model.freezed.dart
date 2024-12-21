@@ -21,10 +21,12 @@ ReferredFamilyDetailsModel _$ReferredFamilyDetailsModelFromJson(
 
 /// @nodoc
 mixin _$ReferredFamilyDetailsModel {
-  int get status => throw _privateConstructorUsedError;
-  String get message => throw _privateConstructorUsedError;
+  int get status =>
+      throw _privateConstructorUsedError; // Defaulting to 0 if not provided
+  String get message =>
+      throw _privateConstructorUsedError; // Defaulting to 'Unauthorized' for message
   FamilyData get data =>
-      throw _privateConstructorUsedError; // Maps the 'data' field from JSON
+      throw _privateConstructorUsedError; // Defaulting to empty FamilyData
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this ReferredFamilyDetailsModel to a JSON map.
@@ -161,23 +163,29 @@ class __$$ReferredFamilyDetailsModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReferredFamilyDetailsModelImpl implements _ReferredFamilyDetailsModel {
   const _$ReferredFamilyDetailsModelImpl(
-      {required this.status,
-      required this.message,
-      required this.data,
-      required this.code});
+      {this.status = 0,
+      this.message = 'Unauthorized',
+      this.data = const FamilyData(familyDetails: []),
+      this.code = 401});
 
   factory _$ReferredFamilyDetailsModelImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$ReferredFamilyDetailsModelImplFromJson(json);
 
   @override
+  @JsonKey()
   final int status;
+// Defaulting to 0 if not provided
   @override
+  @JsonKey()
   final String message;
+// Defaulting to 'Unauthorized' for message
   @override
+  @JsonKey()
   final FamilyData data;
-// Maps the 'data' field from JSON
+// Defaulting to empty FamilyData
   @override
+  @JsonKey()
   final int code;
 
   @override
@@ -220,20 +228,20 @@ class _$ReferredFamilyDetailsModelImpl implements _ReferredFamilyDetailsModel {
 abstract class _ReferredFamilyDetailsModel
     implements ReferredFamilyDetailsModel {
   const factory _ReferredFamilyDetailsModel(
-      {required final int status,
-      required final String message,
-      required final FamilyData data,
-      required final int code}) = _$ReferredFamilyDetailsModelImpl;
+      {final int status,
+      final String message,
+      final FamilyData data,
+      final int code}) = _$ReferredFamilyDetailsModelImpl;
 
   factory _ReferredFamilyDetailsModel.fromJson(Map<String, dynamic> json) =
       _$ReferredFamilyDetailsModelImpl.fromJson;
 
   @override
-  int get status;
+  int get status; // Defaulting to 0 if not provided
   @override
-  String get message;
+  String get message; // Defaulting to 'Unauthorized' for message
   @override
-  FamilyData get data; // Maps the 'data' field from JSON
+  FamilyData get data; // Defaulting to empty FamilyData
   @override
   int get code;
 
@@ -683,6 +691,8 @@ mixin _$MembershipCard {
   String get updatedAt => throw _privateConstructorUsedError;
   String get village => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'primary_name')
+  String? get primaryName => throw _privateConstructorUsedError;
   District get district => throw _privateConstructorUsedError;
   @JsonKey(name: 'district_id')
   int? get districtId => throw _privateConstructorUsedError;
@@ -739,6 +749,7 @@ abstract class $MembershipCardCopyWith<$Res> {
       @JsonKey(name: 'updated_at') String updatedAt,
       String village,
       String? photo,
+      @JsonKey(name: 'primary_name') String? primaryName,
       District district,
       @JsonKey(name: 'district_id') int? districtId,
       String name,
@@ -789,6 +800,7 @@ class _$MembershipCardCopyWithImpl<$Res, $Val extends MembershipCard>
     Object? updatedAt = null,
     Object? village = null,
     Object? photo = freezed,
+    Object? primaryName = freezed,
     Object? district = null,
     Object? districtId = freezed,
     Object? name = null,
@@ -882,6 +894,10 @@ class _$MembershipCardCopyWithImpl<$Res, $Val extends MembershipCard>
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as String?,
+      primaryName: freezed == primaryName
+          ? _value.primaryName
+          : primaryName // ignore: cast_nullable_to_non_nullable
+              as String?,
       district: null == district
           ? _value.district
           : district // ignore: cast_nullable_to_non_nullable
@@ -970,6 +986,7 @@ abstract class _$$MembershipCardImplCopyWith<$Res>
       @JsonKey(name: 'updated_at') String updatedAt,
       String village,
       String? photo,
+      @JsonKey(name: 'primary_name') String? primaryName,
       District district,
       @JsonKey(name: 'district_id') int? districtId,
       String name,
@@ -1019,6 +1036,7 @@ class __$$MembershipCardImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? village = null,
     Object? photo = freezed,
+    Object? primaryName = freezed,
     Object? district = null,
     Object? districtId = freezed,
     Object? name = null,
@@ -1112,6 +1130,10 @@ class __$$MembershipCardImplCopyWithImpl<$Res>
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
               as String?,
+      primaryName: freezed == primaryName
+          ? _value.primaryName
+          : primaryName // ignore: cast_nullable_to_non_nullable
+              as String?,
       district: null == district
           ? _value.district
           : district // ignore: cast_nullable_to_non_nullable
@@ -1186,6 +1208,7 @@ class _$MembershipCardImpl implements _MembershipCard {
       @JsonKey(name: 'updated_at') required this.updatedAt,
       required this.village,
       this.photo,
+      @JsonKey(name: 'primary_name') this.primaryName,
       required this.district,
       @JsonKey(name: 'district_id') this.districtId,
       required this.name,
@@ -1257,6 +1280,9 @@ class _$MembershipCardImpl implements _MembershipCard {
   @override
   final String? photo;
   @override
+  @JsonKey(name: 'primary_name')
+  final String? primaryName;
+  @override
   final District district;
   @override
   @JsonKey(name: 'district_id')
@@ -1287,7 +1313,7 @@ class _$MembershipCardImpl implements _MembershipCard {
 
   @override
   String toString() {
-    return 'MembershipCard(id: $id, userId: $userId, refId: $refId, oldRefCode: $oldRefCode, title: $title, address: $address, pinCode: $pinCode, btcAssemblyConstituencyId: $btcAssemblyConstituencyId, btcConstituency: $btcConstituency, partyDistrict: $partyDistrict, assemblyConstituency: $assemblyConstituency, primaryId: $primaryId, boothId: $boothId, villageId: $villageId, createdBy: $createdBy, updateCount: $updateCount, createdAt: $createdAt, updatedAt: $updatedAt, village: $village, photo: $photo, district: $district, districtId: $districtId, name: $name, mobileNo: $mobileNo, membershipNo: $membershipNo, refCode: $refCode, gender: $gender, dateOfBirth: $dateOfBirth, email: $email, joiningDate: $joiningDate, relationship: $relationship)';
+    return 'MembershipCard(id: $id, userId: $userId, refId: $refId, oldRefCode: $oldRefCode, title: $title, address: $address, pinCode: $pinCode, btcAssemblyConstituencyId: $btcAssemblyConstituencyId, btcConstituency: $btcConstituency, partyDistrict: $partyDistrict, assemblyConstituency: $assemblyConstituency, primaryId: $primaryId, boothId: $boothId, villageId: $villageId, createdBy: $createdBy, updateCount: $updateCount, createdAt: $createdAt, updatedAt: $updatedAt, village: $village, photo: $photo, primaryName: $primaryName, district: $district, districtId: $districtId, name: $name, mobileNo: $mobileNo, membershipNo: $membershipNo, refCode: $refCode, gender: $gender, dateOfBirth: $dateOfBirth, email: $email, joiningDate: $joiningDate, relationship: $relationship)';
   }
 
   @override
@@ -1327,6 +1353,8 @@ class _$MembershipCardImpl implements _MembershipCard {
                 other.updatedAt == updatedAt) &&
             (identical(other.village, village) || other.village == village) &&
             (identical(other.photo, photo) || other.photo == photo) &&
+            (identical(other.primaryName, primaryName) ||
+                other.primaryName == primaryName) &&
             (identical(other.district, district) ||
                 other.district == district) &&
             (identical(other.districtId, districtId) ||
@@ -1371,6 +1399,7 @@ class _$MembershipCardImpl implements _MembershipCard {
         updatedAt,
         village,
         photo,
+        primaryName,
         district,
         districtId,
         name,
@@ -1425,6 +1454,7 @@ abstract class _MembershipCard implements MembershipCard {
       @JsonKey(name: 'updated_at') required final String updatedAt,
       required final String village,
       final String? photo,
+      @JsonKey(name: 'primary_name') final String? primaryName,
       required final District district,
       @JsonKey(name: 'district_id') final int? districtId,
       required final String name,
@@ -1495,6 +1525,9 @@ abstract class _MembershipCard implements MembershipCard {
   String get village;
   @override
   String? get photo;
+  @override
+  @JsonKey(name: 'primary_name')
+  String? get primaryName;
   @override
   District get district;
   @override

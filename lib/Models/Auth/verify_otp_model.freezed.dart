@@ -22,7 +22,7 @@ VerifyOtpModel _$VerifyOtpModelFromJson(Map<String, dynamic> json) {
 mixin _$VerifyOtpModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  VerifyOtpData get data => throw _privateConstructorUsedError;
+  Object get data => throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this VerifyOtpModel to a JSON map.
@@ -41,9 +41,7 @@ abstract class $VerifyOtpModelCopyWith<$Res> {
           VerifyOtpModel value, $Res Function(VerifyOtpModel) then) =
       _$VerifyOtpModelCopyWithImpl<$Res, VerifyOtpModel>;
   @useResult
-  $Res call({int status, String message, VerifyOtpData data, int code});
-
-  $VerifyOtpDataCopyWith<$Res> get data;
+  $Res call({int status, String message, Object data, int code});
 }
 
 /// @nodoc
@@ -75,25 +73,12 @@ class _$VerifyOtpModelCopyWithImpl<$Res, $Val extends VerifyOtpModel>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as VerifyOtpData,
+      data: null == data ? _value.data : data,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
-  }
-
-  /// Create a copy of VerifyOtpModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $VerifyOtpDataCopyWith<$Res> get data {
-    return $VerifyOtpDataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value) as $Val);
-    });
   }
 }
 
@@ -105,10 +90,7 @@ abstract class _$$VerifyOtpModelImplCopyWith<$Res>
       __$$VerifyOtpModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, VerifyOtpData data, int code});
-
-  @override
-  $VerifyOtpDataCopyWith<$Res> get data;
+  $Res call({int status, String message, Object data, int code});
 }
 
 /// @nodoc
@@ -138,10 +120,7 @@ class __$$VerifyOtpModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as VerifyOtpData,
+      data: null == data ? _value.data : data,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -167,7 +146,7 @@ class _$VerifyOtpModelImpl implements _VerifyOtpModel {
   @override
   final String message;
   @override
-  final VerifyOtpData data;
+  final Object data;
   @override
   final int code;
 
@@ -183,13 +162,14 @@ class _$VerifyOtpModelImpl implements _VerifyOtpModel {
             other is _$VerifyOtpModelImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data) &&
+            const DeepCollectionEquality().equals(other.data, data) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, message, data, code);
+  int get hashCode => Object.hash(runtimeType, status, message,
+      const DeepCollectionEquality().hash(data), code);
 
   /// Create a copy of VerifyOtpModel
   /// with the given fields replaced by the non-null parameter values.
@@ -212,7 +192,7 @@ abstract class _VerifyOtpModel implements VerifyOtpModel {
   const factory _VerifyOtpModel(
       {required final int status,
       required final String message,
-      required final VerifyOtpData data,
+      required final Object data,
       required final int code}) = _$VerifyOtpModelImpl;
 
   factory _VerifyOtpModel.fromJson(Map<String, dynamic> json) =
@@ -223,7 +203,7 @@ abstract class _VerifyOtpModel implements VerifyOtpModel {
   @override
   String get message;
   @override
-  VerifyOtpData get data;
+  Object get data;
   @override
   int get code;
 

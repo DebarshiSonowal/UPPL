@@ -5,7 +5,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +14,7 @@ import 'package:uppl/Repository/repository.dart';
 
 import '../../../API/api_services.dart';
 import '../../../Helper/toast.dart';
+import '../../../Models/Member/member_details_model.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   PersonalDetailsScreen({super.key});
@@ -48,58 +48,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final data = Provider.of<Repository>(context, listen: false).memberData;
-      setState(() {
-        mobileController.text = data?.personalDetails.mobileNo ?? "";
-        fullname.text = data?.personalDetails.name ?? "";
-        email.text = data?.personalDetails.email ?? "";
-        voterId.text = data?.personalDetails.voterId ?? "";
-        aadharId.text = data?.personalDetails.aadhaarNo ?? "";
-        if (data?.personalDetails.dateOfBirth != null &&
-            data?.personalDetails.dateOfBirth != "") {
-          dob.text = DateFormat("dd-MM-yyyy")
-              .format(DateTime.parse(data!.personalDetails.dateOfBirth))
-              .toString();
-        }
-        if (data?.personalDetails.gender != null) {
-          selectedTitle = data?.personalDetails.gender == 1 ? "Mr." : "Miss.";
-          selectedGender = (data?.personalDetails.gender ?? 1) - 1;
-        }
-        if (data?.personalDetails.religion != null) {
-          religion = Provider.of<Repository>(context, listen: false)
-              .religions[data?.personalDetails.religion ?? 0];
-        }
-        if (data?.personalDetails.category != null) {
-          cast = Provider.of<Repository>(context, listen: false)
-              .categories[(data?.personalDetails.category ?? 0) - 1];
-        }
-        if (data?.personalDetails.profession != null) {
-          profession = Provider.of<Repository>(context, listen: false)
-              .professions[data?.personalDetails.profession ?? 0];
-        }
-        if (data?.personalDetails.education != null) {
-          education = Provider.of<Repository>(context, listen: false)
-              .educationLevels[data?.personalDetails.education ?? 0];
-        }
-        if (Provider.of<Repository>(context, listen: false)
-                .profileData
-                ?.motherTounge !=
-            null) {
-          motherTongue = Provider.of<Repository>(context, listen: false)
-              .motherTounge[Provider.of<Repository>(context, listen: false)
-                  .profileData
-                  ?.motherTounge ??
-              0];
-        }
-        otherProfession.text = Provider.of<Repository>(context, listen: false)
-                .personalDetails
-                ?.otherProfession ??
-            "";
-        otherEducation.text = Provider.of<Repository>(context, listen: false)
-                .personalDetails
-                ?.otherEducation ??
-            "";
-      });
+      fetchData();
     });
   }
 
@@ -574,7 +523,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Religion",
+                    "Religion*",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black87,
@@ -593,7 +542,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Select Your Religion',
+                      labelText: 'Select Your Religion*',
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -635,7 +584,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Cast/Category",
+                    "Cast/Category*",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black87,
@@ -654,7 +603,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Select Your Cast/Category',
+                      labelText: 'Select Your Cast/Category*',
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -716,7 +665,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Select Your Profession*',
+                    labelText: 'Select Your Profession',
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -757,7 +706,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Education*",
+                    "Education",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black87,
@@ -797,7 +746,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Enter Your Education*',
+                      labelText: 'Enter Your Education',
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -1059,57 +1008,88 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             SizedBox(
               height: 4.h,
             ),
-            Padding(
+            Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
                 horizontal: 5.w,
               ),
-              child: SwipeButton.expand(
-                thumb: const Icon(
-                  Icons.double_arrow_rounded,
-                  color: Colors.white,
-                ),
-                activeThumbColor: Configuration.thirdColor,
-                activeTrackColor: Configuration.primaryColor,
-                inactiveTrackColor: Colors.white,
-                onSwipe: () {
-                  if (fullname.text.isNotEmpty &&
-                      dob.text.isNotEmpty &&
-                      education != null &&
-                      voterId.text.isNotEmpty &&
-                      isValidEmail(email.text) &&
-                      isValidMobile(mobileController.text) &&
-                      motherTongue != null &&
-                      religion != null &&
-                      cast != null &&
-                      profession != null &&
-                      (profession != 'Other' ||
-                          otherProfession.text.isNotEmpty) &&
-                      (education != 'Other' ||
-                          otherEducation.text.isNotEmpty)) {
-                    saveDetails();
-                  } else {
-                    String errorMessage =
-                        "Please enter all the required information";
-                    if (!isValidEmail(email.text)) {
-                      errorMessage += "\nInvalid email address";
+              child: Configuration.rectangleButton(
+                  onPressed: () {
+                    if (fullname.text.isNotEmpty &&
+                        dob.text.isNotEmpty &&
+                        voterId.text.isNotEmpty &&
+                        (email.text.isEmpty || isValidEmail(email.text)) &&
+                        isValidMobile(mobileController.text) &&
+                        motherTongue != null &&
+                        religion != null &&
+                        cast != null &&
+                        (profession != 'Other' ||
+                            otherProfession.text.isNotEmpty) &&
+                        (education != 'Other' ||
+                            otherEducation.text.isNotEmpty)) {
+                      saveDetails();
+                    } else {
+                      String errorMessage =
+                          "Please enter all the required information";
+                      if (!isValidEmail(email.text)) {
+                        errorMessage += "\nInvalid email address";
+                      }
+                      if (!isValidMobile(mobileController.text)) {
+                        errorMessage += "\nInvalid mobile number";
+                      }
+                      CustomToast.showWarningToast(context,
+                          "Incomplete or Invalid Information", errorMessage);
                     }
-                    if (!isValidMobile(mobileController.text)) {
-                      errorMessage += "\nInvalid mobile number";
-                    }
-                    CustomToast.showWarningToast(context,
-                        "Incomplete or Invalid Information", errorMessage);
-                  }
-                },
-                child: Text(
-                  "Save",
-                  style: Configuration.primaryFont(
-                    fontSize: 16.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    // Add other text styling as needed
-                  ),
-                ),
-              ),
+                  },
+                  text: "Save",
+                  fontSize: 15.sp,
+                  fontColor: Colors.black,
+                  bgColor: Configuration.primaryColor),
+              // child: SwipeButton.expand(
+              //   thumb: const Icon(
+              //     Icons.double_arrow_rounded,
+              //     color: Colors.white,
+              //   ),
+              //   activeThumbColor: Configuration.thirdColor,
+              //   activeTrackColor: Configuration.primaryColor,
+              //   inactiveTrackColor: Colors.white,
+              //   onSwipe: () {
+              //     if (fullname.text.isNotEmpty &&
+              //         dob.text.isNotEmpty &&
+              //         voterId.text.isNotEmpty &&
+              //         (email.text.isEmpty || isValidEmail(email.text)) &&
+              //         isValidMobile(mobileController.text) &&
+              //         motherTongue != null &&
+              //         religion != null &&
+              //         cast != null &&
+              //         (profession != 'Other' ||
+              //             otherProfession.text.isNotEmpty) &&
+              //         (education != 'Other' ||
+              //             otherEducation.text.isNotEmpty)) {
+              //       saveDetails();
+              //     } else {
+              //       String errorMessage =
+              //           "Please enter all the required information";
+              //       if (!isValidEmail(email.text)) {
+              //         errorMessage += "\nInvalid email address";
+              //       }
+              //       if (!isValidMobile(mobileController.text)) {
+              //         errorMessage += "\nInvalid mobile number";
+              //       }
+              //       CustomToast.showWarningToast(context,
+              //           "Incomplete or Invalid Information", errorMessage);
+              //     }
+              //   },
+              //   child: Text(
+              //     "Save",
+              //     style: Configuration.primaryFont(
+              //       fontSize: 16.sp,
+              //       color: Colors.black,
+              //       fontWeight: FontWeight.bold,
+              //       // Add other text styling as needed
+              //     ),
+              //   ),
+              // ),
             ),
             SizedBox(
               height: 2.h,
@@ -1224,6 +1204,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   }
 
   void saveDetails() async {
+    debugPrint("Saving details $profession");
     final data = Provider.of<Repository>(context, listen: false)
         .memberData
         ?.personalDetails;
@@ -1265,6 +1246,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         "Information Updated",
         response.message,
       );
+      fetchData();
     } else {
       CustomToast.showFailureToast(
         context,
@@ -1282,5 +1264,72 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   bool isValidMobile(String mobile) {
     final mobileRegExp = RegExp(r'^[0-9]{10}$');
     return mobileRegExp.hasMatch(mobile);
+  }
+
+  void fetchData() async {
+    final responseJson =
+        await ApiService.instance(context).getMemberDetails(context);
+    if (responseJson.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setData(responseJson.data as MemberDetailsData);
+      setData();
+    }
+  }
+
+  void setData() {
+    final data = Provider.of<Repository>(context, listen: false).memberData;
+    setState(() {
+      mobileController.text = data?.personalDetails.mobileNo ?? "";
+      fullname.text = data?.personalDetails.name ?? "";
+      email.text = data?.personalDetails.email ?? "";
+      voterId.text = data?.personalDetails.voterId ?? "";
+      aadharId.text = data?.personalDetails.aadhaarNo ?? "";
+      if (data?.personalDetails.dateOfBirth != null &&
+          data?.personalDetails.dateOfBirth != "") {
+        dob.text = DateFormat("dd-MM-yyyy")
+            .format(DateTime.parse(data!.personalDetails.dateOfBirth))
+            .toString();
+      }
+      if (data?.personalDetails.gender != null) {
+        selectedTitle = data?.personalDetails.gender == 1 ? "Mr." : "Miss.";
+        selectedGender = (data?.personalDetails.gender ?? 1) - 1;
+      }
+      if (data?.personalDetails.religion != null) {
+        religion = Provider.of<Repository>(context, listen: false)
+            .religions[data?.personalDetails.religion ?? 0];
+      }
+      if (data?.personalDetails.category != null) {
+        debugPrint(
+            "Category: ${Provider.of<Repository>(context, listen: false).categories[(data?.personalDetails.category ?? 0)]}");
+        cast = Provider.of<Repository>(context, listen: false)
+            .categories[(data?.personalDetails.category ?? 0) - 1];
+      }
+      if (data?.personalDetails.profession != null) {
+        profession = Provider.of<Repository>(context, listen: false)
+            .professions[data?.personalDetails.profession ?? 0];
+      }
+      if (data?.personalDetails.education != null) {
+        education = Provider.of<Repository>(context, listen: false)
+            .educationLevels[data?.personalDetails.education ?? 0];
+      }
+      if (Provider.of<Repository>(context, listen: false)
+              .profileData
+              ?.motherTounge !=
+          null) {
+        motherTongue = Provider.of<Repository>(context, listen: false)
+            .motherTounge[Provider.of<Repository>(context, listen: false)
+                .profileData
+                ?.motherTounge ??
+            0];
+      }
+      otherProfession.text = Provider.of<Repository>(context, listen: false)
+              .personalDetails
+              ?.otherProfession ??
+          "";
+      otherEducation.text = Provider.of<Repository>(context, listen: false)
+              .personalDetails
+              ?.otherEducation ??
+          "";
+    });
   }
 }

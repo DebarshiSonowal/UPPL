@@ -12,8 +12,16 @@ class ProfileDataModel with _$ProfileDataModel {
     required int code,
   }) = _ProfileDataModel;
 
-  factory ProfileDataModel.fromJson(Map<String, dynamic> json) =>
-      _$ProfileDataModelFromJson(json);
+  factory ProfileDataModel.fromJson(Map<String, dynamic> json) {
+    return ProfileDataModel(
+      status: json['status'] as int,
+      message: json['message'] as String,
+      data: json['data'] != null && json['data'] is Map<String, dynamic>
+          ? ProfileDataWrapper.fromJson(json['data'] as Map<String, dynamic>)
+          : null, // Handle cases like empty array or null data
+      code: json['code'] as int,
+    );
+  }
 }
 
 @freezed
@@ -34,7 +42,7 @@ class ProfileData with _$ProfileData {
     required int id,
     @JsonKey(name: 'user_id') required int userId,
     @JsonKey(name: 'ref_id') required int refId,
-    @JsonKey(name: 'old_ref_code') String? oldRefCode, // Nullable
+    @JsonKey(name: 'old_ref_code') String? oldRefCode,
     required String title,
     required String address,
     @JsonKey(name: 'pin_code') required String pinCode,
@@ -51,7 +59,7 @@ class ProfileData with _$ProfileData {
     @JsonKey(name: 'created_at') required String createdAt,
     @JsonKey(name: 'updated_at') required String updatedAt,
     required String village,
-    @JsonKey(name: 'photo') String? photo, // Nullable
+    @JsonKey(name: 'photo') String? photo,
     required String district,
     @JsonKey(name: 'district_id') required int districtId,
     required String name,
@@ -60,9 +68,9 @@ class ProfileData with _$ProfileData {
     @JsonKey(name: 'ref_code') required String refCode,
     required int gender,
     @JsonKey(name: 'date_of_birth') required String dateOfBirth,
-    String? email, // Nullable
-    @JsonKey(name: 'mother_tounge') int? motherTounge, // Nullable
-    @JsonKey(name: 'other_mother_tounge') String? otherMotherTounge, // Nullable
+    String? email,
+    @JsonKey(name: 'mother_tounge') int? motherTounge,
+    @JsonKey(name: 'other_mother_tounge') String? otherMotherTounge,
   }) = _ProfileData;
 
   factory ProfileData.fromJson(Map<String, dynamic> json) =>
@@ -76,20 +84,20 @@ class PersonalDetails with _$PersonalDetails {
     required String name,
     @JsonKey(name: 'date_of_birth') required String dateOfBirth,
     required int gender,
-    String? email, // Nullable
-    @JsonKey(name: 'religion') int? religion, // Nullable
-    @JsonKey(name: 'other_religion') String? otherReligion, // Nullable
-    String? caste, // Nullable
-    int? category, // Nullable
-    int? profession, // Nullable
-    @JsonKey(name: 'other_profession') String? otherProfession, // Nullable
+    String? email,
+    @JsonKey(name: 'religion') int? religion,
+    @JsonKey(name: 'other_religion') String? otherReligion,
+    String? caste,
+    int? category,
+    int? profession,
+    @JsonKey(name: 'other_profession') String? otherProfession,
     int? education,
-    @JsonKey(name: 'other_education') String? otherEducation, // Nullable
-    @JsonKey(name: 'aadhaar_no') String? aadhaarNo, // Nullable
-    @JsonKey(name: 'voter_id') String? voterId, // Nullable
+    @JsonKey(name: 'other_education') String? otherEducation,
+    @JsonKey(name: 'aadhaar_no') String? aadhaarNo,
+    @JsonKey(name: 'voter_id') String? voterId,
     @JsonKey(name: 'mobile_no') required String mobileNo,
-    @JsonKey(name: 'mother_tounge') int? motherTounge, // Nullable
-    @JsonKey(name: 'other_mother_tounge') String? otherMotherTounge, // Nullable
+    @JsonKey(name: 'mother_tounge') int? motherTounge,
+    @JsonKey(name: 'other_mother_tounge') String? otherMotherTounge,
   }) = _PersonalDetails;
 
   factory PersonalDetails.fromJson(Map<String, dynamic> json) =>
@@ -99,11 +107,11 @@ class PersonalDetails with _$PersonalDetails {
 @freezed
 class SocialDetails with _$SocialDetails {
   const factory SocialDetails({
-    @JsonKey(name: 'member_id') int? memberId, // Nullable
-    @JsonKey(name: 'aleternate_number') String? aleternateNumber, // Nullable
-    @JsonKey(name: 'facebook_url') String? facebookUrl, // Nullable
-    @JsonKey(name: 'twitter_url') String? twitterUrl, // Nullable
-    @JsonKey(name: 'instagram_url') String? instagramUrl, // Nullable
+    @JsonKey(name: 'member_id') int? memberId,
+    @JsonKey(name: 'aleternate_number') String? aleternateNumber,
+    @JsonKey(name: 'facebook_url') String? facebookUrl,
+    @JsonKey(name: 'twitter_url') String? twitterUrl,
+    @JsonKey(name: 'instagram_url') String? instagramUrl,
   }) = _SocialDetails;
 
   factory SocialDetails.fromJson(Map<String, dynamic> json) =>

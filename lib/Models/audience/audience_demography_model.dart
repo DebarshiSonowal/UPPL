@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'audience_demography_model.freezed.dart';
-
 part 'audience_demography_model.g.dart';
 
 @freezed
@@ -20,22 +19,26 @@ class AudienceDemographyModel with _$AudienceDemographyModel {
     required int code,
   }) = ErrorResponse;
 
-  /// Custom `fromJson` to handle both success and error cases
+  /// Custom `fromJson` to handle both success and error cases, including empty or null data
   factory AudienceDemographyModel.fromJson(Map<String, dynamic> json) {
     if (json['status'] == 1) {
       return AudienceDemographyModel.success(
         status: json['status'] as int,
         message: json['message'] as String,
-        data: AudienceDemographyData.fromJson(
-            json['data'] as Map<String, dynamic>),
+        data: json['data'] != null && json['data'] is Map<String, dynamic>
+            ? AudienceDemographyData.fromJson(
+                json['data'] as Map<String, dynamic>)
+            : null, // Handle null or empty data
         code: json['code'] as int,
       );
     } else {
       return AudienceDemographyModel.error(
         status: json['status'] as int,
         message: json['message'] as String,
-        error: AudienceDemographyError.fromJson(
-            json['data'] as Map<String, dynamic>),
+        error: json['data'] != null && json['data'] is Map<String, dynamic>
+            ? AudienceDemographyError.fromJson(
+                json['data'] as Map<String, dynamic>)
+            : const AudienceDemographyError(errors: {}), // Default empty errors
         code: json['code'] as int,
       );
     }

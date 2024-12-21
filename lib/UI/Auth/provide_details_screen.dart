@@ -5,7 +5,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +56,13 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
   final referral = TextEditingController();
   File? selectedFile;
   ValidateMemberData? selectedValidateMemberData;
+  List<AssemblyConstituency> filteredAssemblyConstituencies = [];
+  List<Constituency> listOfConstituencies = [];
+  List<Primary> filteredPrimary = [];
+  List<Booth> filteredBooth = [];
+  List<District> filteredDistricts = [];
+  List<PartyDistrict> filteredPartyDistricts = [];
+  Constituency? currentConstituency;
 
   @override
   void initState() {
@@ -89,7 +95,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Provide Details",
+                      "Provide Your Details",
                       style: Configuration.primaryFont(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -156,11 +162,16 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      "Upload Photo",
-                      style: Configuration.primaryFont(
-                        color: Colors.black,
-                        fontSize: 13.sp,
+                    GestureDetector(
+                      onTap: () {
+                        pickUpFile();
+                      },
+                      child: Text(
+                        "Upload Photo",
+                        style: Configuration.primaryFont(
+                          color: Colors.black,
+                          fontSize: 13.sp,
+                        ),
                       ),
                     ),
                     Text(
@@ -494,7 +505,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Email*',
+                    labelText: 'Email',
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -642,20 +653,46 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                       ),
                     ),
                     onChanged: (String? value) {
+                      // "constituency_type": "ST",
+                      //                         "assembly_constituency_id": 11,
+                      //                         "district_id": 3,
+                      //                         "party_district_id": 7,
                       setState(() {
                         selectedBtcConstituency = data.btcConstituency
                             .firstWhere(
                                 (constituency) => constituency.name == value)
                             .id;
+                        listOfConstituencies = data.btcAssemblyConstituencies[
+                            data.btcConstituency.indexWhere(
+                                (constituency) => constituency.name == value)];
+                        filteredAssemblyConstituencies = data
+                            .assemblyConstituencies
+                            .where((e) => listOfConstituencies
+                                .any((f) => f.assemblyConstituencyId == e.id))
+                            .toList();
+                        selectedAssembly = null;
+                        selectedDistrict = null;
+                        selectedPartyDistrict = null;
+                        selectedBooth = null;
+                        selectedPrimary = null;
                       });
+
+                      // setState(() {
+                      //   selectedDistrict = data.districts
+                      //       .firstWhere((e) => e.id == selected.)
+                      //       .id;
+                      //   selectedPartyDistrict = data.partyDistricts
+                      //       .firstWhere((e) => e.id == selected.id)
+                      //       .id;
+                      // });
                     },
                     selectedItem: selectedBtcConstituency != null
                         ? data.btcConstituency
                             .firstWhere(
                                 (constituency) =>
                                     constituency.id == selectedBtcConstituency,
-                                orElse: () =>
-                                    BTCConstituency(id: 0, name: '', status: 0))
+                                orElse: () => const BTCConstituency(
+                                    id: 0, name: '', status: 0))
                             .name
                         : '',
                   ),
@@ -669,94 +706,10 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                   padding: EdgeInsets.symmetric(
                     horizontal: 6.w,
                   ),
-                  child: SizedBox(
-                    height: 7.h,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 45.w,
-                          child: DropdownButtonFormField<int>(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'District*',
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            items: data.districts.map((District value) {
-                              return DropdownMenuItem<int>(
-                                value: value.id,
-                                child: Text(value.name),
-                              );
-                            }).toList(),
-                            onChanged: (int? newValue) {
-                              setState(() {
-                                selectedDistrict = newValue;
-                              });
-                            },
-                            value: selectedDistrict,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40.w,
-                          child: DropdownButtonFormField<int>(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'Party District *',
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            items:
-                                data.partyDistricts.map((PartyDistrict value) {
-                              return DropdownMenuItem<int>(
-                                value: value.id,
-                                child: Text(value.name),
-                              );
-                            }).toList(),
-                            onChanged: (int? newValue) {
-                              setState(() {
-                                selectedPartyDistrict = newValue;
-                              });
-                            },
-                            value: selectedPartyDistrict,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              SizedBox(
-                height: 1.h,
-              ),
-              Consumer<Repository>(builder: (context, data, _) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 6.w,
-                  ),
                   child: DropdownSearch<String>(
                     items: (String filter, _) async {
-                      return data.assemblyConstituencies
-                          .map((assembly) => assembly.name)
+                      return (filteredAssemblyConstituencies
+                              .map((assembly) => assembly.name))
                           .where((name) =>
                               name.toLowerCase().contains(filter.toLowerCase()))
                           .toList();
@@ -791,19 +744,140 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        selectedAssembly = data.assemblyConstituencies
-                            .firstWhere((assembly) => assembly.name == value)
-                            .id;
+                        final selectedAssemblyObj =
+                            filteredAssemblyConstituencies.firstWhere(
+                          (assembly) => assembly.name == value,
+                          orElse: () => throw Exception("Assembly not found"),
+                        );
+                        currentConstituency = listOfConstituencies.firstWhere(
+                            (e) =>
+                                e.assemblyConstituencyId ==
+                                selectedAssemblyObj.id);
+                        debugPrint(
+                            "selectedAssemblyObj ${selectedAssemblyObj.name}");
+                        selectedAssembly = selectedAssemblyObj.id;
+                        filteredDistricts = data.districts
+                            .where((e) => listOfConstituencies
+                                .any((f) => f.districtId == e.id))
+                            .toList();
+                        filteredPartyDistricts = data.partyDistricts
+                            .where((e) => listOfConstituencies
+                                .any((f) => f.partyDistrictId == e.id))
+                            .toList();
+                        selectedDistrict = listOfConstituencies
+                            .firstWhere((constituency) =>
+                                constituency.assemblyConstituencyId ==
+                                selectedAssemblyObj.id)
+                            .districtId;
+                        selectedPartyDistrict = listOfConstituencies
+                            .firstWhere((constituency) =>
+                                constituency.assemblyConstituencyId ==
+                                selectedAssemblyObj.id)
+                            .partyDistrictId;
+                        final assemblyConstituencyIds = listOfConstituencies
+                            .map((constituency) =>
+                                constituency.assemblyConstituencyId)
+                            .toList();
+                        debugPrint(
+                            "Primaries $currentConstituency ! $selectedAssembly ${data.btcPrimariesList["${currentConstituency?.id}"]}");
+                        filteredPrimary = data
+                            .btcPrimariesList["${currentConstituency?.id}"]!
+                            .toList();
                       });
                     },
                     selectedItem: selectedAssembly != null
-                        ? data.assemblyConstituencies
+                        ? filteredAssemblyConstituencies
                             .firstWhere(
                                 (assembly) => assembly.id == selectedAssembly,
                                 orElse: () =>
-                                    AssemblyConstituency(id: 0, name: ''))
+                                    const AssemblyConstituency(id: 0, name: ''))
                             .name
                         : "",
+                  ),
+                );
+              }),
+
+              SizedBox(
+                height: 1.h,
+              ),
+              Consumer<Repository>(builder: (context, data, _) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 6.w,
+                  ),
+                  child: SizedBox(
+                    height: 7.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 45.w,
+                          child: DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'District*',
+                              labelStyle: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            items: filteredDistricts.map((District value) {
+                              return DropdownMenuItem<int>(
+                                value: value.id,
+                                child: Text(value.name),
+                              );
+                            }).toList(),
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                selectedDistrict = newValue;
+                              });
+                            },
+                            value: selectedDistrict,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 40.w,
+                          child: DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Party District *',
+                              labelStyle: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            items: filteredPartyDistricts
+                                .map((PartyDistrict value) {
+                              return DropdownMenuItem<int>(
+                                value: value.id,
+                                child: Text(value.name),
+                              );
+                            }).toList(),
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                selectedPartyDistrict = newValue;
+                              });
+                            },
+                            value: selectedPartyDistrict,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -817,8 +891,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                   ),
                   child: DropdownSearch<String>(
                     items: (String filter, _) async {
-                      return data.btcPrimaries
-                          .expand((e) => e.toList())
+                      return filteredPrimary
                           .map((Primary value) => value.name)
                           .where((name) =>
                               name.toLowerCase().contains(filter.toLowerCase()))
@@ -854,15 +927,16 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        selectedPrimary = data.btcPrimaries
-                            .expand((e) => e.toList())
+                        selectedPrimary = filteredPrimary
                             .firstWhere((primary) => primary.name == value)
                             .id;
+                        filteredBooth = data.booths
+                            .where((e) => e.btcPrimaryId == selectedPrimary)
+                            .toList();
                       });
                     },
                     selectedItem: selectedPrimary != null
-                        ? data.btcPrimaries
-                            .expand((e) => e.toList())
+                        ? filteredPrimary
                             .firstWhere(
                                 (primary) => primary.id == selectedPrimary,
                                 orElse: () => Primary(
@@ -884,7 +958,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                   ),
                   child: DropdownSearch<String>(
                     items: (String filter, _) async {
-                      return data.booths
+                      return filteredBooth
                           .map((booth) => booth.name)
                           .where((name) =>
                               name.toLowerCase().contains(filter.toLowerCase()))
@@ -920,13 +994,13 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        selectedBooth = data.booths
+                        selectedBooth = filteredBooth
                             .firstWhere((booth) => booth.name == value)
                             .id;
                       });
                     },
                     selectedItem: selectedBooth != null
-                        ? data.booths
+                        ? filteredBooth
                             .firstWhere((booth) => booth.id == selectedBooth,
                                 orElse: () =>
                                     Booth(id: 0, name: '', btcPrimaryId: 0))
@@ -1224,19 +1298,13 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
               SizedBox(
                 height: 3.h,
               ),
-              Padding(
+              Container(
+                width: double.infinity,
                 padding: EdgeInsets.symmetric(
                   horizontal: 5.w,
                 ),
-                child: SwipeButton.expand(
-                  thumb: const Icon(
-                    Icons.double_arrow_rounded,
-                    color: Colors.white,
-                  ),
-                  activeThumbColor: Configuration.thirdColor,
-                  activeTrackColor: Configuration.primaryColor,
-                  inactiveTrackColor: Colors.white,
-                  onSwipe: () {
+                child: Configuration.rectangleButton(
+                  onPressed: () {
                     if (_validateInputs()) {
                       register(context);
                     } else {
@@ -1246,15 +1314,10 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                           "Please fill all required fields and check your inputs.");
                     }
                   },
-                  child: Text(
-                    "Save",
-                    style: Configuration.primaryFont(
-                      fontSize: 16.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      // Add other text styling as needed
-                    ),
-                  ),
+                  text: "Save",
+                  fontSize: 15.sp,
+                  fontColor: Colors.black,
+                  bgColor: Configuration.primaryColor,
                 ),
               ),
               SizedBox(
@@ -1328,7 +1391,9 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
         name.text.isEmpty ||
         dob.text.isEmpty ||
         age.text.isEmpty ||
-        email.text.isEmpty ||
+        (email.text.isNotEmpty &&
+            !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                .hasMatch(email.text)) ||
         pincode.text.isEmpty ||
         selectedBtcConstituency == null ||
         selectedDistrict == null ||
@@ -1494,6 +1559,8 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
       Provider.of<Repository>(context, listen: false)
           .setBooths(tempList.expand((innerList) => innerList).toList());
       Provider.of<Repository>(context, listen: false).setPrimary(temp ?? []);
+      Provider.of<Repository>(context, listen: false)
+          .setPrimaryList(response.intermediateData.data.btcPrimaries ?? {});
       Provider.of<Repository>(context, listen: false)
           .setVillages(response.intermediateData.data.villages ?? []);
       debugPrint(

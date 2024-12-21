@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tab_container/tab_container.dart';
+import 'package:uppl/Helper/toast.dart';
 import 'package:uppl/Repository/repository.dart';
 
 import '../../API/api_services.dart';
@@ -140,22 +142,27 @@ class _ViewListScreenState extends State<ViewListScreen>
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        length = 20;
-                      });
-                      fetchJoinedBy();
-                    },
-                    child: Text(
-                      'View All',
-                      style: Configuration.primaryFont(
-                        fontSize: 12.sp,
-                        color: const Color(0xff5C5C5C),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  Consumer<Repository>(builder: (context, data, _) {
+                    return (data.joinedByReferralMember.isNotEmpty ||
+                            data.unverifiedJoinedByReferralMember.isNotEmpty)
+                        ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                length = 20;
+                              });
+                              fetchJoinedBy();
+                            },
+                            child: Text(
+                              'View All',
+                              style: Configuration.primaryFont(
+                                fontSize: 12.sp,
+                                color: const Color(0xff5C5C5C),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink();
+                  }),
                 ],
               );
             }),
@@ -207,17 +214,40 @@ class _ViewListScreenState extends State<ViewListScreen>
   ]);
 
   void fetchJoinedBy() async {
-    final response =
-        await ApiService.instance(context).joinedByList(context, start, length);
-    if (response.status == 1) {
-      Provider.of<Repository>(context, listen: false)
-          .setJoinedByReferralMember(response.data!.data);
+    SVProgressHUD.dismiss();
+    SVProgressHUD.show();
+    setState(() {
+      length = length + 10;
+    });
+    try {
+      if (controller?.index == 0 ?? false) {
+        final response = await ApiService.instance(context)
+            .joinedByList(context, start, length);
+        if (response.status == 1) {
+          Provider.of<Repository>(context, listen: false)
+              .setJoinedByReferralMember(response.data!.data);
+          CustomToast.showSuccessToast(
+              context, "Fetched Data", "Fetched All Available Data");
+        } else {
+          CustomToast.showFailureToast(
+              context, "Something Went Wrong", response.message);
+        }
+      } else {
+        final response1 = await ApiService.instance(context)
+            .unverifiedJoinedByList(context, start, length);
+        if (response1.status == 1) {
+          Provider.of<Repository>(context, listen: false)
+              .setUnverifiedJoinedByReferralMember(response1.data!.data);
+          CustomToast.showSuccessToast(
+              context, "Fetched Data", "Fetched All Available Data");
+        } else {
+          CustomToast.showFailureToast(
+              context, "Something Went Wrong", response1.message);
+        }
+      }
+    } catch (e) {
+      print(e);
     }
-    final response1 = await ApiService.instance(context)
-        .unverifiedJoinedByList(context, start, length);
-    if (response1.status == 1) {
-      Provider.of<Repository>(context, listen: false)
-          .setUnverifiedJoinedByReferralMember(response1.data!.data);
-    }
+    SVProgressHUD.dismiss();
   }
 }

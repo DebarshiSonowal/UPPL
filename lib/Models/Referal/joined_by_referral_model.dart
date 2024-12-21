@@ -13,8 +13,16 @@ class JoinedByReferralModel with _$JoinedByReferralModel {
     required int code,
   }) = _JoinedByReferralModel;
 
-  factory JoinedByReferralModel.fromJson(Map<String, dynamic> json) =>
-      _$JoinedByReferralModelFromJson(json);
+  factory JoinedByReferralModel.fromJson(Map<String, dynamic> json) {
+    return JoinedByReferralModel(
+      status: json['status'] as int,
+      message: json['message'] as String,
+      data: json['data'] != null && json['data'] is Map<String, dynamic>
+          ? JoinedByReferralData.fromJson(json['data'] as Map<String, dynamic>)
+          : null, // Handle null or empty data
+      code: json['code'] as int,
+    );
+  }
 }
 
 @freezed

@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
 import '../../Helper/toast.dart';
+import '../../Models/JSON/generate_json_model.dart';
 import '../../Models/Membership/membership_card_model.dart';
 import '../../Navigation/Router/app_router.dart';
 import '../CommonWidgets/custom_nav_drawer.dart';
@@ -55,260 +56,220 @@ class _ReferralFamilyViewDetailsMemberScreenState
       backgroundColor: Configuration.homeBgColor,
       appBar: Configuration.appBar,
       drawer: const CustomNavDrawer(),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 1.h,
-                ),
-                height: 78.h,
-                width: double.infinity,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            context.router.popForced();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Configuration.secondaryColor,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            padding: EdgeInsets.all(1.w),
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
-                              size: 18.sp,
-                            ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          horizontal: 4.w,
+          vertical: 1.h,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              // Removed fixed height to allow dynamic sizing
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context.router.popForced();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Configuration.secondaryColor,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: EdgeInsets.all(1.w),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                            size: 18.sp,
                           ),
                         ),
-                        Column(
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Configuration.primaryColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                              ),
+                              image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                  data?.membershipCard.photo ?? "",
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            height: 22.w,
+                            width: 22.w,
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Text(
+                            "Membership ID: ${data?.membershipCard.id ?? "N/A"}",
+                            style: Configuration.primaryFont(
+                              fontSize: 11.sp,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            data?.personalDetails.dateOfBirth == null
+                                ? "N/A"
+                                : "Date of Joining: ${DateFormat("dd MMM,yyyy").format(DateTime.parse(data!.personalDetails.dateOfBirth))}",
+                            style: Configuration.primaryFont(
+                              fontSize: 11.sp,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 2.h,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Configuration.primaryColor,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.black,
-                                ),
-                                image: DecorationImage(
-                                  image: CachedNetworkImageProvider(
-                                    data?.membershipCard.photo ?? "",
-                                  ),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              height: 22.w,
-                              width: 22.w,
-                            ),
                             SizedBox(
-                              height: 1.h,
-                            ),
-                            Text(
-                              "Membership ID: ${data?.membershipCard.id ?? "N/A"}",
-                              style: Configuration.primaryFont(
-                                fontSize: 11.sp,
-                                color: Colors.black,
-                                // fontWeight: FontWeight.bold,
-                                // Add other text styling as needed
-                              ),
-                            ),
-                            Text(
-                              data?.personalDetails.dateOfBirth == null
-                                  ? "N/A"
-                                  : "Date of Joining: ${DateFormat("dd MMM,yyyy").format(DateTime.parse(data!.personalDetails.dateOfBirth))}",
-                              style: Configuration.primaryFont(
-                                fontSize: 11.sp,
-                                color: Colors.black,
-                                // fontWeight: FontWeight.bold,
-                                // Add other text styling as needed
+                              width: 50.w,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Configuration.primaryColor,
+                                ),
+                                onPressed: () {
+                                  Configuration.showMembershipCard(
+                                    context: context,
+                                    name: data?.membershipCard.name ?? "",
+                                    district:
+                                        data?.membershipCard.district.name ??
+                                            "",
+                                    photo: data?.membershipCard.photo ?? "",
+                                    memberId: data?.membershipCard.id ?? 0,
+                                    joiningDate:
+                                        data!.membershipCard.joiningDate,
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FontAwesomeIcons.download,
+                                      color: Colors.black,
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      "UPPL Membership Card",
+                                      style: Configuration.primaryFont(
+                                          fontSize: 13.sp,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 2.h,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 50.w,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Configuration.primaryColor,
-                                  ),
-                                  onPressed: () {
-                                    Configuration.showMembershipCard(
-                                      context: context,
-                                      name: data?.membershipCard.name ?? "",
-                                      district:
-                                          data?.membershipCard.district.name ??
-                                              "",
-                                      photo: data?.membershipCard.photo ?? "",
-                                      memberId: data?.membershipCard.id ?? 0,
-                                      joiningDate:
-                                          data!.membershipCard.joiningDate,
-                                    );
-                                  },
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        FontAwesomeIcons.download,
-                                        color: Colors.black,
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        "UPPL Membership Card",
-                                        style: Configuration.primaryFont(
-                                            fontSize: 13.sp,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  (data?.membershipCard.userId == 0 ?? true) ||
+                          data?.membershipCard.userId == null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90.w,
+                              height: 4.h,
+                              child: Configuration.rectangleButton(
+                                onPressed: () async {
+                                  final result =
+                                      await AutoRouter.of(context).push(
+                                    VerifiedRoute(
+                                      mobile:
+                                          data?.personalDetails.mobileNo ?? "",
+                                    ),
+                                  );
+                                  if (result != null) {
+                                    updateProfile(result.toString(), data!);
+                                  }
+                                },
+                                text: 'Validate',
+                                bgColor: Configuration.errorColor,
+                                fontSize: 16.sp,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 30.w,
+                              height: 4.h,
+                              child: Configuration.rectangleButton(
+                                onPressed: () {
+                                  Provider.of<Repository>(context,
+                                          listen: false)
+                                      .setReferredMembersFamilyDetails(data!);
+                                  AutoRouter.of(context)
+                                      .pushNamed(CustomRoutes
+                                          .updateFamilyDetailsScreen)
+                                      .then((_) {
+                                    fetchFamilyDetails(
+                                        context,
+                                        Provider.of<Repository>(context,
+                                                listen: false)
+                                            .memberData
+                                            ?.personalDetails
+                                            ?.memberId);
+                                  });
+                                },
+                                text: 'Edit',
+                                bgColor: Configuration.secondaryColor,
+                                fontColor: Colors.white,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 55.w,
+                              height: 4.h,
+                              child: Configuration.rectangleButton(
+                                onPressed: () {
+                                  AutoRouter.of(context)
+                                      .pushNamed(CustomRoutes.addMemberScreen);
+                                },
+                                text: 'Add More Family Member',
+                                bgColor: Configuration.thirdColor,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    (data?.membershipCard.userId == 0 ?? true) ||
-                            data?.membershipCard.userId == null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 90.w,
-                                height: 4.h,
-                                child: Configuration.rectangleButton(
-                                  onPressed: () async {
-                                    final result =
-                                        await AutoRouter.of(context).push(
-                                      VerifiedRoute(
-                                        mobile:
-                                            data?.personalDetails.mobileNo ??
-                                                "",
-                                      ),
-                                    );
-                                    if (result != null) {
-                                      // Handle the result if any is returned
-                                      updateProfile(result.toString(), data!);
-                                    }
-                                  },
-                                  text: 'Validate',
-                                  bgColor: Configuration.errorColor,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 30.w,
-                                height: 4.h,
-                                child: Configuration.rectangleButton(
-                                  onPressed: () {
-                                    Provider.of<Repository>(context,
-                                            listen: false)
-                                        .setReferredMembersFamilyDetails(data!);
-                                    AutoRouter.of(context)
-                                        .pushNamed(CustomRoutes
-                                            .updateFamilyDetailsScreen)
-                                        .then((_) {
-                                      fetchFamilyDetails(
-                                          context,
-                                          Provider.of<Repository>(context,
-                                                  listen: false)
-                                              .memberData
-                                              ?.personalDetails
-                                              ?.memberId);
-                                    });
-                                  },
-                                  text: 'Edit',
-                                  bgColor: Configuration.secondaryColor,
-                                  fontColor: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 55.w,
-                                height: 4.h,
-                                child: Configuration.rectangleButton(
-                                  onPressed: () {
-                                    AutoRouter.of(context).pushNamed(
-                                        CustomRoutes.addMemberScreen);
-                                  },
-                                  text: 'Add More Family Member',
-                                  bgColor: Configuration.thirdColor,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      "Name:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    SizedBox(
-                      width: 70.w,
-                      child: Text(
-                        (data?.membershipCard.name ?? "N/A")
-                            .capitalizeFirstOfEach(),
-                        style: Configuration.primaryFont(
-                          fontSize: 15.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      "Mobile Number:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    Row(
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  InfoSection(
+                    title: "Name:",
+                    content: (data?.membershipCard.name ?? "N/A")
+                        .capitalizeFirstOfEach(),
+                  ),
+                  InfoSection(
+                    title: "Mobile Number:",
+                    contentWidget: Row(
                       children: [
-                        SizedBox(
-                          width: 25.w, // Adjusted width to accommodate icons
+                        Expanded(
+                          flex: 4,
                           child: Text(
                             (data?.membershipCard.mobileNo ?? "N/A")
                                 .capitalizeFirstOfEach(),
@@ -319,9 +280,13 @@ class _ReferralFamilyViewDetailsMemberScreenState
                             ),
                           ),
                         ),
-                        // Spacer(),
-                        GestureDetector(
-                          onTap: () async {
+                        IconButton(
+                          icon: Icon(
+                            Icons.phone,
+                            size: 16.sp,
+                            color: Configuration.thirdColor,
+                          ),
+                          onPressed: () async {
                             final phoneNumber = data?.membershipCard.mobileNo;
                             if (phoneNumber != null && phoneNumber.isNotEmpty) {
                               final url = Uri.parse('tel:$phoneNumber');
@@ -330,15 +295,14 @@ class _ReferralFamilyViewDetailsMemberScreenState
                               }
                             }
                           },
-                          child: Icon(
-                            Icons.phone,
-                            size: 16.sp,
-                            color: Configuration.thirdColor,
-                          ),
                         ),
-                        SizedBox(width: 2.w),
-                        GestureDetector(
-                          onTap: () async {
+                        IconButton(
+                          icon: Icon(
+                            FontAwesomeIcons.whatsapp,
+                            size: 16.sp,
+                            color: Colors.green,
+                          ),
+                          onPressed: () async {
                             final phoneNumber = data?.membershipCard.mobileNo;
                             if (phoneNumber != null && phoneNumber.isNotEmpty) {
                               final whatsappUrl = Uri.parse(
@@ -349,450 +313,278 @@ class _ReferralFamilyViewDetailsMemberScreenState
                               }
                             }
                           },
-                          child: Icon(
-                            FontAwesomeIcons.whatsapp,
-                            size: 16.sp,
-                            color: Colors.green,
-                          ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      "Address:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    SizedBox(
-                      width: 70.w,
-                      child: Text(
-                        (data?.membershipCard.address ?? "N/A")
-                            .capitalizeFirstOfEach(),
-                        style: Configuration.primaryFont(
-                          fontSize: 15.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      "Pincode:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    SizedBox(
-                      width: 70.w,
-                      child: Text(
-                        data?.membershipCard.pinCode ?? "N/A",
-                        style: Configuration.primaryFont(
-                          fontSize: 15.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      "District:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    SizedBox(
-                      width: 70.w,
-                      child: Text(
-                        data?.membershipCard.district.name ?? "N/A",
-                        style: Configuration.primaryFont(
-                          fontSize: 15.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    Text(
-                      "BTC Constituency:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    Consumer<Repository>(builder: (context, _, __) {
-                      return SizedBox(
-                        width: 70.w,
-                        child: Text(
-                          _.btcConstituency.indexWhere((e) =>
-                                      e.id ==
-                                      data?.membershipCard.btcConstituency) ==
-                                  -1
-                              ? "N/A"
-                              : (_.btcConstituency
-                                  .firstWhere((e) =>
-                                      e.id ==
-                                      data?.membershipCard.btcConstituency)
-                                  .name),
+                  ),
+                  InfoSection(
+                    title: "Address:",
+                    content: (data?.membershipCard.address ?? "N/A")
+                        .capitalizeFirstOfEach(),
+                  ),
+                  InfoSection(
+                    title: "Pincode:",
+                    content: data?.membershipCard.pinCode ?? "N/A",
+                  ),
+                  InfoSection(
+                    title: "District:",
+                    content: data?.membershipCard.district.name ?? "N/A",
+                  ),
+                  InfoSection(
+                    title: "BTC Constituency:",
+                    contentWidget: Consumer<Repository>(
+                      builder: (context, repo, _) {
+                        final constituency = repo.btcConstituency.firstWhere(
+                            (e) => e.id == data?.membershipCard.btcConstituency,
+                            orElse: () =>
+                                BTCConstituency(id: 0, name: "N/A", status: 0));
+                        return Text(
+                          constituency.name,
                           style: Configuration.primaryFont(
                             fontSize: 15.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                           ),
-                        ),
-                      );
-                    }),
-                    SizedBox(
-                      height: 2.h,
+                        );
+                      },
                     ),
-                    Text(
-                      "Party District:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    Consumer<Repository>(builder: (context, _, __) {
-                      return SizedBox(
-                        width: 70.w,
-                        child: Text(
-                          _.partyDistricts.indexWhere((e) =>
-                                      e.id ==
-                                      data?.membershipCard.partyDistrict) ==
-                                  -1
-                              ? "N/A"
-                              : (_.partyDistricts
-                                  .firstWhere((e) =>
-                                      e.id ==
-                                      data!.membershipCard.partyDistrict)
-                                  .name),
+                  ),
+                  InfoSection(
+                    title: "Party District:",
+                    contentWidget: Consumer<Repository>(
+                      builder: (context, repo, _) {
+                        final partyDistrict = repo.partyDistricts.firstWhere(
+                          (e) => e.id == data?.membershipCard.partyDistrict,
+                          orElse: () => PartyDistrict(id: 0, name: "N/A"),
+                        );
+                        return Text(
+                          partyDistrict.name,
                           style: Configuration.primaryFont(
                             fontSize: 15.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                           ),
-                        ),
-                      );
-                    }),
-                    SizedBox(
-                      height: 2.h,
+                        );
+                      },
                     ),
-                    Text(
-                      "Primary Booth:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    Consumer<Repository>(builder: (context, _, __) {
-                      return SizedBox(
-                        width: 70.w,
-                        child: Text(
-                          "${_.booths.indexWhere((e) => e.id == data?.membershipCard.boothId) == -1 ? "N/A" : _.booths.firstWhere((e) => e.id == data?.membershipCard.boothId).id}",
+                  ),
+                  InfoSection(
+                    title: "Booth:",
+                    contentWidget: Consumer<Repository>(
+                      builder: (context, repo, _) {
+                        final booth = repo.booths.firstWhere(
+                          (e) => e.id == data?.membershipCard.boothId,
+                          orElse: () =>
+                              Booth(id: 0, name: "N/A", btcPrimaryId: 0),
+                        );
+                        return Text(
+                          booth.name,
                           style: Configuration.primaryFont(
                             fontSize: 15.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                           ),
-                        ),
-                      );
-                    }),
-                    SizedBox(
-                      height: 2.h,
+                        );
+                      },
                     ),
-                    Text(
-                      "Booth Location:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    Consumer<Repository>(builder: (context, _, __) {
-                      return SizedBox(
-                        width: 70.w,
-                        child: Text(
-                          _.booths.indexWhere((e) =>
-                                      e.id == data?.membershipCard.boothId) ==
-                                  -1
-                              ? "N/A"
-                              : _.booths
-                                  .firstWhere((e) =>
-                                      e.id == data?.membershipCard.boothId)
-                                  .name,
+                  ),
+                  InfoSection(
+                    title: "Assembly Constituency:",
+                    contentWidget: Consumer<Repository>(
+                      builder: (context, repo, _) {
+                        final assemblyConstituency =
+                            repo.assemblyConstituencies.firstWhere(
+                          (e) =>
+                              e.id == data?.membershipCard.assemblyConstituency,
+                          orElse: () => AssemblyConstituency(
+                            id: 0,
+                            name: "N/A",
+                          ),
+                        );
+                        return Text(
+                          assemblyConstituency.name,
                           style: Configuration.primaryFont(
                             fontSize: 15.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                           ),
-                        ),
-                      );
-                    }),
-                    SizedBox(
-                      height: 2.h,
+                        );
+                      },
                     ),
-                    Text(
-                      "Assembly Constituency:",
-                      style: Configuration.primaryFont(
-                        fontSize: 13.5.sp,
-                        color: Colors.black,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3.h,
-                    ),
-                    Consumer<Repository>(builder: (context, _, __) {
-                      return SizedBox(
-                        width: 70.w,
-                        child: Text(
-                          _.assemblyConstituencies.indexWhere((e) =>
-                                      e.id ==
-                                      data?.membershipCard
-                                          .assemblyConstituency) ==
-                                  -1
-                              ? "N/A"
-                              : _.assemblyConstituencies
-                                  .firstWhere((e) =>
-                                      e.id ==
-                                      data?.membershipCard.assemblyConstituency)
-                                  .name,
-                          style: Configuration.primaryFont(
-                            fontSize: 15.sp,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Consumer<Repository>(builder: (context, data, __) {
-                return data.referredMembersFamilyDetails.isEmpty
-                    ? Container()
-                    : Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 4.w,
-                          vertical: 1.5.h,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: Color(0xfffff9b7),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Family Member",
-                              style: Configuration.primaryFont(
-                                fontSize: 15.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
+            ),
+            Consumer<Repository>(builder: (context, repo, __) {
+              return repo.referredMembersFamilyDetails.isEmpty
+                  ? SizedBox.shrink()
+                  : Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 4.w,
+                        vertical: 1.5.h,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Color(0xfffff9b7),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Family Member",
+                            style: Configuration.primaryFont(
+                              fontSize: 15.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
                             ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Table(
-                              defaultColumnWidth: FixedColumnWidth(26.w),
-                              children: [
-                                for (var item
-                                    in data.referredMembersFamilyDetails)
-                                  TableRow(
-                                    children: [
-                                      SizedBox(
-                                        width: 23.w,
-                                        child: Center(
-                                          child: Text(
-                                            item.personalDetails.name,
-                                            style: Configuration.primaryFont(
-                                              fontSize: 14.sp,
-                                              color: Colors.black,
-                                              // fontWeight: FontWeight.bold,
-                                              // Add other text styling as needed
-                                            ),
-                                          ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Table(
+                            columnWidths: {
+                              0: FixedColumnWidth(26.w),
+                              1: FixedColumnWidth(22.w),
+                              2: FixedColumnWidth(22.w),
+                              3: FixedColumnWidth(22.w),
+                            },
+                            children: [
+                              ...repo.referredMembersFamilyDetails.map((item) {
+                                return TableRow(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 1.h),
+                                      child: Text(
+                                        item.personalDetails.name,
+                                        style: Configuration.primaryFont(
+                                          fontSize: 14.sp,
+                                          color: Colors.black,
                                         ),
                                       ),
-                                      (item.membershipCard.userId == 0)
-                                          ? GestureDetector(
-                                              onTap: () async {
-                                                final result =
-                                                    await AutoRouter.of(context)
-                                                        .push(
-                                                  VerifiedRoute(
-                                                    mobile: item.personalDetails
-                                                            .mobileNo ??
-                                                        "",
-                                                  ),
-                                                );
-                                                if (result != null) {
-                                                  // Handle the result if any is returned
-                                                  debugPrint(
-                                                      "Returned value $result");
-                                                  updateProfile(
-                                                      result.toString(), item);
-                                                }
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Configuration
-                                                      .primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
+                                    ),
+                                    item.membershipCard.userId == 0
+                                        ? GestureDetector(
+                                            onTap: () async {
+                                              final result =
+                                                  await AutoRouter.of(context)
+                                                      .push(
+                                                VerifiedRoute(
+                                                  mobile: item.personalDetails
+                                                          .mobileNo ??
+                                                      "",
                                                 ),
-                                                width: 18.w,
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 1.w,
-                                                  vertical: 0.5.h,
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Validate",
-                                                    style: Configuration
-                                                        .primaryFont(
-                                                      fontSize: 14.sp,
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      // Add other text styling as needed
-                                                    ),
-                                                  ),
-                                                ),
+                                              );
+                                              if (result != null) {
+                                                updateProfile(
+                                                    result.toString(), item);
+                                              }
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    Configuration.primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
                                               ),
-                                            )
-                                          : SizedBox(
-                                              width: 22.w,
+                                              width: 18.w,
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 1.w,
+                                                vertical: 0.5.h,
+                                              ),
                                               child: Center(
                                                 child: Text(
-                                                  "Verified",
+                                                  "Validate",
                                                   style:
                                                       Configuration.primaryFont(
                                                     fontSize: 14.sp,
                                                     color: Colors.green,
                                                     fontWeight: FontWeight.bold,
-                                                    // Add other text styling as needed
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (item.membershipCard.userId != 0) {
-                                            Configuration.showMembershipCard(
-                                                context: context,
-                                                name:
-                                                    item.membershipCard.name ??
-                                                        "",
-                                                district: item.membershipCard
-                                                        .district.name ??
-                                                    "",
-                                                photo:
-                                                    item.membershipCard.photo ??
-                                                        "",
-                                                memberId:
-                                                    item.membershipCard.id ?? 0,
-                                                joiningDate: item.membershipCard
-                                                    .joiningDate);
-                                          }
-                                        },
-                                        child: (item.membershipCard.userId == 0)
-                                            ? Icon(
-                                                FontAwesomeIcons.download,
-                                                size: 16.sp,
-                                                color: Colors.grey,
-                                              )
-                                            : Icon(
-                                                FontAwesomeIcons.download,
-                                                size: 16.sp,
-                                                color: Configuration.thirdColor,
+                                          )
+                                        : Center(
+                                            child: Text(
+                                              "Verified",
+                                              style: Configuration.primaryFont(
+                                                fontSize: 14.sp,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold,
                                               ),
+                                            ),
+                                          ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (item.membershipCard.userId != 0) {
+                                          Configuration.showMembershipCard(
+                                              context: context,
+                                              name: item.membershipCard.name ??
+                                                  "",
+                                              district: item.membershipCard
+                                                      .district.name ??
+                                                  "",
+                                              photo:
+                                                  item.membershipCard.photo ??
+                                                      "",
+                                              memberId:
+                                                  item.membershipCard.id ?? 0,
+                                              joiningDate: item
+                                                  .membershipCard.joiningDate);
+                                        }
+                                      },
+                                      child: Icon(
+                                        FontAwesomeIcons.download,
+                                        size: 16.sp,
+                                        color: item.membershipCard.userId == 0
+                                            ? Colors.grey
+                                            : Configuration.thirdColor,
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          AutoRouter.of(context)
-                                              .push(
-                                                  ReferralFamilyViewDetailsMemberRoute(
-                                                      id: item
-                                                          .membershipCard.id))
-                                              .then((_) {
-                                            fetchFamilyDetails(
-                                                context,
-                                                Provider.of<Repository>(context,
-                                                        listen: false)
-                                                    .memberData
-                                                    ?.personalDetails
-                                                    ?.memberId);
-                                          });
-                                        },
-                                        child: Icon(
-                                          Icons.remove_red_eye,
-                                          size: 16.sp,
-                                          color: Configuration.thirdColor,
-                                        ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        AutoRouter.of(context)
+                                            .push(
+                                                ReferralFamilyViewDetailsMemberRoute(
+                                                    id: item.membershipCard.id))
+                                            .then((_) {
+                                          fetchFamilyDetails(
+                                              context,
+                                              Provider.of<Repository>(context,
+                                                      listen: false)
+                                                  .memberData
+                                                  ?.personalDetails
+                                                  ?.memberId);
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.remove_red_eye,
+                                        size: 16.sp,
+                                        color: Configuration.thirdColor,
                                       ),
-                                      // Text(
-                                      //   "${calculateAge(item.personalDetails.dateOfBirth)} Years",
-                                      //   style: Configuration.primaryFont(
-                                      //     fontSize: 15.sp,
-                                      //     color: Colors.black,
-                                      //     // fontWeight: FontWeight.bold,
-                                      //     // Add other text styling as needed
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                rowSpacer,
-                              ],
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                          ],
-                        ),
-                      );
-              }),
-            ],
-          ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                              TableRow(
+                                children: [
+                                  SizedBox(height: 1.5.h),
+                                  SizedBox(height: 1.5.h),
+                                  SizedBox(height: 1.5.h),
+                                  SizedBox(height: 1.5.h),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                        ],
+                      ),
+                    );
+            }),
+          ],
         ),
       ),
     );
@@ -806,8 +598,7 @@ class _ReferralFamilyViewDetailsMemberScreenState
       success: (status, message, data, code) {
         if (status == 1 && data!.isNotEmpty) {
           final dataEntry = data.first;
-          showImageDialog(
-              dataEntry); // Pass `dataEntry` directly without casting
+          showImageDialog(dataEntry);
         }
       },
       error: (status, message, errors, code) {
@@ -820,21 +611,6 @@ class _ReferralFamilyViewDetailsMemberScreenState
     debugPrint("showImageDialog ${data.file}");
     AutoRouter.of(context).push(CustomImageViewerRoute(url: data.file!));
   }
-
-  var rowSpacer = TableRow(children: [
-    SizedBox(
-      height: 1.5.h,
-    ),
-    SizedBox(
-      height: 1.5.h,
-    ),
-    SizedBox(
-      height: 1.5.h,
-    ),
-    SizedBox(
-      height: 1.5.h,
-    ),
-  ]);
 
   void fetchFamilyDetails(BuildContext context, int? memberId) async {
     final response = await ApiService.instance(context)
@@ -895,5 +671,52 @@ class _ReferralFamilyViewDetailsMemberScreenState
 
     // If the list is empty, return null
     return null;
+  }
+}
+
+class InfoSection extends StatelessWidget {
+  final String title;
+  final String? content;
+  final Widget? contentWidget;
+
+  const InfoSection({
+    Key? key,
+    required this.title,
+    this.content,
+    this.contentWidget,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: Configuration.primaryFont(
+            fontSize: 13.5.sp,
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(
+          height: 0.3.h,
+        ),
+        contentWidget ??
+            SizedBox(
+              width: 70.w,
+              child: Text(
+                content ?? "N/A",
+                style: Configuration.primaryFont(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+        SizedBox(
+          height: 2.h,
+        ),
+      ],
+    );
   }
 }

@@ -6,26 +6,6 @@ part of 'joined_by_referral_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$JoinedByReferralModelImpl _$$JoinedByReferralModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$JoinedByReferralModelImpl(
-      status: (json['status'] as num).toInt(),
-      message: json['message'] as String,
-      data: json['data'] == null
-          ? null
-          : JoinedByReferralData.fromJson(json['data'] as Map<String, dynamic>),
-      code: (json['code'] as num).toInt(),
-    );
-
-Map<String, dynamic> _$$JoinedByReferralModelImplToJson(
-        _$JoinedByReferralModelImpl instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-      'data': instance.data,
-      'code': instance.code,
-    };
-
 _$JoinedByReferralDataImpl _$$JoinedByReferralDataImplFromJson(
         Map<String, dynamic> json) =>
     _$JoinedByReferralDataImpl(

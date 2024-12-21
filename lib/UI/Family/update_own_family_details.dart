@@ -2,30 +2,30 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:uppl/Constants/configuration.dart';
-import 'package:uppl/Navigation/Router/app_router.dart';
 
 import '../../API/api_services.dart';
+import '../../Constants/configuration.dart';
 import '../../Helper/toast.dart';
+import '../../Navigation/Router/app_router.dart';
 import '../../Repository/repository.dart';
 
 @RoutePage()
-class UpdateFamilyDetailsScreen extends StatefulWidget {
-  const UpdateFamilyDetailsScreen({super.key});
+class UpdateOwnFamilyDetailsScreen extends StatefulWidget {
+  const UpdateOwnFamilyDetailsScreen({super.key});
 
   @override
-  State<UpdateFamilyDetailsScreen> createState() =>
-      _UpdateFamilyDetailsScreenState();
+  State<UpdateOwnFamilyDetailsScreen> createState() =>
+      _UpdateOwnFamilyDetailsScreenState();
 }
 
-class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
+class _UpdateOwnFamilyDetailsScreenState
+    extends State<UpdateOwnFamilyDetailsScreen> {
   int selectedGender = 0; // Example state for demonstration
   final List<String> genderOptions = ["Male", "Female", "Others"];
   final name = TextEditingController();
@@ -43,7 +43,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
     Future.delayed(Duration.zero, () {
       final selectedFamilyMember =
           Provider.of<Repository>(context, listen: false)
-              .selectedReferredFamilyDetailsModel;
+              .selectedFamilyDetailModel;
       if (selectedFamilyMember != null) {
         name.text = selectedFamilyMember.personalDetails.name ?? '';
         mobile.text = selectedFamilyMember.personalDetails.mobileNo ?? '';
@@ -113,7 +113,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                                 : CachedNetworkImageProvider(
                                     Provider.of<Repository>(context,
                                                 listen: false)
-                                            .selectedReferredFamilyDetailsModel
+                                            .selectedFamilyDetailModel
                                             ?.membershipCard
                                             .photo ??
                                         ""),
@@ -132,7 +132,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                         pickUpFile();
                       },
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.black54,
                           shape: BoxShape.circle,
                         ),
@@ -471,7 +471,8 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
               SizedBox(
                 height: 2.h,
               ),
-              Padding(
+              Container(
+                width: double.infinity,
                 padding: EdgeInsets.symmetric(
                   horizontal: 5.w,
                 ),
@@ -495,7 +496,6 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Configuration.primaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -506,6 +506,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                       fontSize: 16.sp,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
+                      // Add other text styling as needed
                     ),
                   ),
                 ),
@@ -526,7 +527,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
         .updateFamilyMemberPersonalDetails(
             context,
             Provider.of<Repository>(context, listen: false)
-                .selectedReferredFamilyDetailsModel
+                .selectedFamilyDetailModel
                 ?.membershipCard
                 .id,
             data.memberData?.personalDetails.memberId,

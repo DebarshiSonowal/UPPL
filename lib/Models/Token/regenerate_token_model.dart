@@ -5,41 +5,29 @@ part 'regenerate_token_model.g.dart';
 
 @freezed
 class RegenerateTokenModel with _$RegenerateTokenModel {
-  const factory RegenerateTokenModel({
+  const factory RegenerateTokenModel.success({
     required int status,
     required String message,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    RegenerateTokenData? data,
-    RegenerateTokenError? error,
+    required RegenerateTokenData data,
     required int code,
-  }) = _RegenerateTokenModel;
+  }) = RegenerateTokenModelSuccess;
 
-  const factory RegenerateTokenModel.withError(String message) =
-      _RegenerateTokenModelWithError;
+  const factory RegenerateTokenModel.error({
+    required int status,
+    required String message,
+    required RegenerateTokenError error,
+    required int code,
+  }) = RegenerateTokenModelError;
 
-  /// Custom `fromJson` to handle success or error response
-  factory RegenerateTokenModel.fromJson(Map<String, dynamic> json) {
-    if (json['status'] == 1) {
-      return RegenerateTokenModel(
-        status: json['status'] as int,
-        message: json['message'] as String,
-        data: json['data'] != null
-            ? RegenerateTokenData.fromJson(json['data'] as Map<String, dynamic>)
-            : null,
-        error: null,
-        code: json['code'] as int,
-      );
-    } else {
-      return RegenerateTokenModel(
-        status: json['status'] as int,
-        message: json['message'] as String,
-        data: null,
-        error:
-            RegenerateTokenError.fromJson(json['data'] as Map<String, dynamic>),
-        code: json['code'] as int,
-      );
-    }
-  }
+  const factory RegenerateTokenModel.withError({
+    required int status,
+    required String message,
+    required RegenerateTokenError error,
+    required int code,
+  }) = RegenerateTokenModelWithError;
+
+  factory RegenerateTokenModel.fromJson(Map<String, dynamic> json) =>
+      _$RegenerateTokenModelFromJson(json);
 }
 
 @freezed

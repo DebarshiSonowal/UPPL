@@ -14,8 +14,10 @@ class CustomRoutes {
   static const profileScreen = "/profile_screen";
   static const completeProfileScreen = "/complete_profile_screen";
   static const updateFamilyDetailsScreen = "/update_family_details_screen";
+  static const updateMyFamilyDetailsScreen = "/update_my_family_details_screen";
   static const validationScreen = "/validation_screen";
   static const viewListScreen = "/view_list_screen";
+  static const editProfileScreen = "/edit_profile_screen";
   static const viewDetailsMemberScreen = "/view_details_member_screen";
   static const referralFamilyViewDetailsMemberScreen =
       "/referral_view_details_member_screen";

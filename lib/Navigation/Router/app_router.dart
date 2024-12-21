@@ -5,6 +5,7 @@ import 'package:uppl/Constants/routes.dart';
 import '../../UI/AddMember/add_member_details_screen.dart';
 import '../../UI/AddMember/add_member_screen.dart';
 import '../../UI/AddMember/save_member_details_screen.dart';
+import '../../UI/Auth/edit_profile_screen.dart';
 import '../../UI/Auth/forget_password_screen.dart';
 import '../../UI/Auth/forgot_password_otp_screen.dart';
 import '../../UI/Auth/login_otp_screen.dart';
@@ -22,6 +23,7 @@ import '../../UI/Dashboard/member_data_screen.dart';
 import '../../UI/Dashboard/referral_family_view_details_member.dart';
 import '../../UI/Dashboard/view_list_screen.dart';
 import '../../UI/Family/update_family_details_screen.dart';
+import '../../UI/Family/update_own_family_details.dart';
 import '../../UI/Home/home_screen.dart';
 import '../../UI/Profile/Widgets/validation_screen.dart';
 import '../../UI/Profile/complete_profile.dart';
@@ -117,8 +119,16 @@ class AppRouter extends RootStackRouter {
           page: UpdateFamilyDetailsRoute.page,
         ),
         AutoRoute(
+          path: CustomRoutes.updateMyFamilyDetailsScreen,
+          page: UpdateOwnFamilyDetailsRoute.page,
+        ),
+        AutoRoute(
           path: CustomRoutes.validationScreen,
           page: ValidationRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.editProfileScreen,
+          page: EditProfileRoute.page,
         ),
 
         //Add

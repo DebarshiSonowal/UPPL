@@ -1,6 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/Repository/repository.dart';
@@ -19,6 +18,7 @@ class _ContactDetailsState extends State<ContactDetails> {
   String? selectedDistrict,
       selectedPartyDistrict,
       selectedBtcConstituency,
+      selectedBtcAssemblyConstituency,
       selectConstituency,
       selectPrimary,
       selectBooth,
@@ -26,6 +26,8 @@ class _ContactDetailsState extends State<ContactDetails> {
   final address = TextEditingController();
   final pincode = TextEditingController();
   bool isAllDataAvailable = false;
+  int indexBtcAssemblyConstituency = 0;
+  int idBtcAssemblyConstituency = 0;
 
   @override
   void didChangeDependencies() {
@@ -448,13 +450,16 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ),
                             ),
                           ),
-                          onChanged: isAllDataAvailable
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    selectedBtcConstituency = value;
-                                  });
-                                },
+                          onChanged: (value) {
+                            setState(() {
+                              selectedBtcConstituency = value;
+                              indexBtcAssemblyConstituency =
+                                  data.btcConstituency.indexWhere(
+                                      (e) => e.name == selectedBtcConstituency);
+                            });
+                            debugPrint(
+                                "selectedBtcAssemblyConstituency $indexBtcAssemblyConstituency");
+                          },
                           selectedItem: selectedBtcConstituency,
                         ),
                       );
@@ -474,26 +479,25 @@ class _ContactDetailsState extends State<ContactDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Consumer<Repository>(
-                        builder: (context, Repository data, _) {
+                    child: Consumer<Repository>(builder: (context, data, _) {
                       return DropdownSearch<String>(
                         items: (String filter, _) async {
-                          return filter.isEmpty
-                              ? data.assemblyConstituencies
-                                  .map((constituency) => constituency.name)
-                                  .toList()
-                              : data.assemblyConstituencies
-                                  .map((constituency) => constituency.name)
-                                  .where((name) => name
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase()))
-                                  .toList();
+                          return data.btcAssemblyConstituencies[
+                                  indexBtcAssemblyConstituency]
+                              .map((Constituency value) =>
+                                  (data.assemblyConstituencies.firstWhere((e) =>
+                                          e.id == value.assemblyConstituencyId))
+                                      .name)
+                              .where((name) => name
+                                  .toLowerCase()
+                                  .contains(filter.toLowerCase()))
+                              .toList();
                         },
                         popupProps: PopupProps.menu(
                           showSearchBox: true,
                           searchFieldProps: const TextFieldProps(
                             decoration: InputDecoration(
-                              hintText: 'Search assembly constituency...',
+                              hintText: 'Search BTC Assembly Constituency...',
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
@@ -504,7 +508,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            labelText: 'Assembly Constituency*',
+                            labelText: 'BTC Assembly Constituency*',
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -517,14 +521,45 @@ class _ContactDetailsState extends State<ContactDetails> {
                             ),
                           ),
                         ),
-                        onChanged: isAllDataAvailable
-                            ? null
-                            : (value) {
-                                setState(() {
-                                  selectConstituency = value;
-                                });
-                              },
-                        selectedItem: selectConstituency,
+                        onChanged: (val) {
+                          setState(() {
+                            selectedDistrict = data.districts
+                                .firstWhere(
+                                  (district) =>
+                                      district.id ==
+                                      data.btcAssemblyConstituencies[
+                                          indexBtcAssemblyConstituency],
+                                )
+                                .name;
+                            debugPrint("selectedDistrict ");
+                          });
+                        },
+                        onSaved: (String? value) {
+                          final tempList = data.btcAssemblyConstituencies[
+                                  indexBtcAssemblyConstituency]
+                              .map((Constituency value) => (data
+                                  .assemblyConstituencies
+                                  .firstWhere((e) =>
+                                      e.id == value.assemblyConstituencyId)
+                                  .name))
+                              .toList();
+
+                          // "constituency_type": "ST",
+                          //                         "assembly_constituency_id": 11,
+                          //                         "district_id": 3,
+                          //                         "party_district_id": 7,
+                          setState(() {});
+                        },
+                        selectedItem: selectedBtcAssemblyConstituency != null
+                            ? data.btcAssemblyConstituencies[
+                                    indexBtcAssemblyConstituency]
+                                .map((Constituency value) => data
+                                    .assemblyConstituencies
+                                    .firstWhere((e) =>
+                                        e.id == value.assemblyConstituencyId)
+                                    .name)
+                                .first
+                            : '',
                       );
                     }),
                   ),
@@ -610,59 +645,6 @@ class _ContactDetailsState extends State<ContactDetails> {
             SizedBox(
               height: 0.5.h,
             ),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     horizontal: 4.w,
-            //   ),
-            //   child: SizedBox(
-            //     height: 7.h,
-            //     width: double.infinity,
-            //     child: Consumer<Repository>(builder: (context, data, _) {
-            //       return DropdownButtonFormField<String>(
-            //         decoration: InputDecoration(
-            //           filled: true,
-            //           fillColor: Colors.white,
-            //           labelText: 'Lok Sabha Constituency',
-            //           labelStyle: Configuration.primaryFont(
-            //             fontSize: 14.sp,
-            //             color: Colors.black54,
-            //           ),
-            //           border: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(10),
-            //           ),
-            //           focusedBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(10),
-            //           ),
-            //         ),
-            //         value: null,
-            //         onChanged: (String? newValue) {
-            //           // Handle the change
-            //         },
-            //         items: data.btcAssemblyConstituencies
-            //             .expand((List<Constituency> constituencyList) =>
-            //                 constituencyList)
-            //             .toSet()
-            //             .toList()
-            //             .map<DropdownMenuItem<String>>(
-            //                 (Constituency constituency) {
-            //           return DropdownMenuItem<String>(
-            //             value: constituency.id.toString(),
-            //             child: Text(
-            //               "${constituency.id}",
-            //               style: Configuration.primaryFont(
-            //                 fontSize: 14.sp,
-            //                 color: Colors.black,
-            //               ),
-            //             ),
-            //           );
-            //         }).toList(),
-            //       );
-            //     }),
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 0.5.h,
-            // ),
             Consumer<Repository>(builder: (context, Repository data, _) {
               return Padding(
                 padding: EdgeInsets.symmetric(
@@ -790,31 +772,19 @@ class _ContactDetailsState extends State<ContactDetails> {
             ),
             isAllDataAvailable
                 ? Container()
-                : Padding(
+                : Container(
+                    width: double.infinity,
                     padding: EdgeInsets.symmetric(
                       horizontal: 5.w,
                     ),
-                    child: SwipeButton.expand(
-                      thumb: const Icon(
-                        Icons.double_arrow_rounded,
-                        color: Colors.white,
-                      ),
-                      activeThumbColor: Configuration.thirdColor,
-                      activeTrackColor: Configuration.primaryColor,
-                      inactiveTrackColor: Colors.white,
-                      onSwipe: () {
-                        // context.router.pushNamed(CustomRoutes.savedDetailsScreen);
+                    child: Configuration.rectangleButton(
+                      onPressed: () {
                         updateContactDetails(context);
                       },
-                      child: Text(
-                        "Save",
-                        style: Configuration.primaryFont(
-                          fontSize: 16.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          // Add other text styling as needed
-                        ),
-                      ),
+                      text: "Save",
+                      fontSize: 15.sp,
+                      fontColor: Colors.black,
+                      bgColor: Configuration.primaryColor,
                     ),
                   ),
           ],
@@ -823,5 +793,7 @@ class _ContactDetailsState extends State<ContactDetails> {
     );
   }
 
-  void updateContactDetails(BuildContext context) {}
+  void updateContactDetails(BuildContext context) async {
+    // final response = await ApiService.instance(context).up
+  }
 }

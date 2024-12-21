@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +35,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
   final dob = TextEditingController();
   String? selectedRelationship;
   File? selectedFile;
+  bool mobileValidated = false;
 
   @override
   void initState() {
@@ -131,7 +131,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               child: TextFormField(
                 controller: name,
                 cursorColor: Colors.black,
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -287,10 +287,13 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                 controller: mobile,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.phone,
+                onChanged: (val) {
+                  setState(() {});
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: 'Mobile Number*',
+                  labelText: 'Mobile Number',
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
                     color: Colors.black54,
@@ -301,6 +304,29 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  suffixIcon: mobile.text.length == 10
+                      ? IconButton(
+                          icon: mobileValidated
+                              ? const Icon(
+                                  Icons.check_circle,
+                                  color: Configuration.secondaryColor,
+                                )
+                              : const Icon(
+                                  Icons.cancel,
+                                  color: Colors.red,
+                                ),
+                          onPressed: () {
+                            // Logic to validate the phone number
+                            if (mobile.text.isNotEmpty) {
+                              // Assuming a function `validatePhoneNumber` exists
+                              validatePhoneNumber(mobile.text);
+                            } else {
+                              CustomToast.showFailureToast(context, "Error",
+                                  "Please enter a mobile number");
+                            }
+                          },
+                        )
+                      : null,
                 ),
               ),
             ),
@@ -445,45 +471,36 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
             SizedBox(
               height: 2.h,
             ),
-            Padding(
+            Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
                 horizontal: 5.w,
               ),
-              child: SwipeButton.expand(
-                thumb: const Icon(
-                  Icons.double_arrow_rounded,
-                  color: Colors.white,
-                ),
-                activeThumbColor: Configuration.thirdColor,
-                activeTrackColor: Configuration.primaryColor,
-                inactiveTrackColor: Colors.white,
-                onSwipe: () {
-                  if (name.text.isEmpty) {
-                    CustomToast.showFailureToast(
-                        context, "Error", "Please enter a name");
-                  } else if (selectedRelationship == null) {
-                    CustomToast.showFailureToast(
-                        context, "Error", "Please select a relationship");
-                  } else if (dob.text.isEmpty) {
-                    CustomToast.showFailureToast(
-                        context, "Error", "Please enter a date of birth");
-                  } else if (mobile.text.isEmpty) {
-                    CustomToast.showFailureToast(
-                        context, "Error", "Please enter a mobile number");
-                  } else {
-                    addFamilyDetails(context);
-                  }
-                },
-                child: Text(
-                  "Save",
-                  style: Configuration.primaryFont(
-                    fontSize: 16.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    // Add other text styling as needed
-                  ),
-                ),
-              ),
+              child: Configuration.rectangleButton(
+                  onPressed: () {
+                    if (name.text.isEmpty) {
+                      CustomToast.showFailureToast(
+                          context, "Error", "Please enter a name");
+                    } else if (selectedRelationship == null) {
+                      CustomToast.showFailureToast(
+                          context, "Error", "Please select a relationship");
+                    } else if (dob.text.isEmpty) {
+                      CustomToast.showFailureToast(
+                          context, "Error", "Please enter a date of birth");
+                    } else if (mobile.text.isEmpty) {
+                      CustomToast.showFailureToast(
+                          context, "Error", "Please enter a mobile number");
+                    } else if (!mobileValidated) {
+                      CustomToast.showFailureToast(context, "Error",
+                          "Please validate the mobile number");
+                    } else {
+                      addFamilyDetails(context);
+                    }
+                  },
+                  text: "Save",
+                  fontSize: 15.sp,
+                  fontColor: Colors.black,
+                  bgColor: Configuration.primaryColor),
             ),
             SizedBox(
               height: 1.h,
@@ -642,6 +659,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
   void fetchFamilyDetails(BuildContext context, int? memberId) async {
     final response = await ApiService.instance(context)
         .getReferredFamilyDetails(context, memberId);
+    debugPrint("Fetching family details");
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setReferredMemberFamilyDetails(response.data.familyDetails);
@@ -752,5 +770,17 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
         );
       },
     );
+  }
+
+  Future<void> validatePhoneNumber(String text) async {
+    final result =
+        await AutoRouter.of(context).push(VerifiedRoute(mobile: text));
+    // You can now handle 'result' based on its value if needed.
+    if (result != null) {
+      setState(() {
+        mobileValidated = true;
+        mobile.text = "$result";
+      });
+    }
   }
 }

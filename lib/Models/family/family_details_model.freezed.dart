@@ -655,6 +655,8 @@ mixin _$FamilyMembershipCard {
   String get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   String get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'primary_name')
+  String? get primaryName => throw _privateConstructorUsedError;
   String get village => throw _privateConstructorUsedError;
   String? get photo => throw _privateConstructorUsedError;
   FamilyDistrict get district => throw _privateConstructorUsedError;
@@ -713,6 +715,7 @@ abstract class $FamilyMembershipCardCopyWith<$Res> {
       @JsonKey(name: 'update_count') int updateCount,
       @JsonKey(name: 'created_at') String createdAt,
       @JsonKey(name: 'updated_at') String updatedAt,
+      @JsonKey(name: 'primary_name') String? primaryName,
       String village,
       String? photo,
       FamilyDistrict district,
@@ -765,6 +768,7 @@ class _$FamilyMembershipCardCopyWithImpl<$Res,
     Object? updateCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? primaryName = freezed,
     Object? village = null,
     Object? photo = freezed,
     Object? district = null,
@@ -853,6 +857,10 @@ class _$FamilyMembershipCardCopyWithImpl<$Res,
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      primaryName: freezed == primaryName
+          ? _value.primaryName
+          : primaryName // ignore: cast_nullable_to_non_nullable
+              as String?,
       village: null == village
           ? _value.village
           : village // ignore: cast_nullable_to_non_nullable
@@ -951,6 +959,7 @@ abstract class _$$FamilyMembershipCardImplCopyWith<$Res>
       @JsonKey(name: 'update_count') int updateCount,
       @JsonKey(name: 'created_at') String createdAt,
       @JsonKey(name: 'updated_at') String updatedAt,
+      @JsonKey(name: 'primary_name') String? primaryName,
       String village,
       String? photo,
       FamilyDistrict district,
@@ -1001,6 +1010,7 @@ class __$$FamilyMembershipCardImplCopyWithImpl<$Res>
     Object? updateCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? primaryName = freezed,
     Object? village = null,
     Object? photo = freezed,
     Object? district = null,
@@ -1089,6 +1099,10 @@ class __$$FamilyMembershipCardImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      primaryName: freezed == primaryName
+          ? _value.primaryName
+          : primaryName // ignore: cast_nullable_to_non_nullable
+              as String?,
       village: null == village
           ? _value.village
           : village // ignore: cast_nullable_to_non_nullable
@@ -1173,6 +1187,7 @@ class _$FamilyMembershipCardImpl implements _FamilyMembershipCard {
       @JsonKey(name: 'update_count') required this.updateCount,
       @JsonKey(name: 'created_at') required this.createdAt,
       @JsonKey(name: 'updated_at') required this.updatedAt,
+      @JsonKey(name: 'primary_name') this.primaryName,
       required this.village,
       this.photo,
       required this.district,
@@ -1243,6 +1258,9 @@ class _$FamilyMembershipCardImpl implements _FamilyMembershipCard {
   @JsonKey(name: 'updated_at')
   final String updatedAt;
   @override
+  @JsonKey(name: 'primary_name')
+  final String? primaryName;
+  @override
   final String village;
   @override
   final String? photo;
@@ -1280,7 +1298,7 @@ class _$FamilyMembershipCardImpl implements _FamilyMembershipCard {
 
   @override
   String toString() {
-    return 'FamilyMembershipCard(id: $id, userId: $userId, refId: $refId, oldRefCode: $oldRefCode, title: $title, address: $address, pinCode: $pinCode, btcAssemblyConstituencyId: $btcAssemblyConstituencyId, btcConstituency: $btcConstituency, partyDistrict: $partyDistrict, assemblyConstituency: $assemblyConstituency, primaryId: $primaryId, boothId: $boothId, villageId: $villageId, createdBy: $createdBy, updateCount: $updateCount, createdAt: $createdAt, updatedAt: $updatedAt, village: $village, photo: $photo, district: $district, districtId: $districtId, name: $name, mobileNo: $mobileNo, membershipNo: $membershipNo, refCode: $refCode, gender: $gender, dateOfBirth: $dateOfBirth, email: $email, joiningDate: $joiningDate, relationship: $relationship, voterId: $voterId)';
+    return 'FamilyMembershipCard(id: $id, userId: $userId, refId: $refId, oldRefCode: $oldRefCode, title: $title, address: $address, pinCode: $pinCode, btcAssemblyConstituencyId: $btcAssemblyConstituencyId, btcConstituency: $btcConstituency, partyDistrict: $partyDistrict, assemblyConstituency: $assemblyConstituency, primaryId: $primaryId, boothId: $boothId, villageId: $villageId, createdBy: $createdBy, updateCount: $updateCount, createdAt: $createdAt, updatedAt: $updatedAt, primaryName: $primaryName, village: $village, photo: $photo, district: $district, districtId: $districtId, name: $name, mobileNo: $mobileNo, membershipNo: $membershipNo, refCode: $refCode, gender: $gender, dateOfBirth: $dateOfBirth, email: $email, joiningDate: $joiningDate, relationship: $relationship, voterId: $voterId)';
   }
 
   @override
@@ -1318,6 +1336,8 @@ class _$FamilyMembershipCardImpl implements _FamilyMembershipCard {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
+            (identical(other.primaryName, primaryName) ||
+                other.primaryName == primaryName) &&
             (identical(other.village, village) || other.village == village) &&
             (identical(other.photo, photo) || other.photo == photo) &&
             (identical(other.district, district) ||
@@ -1363,6 +1383,7 @@ class _$FamilyMembershipCardImpl implements _FamilyMembershipCard {
         updateCount,
         createdAt,
         updatedAt,
+        primaryName,
         village,
         photo,
         district,
@@ -1419,6 +1440,7 @@ abstract class _FamilyMembershipCard implements FamilyMembershipCard {
           @JsonKey(name: 'update_count') required final int updateCount,
           @JsonKey(name: 'created_at') required final String createdAt,
           @JsonKey(name: 'updated_at') required final String updatedAt,
+          @JsonKey(name: 'primary_name') final String? primaryName,
           required final String village,
           final String? photo,
           required final FamilyDistrict district,
@@ -1489,6 +1511,9 @@ abstract class _FamilyMembershipCard implements FamilyMembershipCard {
   @override
   @JsonKey(name: 'updated_at')
   String get updatedAt;
+  @override
+  @JsonKey(name: 'primary_name')
+  String? get primaryName;
   @override
   String get village;
   @override

@@ -187,6 +187,52 @@ class DashboardRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [EditProfileScreen]
+class EditProfileRoute extends PageRouteInfo<EditProfileRouteArgs> {
+  EditProfileRoute({
+    Key? key,
+    required int id,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditProfileRoute.name,
+          args: EditProfileRouteArgs(
+            key: key,
+            id: id,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'EditProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<EditProfileRouteArgs>();
+      return EditProfileScreen(
+        key: args.key,
+        id: args.id,
+      );
+    },
+  );
+}
+
+class EditProfileRouteArgs {
+  const EditProfileRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final Key? key;
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'EditProfileRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
 /// [FamilyViewDetailsMemberScreen]
 class FamilyViewDetailsMemberRoute
     extends PageRouteInfo<FamilyViewDetailsMemberRouteArgs> {
@@ -735,6 +781,25 @@ class UpdateFamilyProfileRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const UpdateFamilyProfileScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [UpdateOwnFamilyDetailsScreen]
+class UpdateOwnFamilyDetailsRoute extends PageRouteInfo<void> {
+  const UpdateOwnFamilyDetailsRoute({List<PageRouteInfo>? children})
+      : super(
+          UpdateOwnFamilyDetailsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UpdateOwnFamilyDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const UpdateOwnFamilyDetailsScreen();
     },
   );
 }

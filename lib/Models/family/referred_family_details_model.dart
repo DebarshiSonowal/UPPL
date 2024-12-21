@@ -7,15 +7,27 @@ part 'referred_family_details_model.g.dart';
 
 @freezed
 class ReferredFamilyDetailsModel with _$ReferredFamilyDetailsModel {
+  // Handling Unauthorized case with default values
   const factory ReferredFamilyDetailsModel({
-    required int status,
-    required String message,
-    required FamilyData data, // Maps the 'data' field from JSON
-    required int code,
+    @Default(0) int status, // Defaulting to 0 if not provided
+    @Default('Unauthorized')
+    String message, // Defaulting to 'Unauthorized' for message
+    @Default(FamilyData(familyDetails: []))
+    FamilyData data, // Defaulting to empty FamilyData
+    @Default(401) int code, // Defaulting to 401 if not provided
   }) = _ReferredFamilyDetailsModel;
 
   factory ReferredFamilyDetailsModel.fromJson(Map<String, dynamic> json) =>
       _$ReferredFamilyDetailsModelFromJson(json);
+
+  // Updated factory constructor for Unauthorized case with explicit values
+  factory ReferredFamilyDetailsModel.unauthorized() =>
+      ReferredFamilyDetailsModel(
+        status: 0,
+        message: 'Unauthorized',
+        data: FamilyData(familyDetails: []),
+        code: 401,
+      );
 }
 
 @freezed
@@ -65,6 +77,7 @@ class MembershipCard with _$MembershipCard {
     @JsonKey(name: 'updated_at') required String updatedAt,
     required String village,
     String? photo,
+    @JsonKey(name: 'primary_name') String? primaryName,
     required District district,
     @JsonKey(name: 'district_id') int? districtId,
     required String name,

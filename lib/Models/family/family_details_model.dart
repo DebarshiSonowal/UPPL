@@ -60,6 +60,7 @@ class FamilyMembershipCard with _$FamilyMembershipCard {
     @JsonKey(name: 'update_count') required int updateCount,
     @JsonKey(name: 'created_at') required String createdAt,
     @JsonKey(name: 'updated_at') required String updatedAt,
+    @JsonKey(name: 'primary_name') String? primaryName,
     required String village,
     String? photo,
     required FamilyDistrict district,

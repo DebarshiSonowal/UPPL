@@ -10,7 +10,7 @@ _$VerifyOtpModelImpl _$$VerifyOtpModelImplFromJson(Map<String, dynamic> json) =>
     _$VerifyOtpModelImpl(
       status: (json['status'] as num).toInt(),
       message: json['message'] as String,
-      data: VerifyOtpData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] as Object,
       code: (json['code'] as num).toInt(),
     );
 

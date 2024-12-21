@@ -237,8 +237,7 @@ class _CustomNavDrawerState extends State<CustomNavDrawer> {
           children: [
             GestureDetector(
               onTap: () {
-                launchURL(
-                    "https://sites.google.com/view/www-upplofficial-org/data-deletion?authuser=6");
+                launchURL("https://upplofficial.org/delete-member");
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(

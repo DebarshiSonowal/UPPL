@@ -237,7 +237,6 @@ class GetAuthService {
         "mobile_no": mobile_no,
         "date_of_birth": date_of_birth,
         "gender": gender + 1,
-        "email": email,
         "address": address,
         "pincode": pincode,
         "btc_constituency": btc_constituency,
@@ -254,6 +253,9 @@ class GetAuthService {
         "village": village == 0 ? "other" : village,
       };
 
+      if (email != "") {
+        dataMap["email"] = email;
+      }
       if (ref_id != 0) {
         dataMap["ref_id"] = ref_id;
       }
@@ -336,8 +338,12 @@ class GetAuthService {
   Future<RegenerateTokenModel> regenerateToken(
       String refreshToken, BuildContext context) async {
     if (_isRegenerating) {
-      return const RegenerateTokenModel.withError(
-          "Another token is already regenerated");
+      return RegenerateTokenModel.withError(
+        message: "Another token is already being regenerated",
+        status: 0,
+        code: 0,
+        error: RegenerateTokenError(errors: {}),
+      );
     }
     _isRegenerating = true;
     SVProgressHUD.show();
@@ -364,49 +370,81 @@ class GetAuthService {
       debugPrint("RegenerateTokenModel response: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ConfigStorage.instance.setToken(response.data['data']['access_token'],
-            response.data['data']['refresh_token']);
-
-        SVProgressHUD.dismiss();
-        _isRegenerating = false;
-        return RegenerateTokenModel.fromJson(response.data);
+        if (response.data != null && response.data['data'] != null) {
+          ConfigStorage.instance.setToken(
+            response.data['data']['access_token'],
+            response.data['data']['refresh_token'],
+          );
+          return RegenerateTokenModel.fromJson(response.data);
+        } else {
+          debugPrint("RegenerateTokenModel error: Invalid response format");
+          return RegenerateTokenModel.withError(
+            message: "Invalid response format",
+            status: response.data['status'] ?? 0,
+            error: RegenerateTokenError(errors: {}),
+            code: response.data['code'] ?? 0,
+          );
+        }
       } else {
-        SVProgressHUD.dismiss();
         debugPrint("RegenerateTokenModel error: ${response.data}");
-        _isRegenerating = false;
-        return RegenerateTokenModel.withError(response.data['message'] ??
-            "An unknown error occurred while regenerating token");
+        return RegenerateTokenModel.withError(
+          message: response.data['message'] ??
+              "An unknown error occurred while regenerating token",
+          status: response.data['status'] ?? 0,
+          error: RegenerateTokenError(
+            errors: {},
+          ),
+          code: response.data['code'] ?? 0,
+        );
       }
     } on DioException catch (e) {
-      SVProgressHUD.dismiss();
       if (e.response?.statusCode == 401 || e.response?.statusCode == 400) {
-        debugPrint("RegenerateTokenModel error: ${e.response?.data}");
+        debugPrint(
+            "RegenerateTokenModel authorization error: ${e.response?.data}");
         ConfigStorage.instance.logout();
         try {
           AutoRouter.of(context).popUntilRoot();
-        } catch (e) {
-          print(e);
+        } catch (err) {
+          debugPrint("AutoRouter popUntilRoot error: $err");
         }
         AutoRouter.of(context).pushNamed(CustomRoutes.loginOtpScreen);
-        _isRegenerating = false;
-        return RegenerateTokenModel.withError(e.response?.data['message'] ??
-            "Unauthorized access or invalid input");
+        return RegenerateTokenModel.withError(
+          message: e.response?.data['message'] ??
+              e.message ??
+              "Unknown error occurred",
+          status: e.response?.statusCode ?? 0,
+          error: RegenerateTokenError(
+            errors: {},
+          ),
+          code: e.response?.statusCode ?? 0,
+        );
       }
 
       debugPrint(
-          "RegenerateTokenModel error: ${e.message} ${e.response} ${e.requestOptions.data}");
-      _isRegenerating = false;
-      return ErrorHandler.handleDioError(e, context, (val) {
-        return RegenerateTokenModel.withError(e.response?.data['message'] ??
+          "RegenerateTokenModel unexpected error: ${e.message} ${e.response} ${e.requestOptions.data}");
+      return RegenerateTokenModel.withError(
+        message: e.response?.data['message'] ??
             e.message ??
-            "Unknown error occurred");
-      });
+            "Unknown error occurred",
+        status: e.response?.statusCode ?? 0,
+        error: RegenerateTokenError(
+          errors: {},
+        ),
+        code: e.response?.statusCode ?? 0,
+      );
     } catch (e) {
-      SVProgressHUD.dismiss();
       debugPrint("Unexpected error in regenerateToken: $e");
+      return RegenerateTokenModel.withError(
+        message: e.toString(),
+        status: 0,
+        error: RegenerateTokenError(
+          errors: {},
+        ),
+        code: 0,
+      );
+    } finally {
+      SVProgressHUD.dismiss();
       _isRegenerating = false;
-      return const RegenerateTokenModel.withError(
-          "An unexpected error occurred");
     }
   }
 

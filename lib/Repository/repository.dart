@@ -13,6 +13,7 @@ import '../Models/family/referred_family_details_model.dart';
 class Repository extends ChangeNotifier {
   int currentIndex = 0;
   ReferredMemberFamilyDetails? selectedReferredFamilyDetailsModel;
+  FamilyDetail? selectedFamilyDetailModel;
   MemberDetailsData? memberData;
   ProfileData? profileData;
   PersonalDetails? personalDetails;
@@ -23,8 +24,10 @@ class Repository extends ChangeNotifier {
   List<District> districts = [];
   List<PartyDistrict> partyDistricts = [];
   List<List<Primary>> btcPrimaries = [];
+  Map<String, List<Primary>> btcPrimariesList = {};
   List<List<Constituency>> btcAssemblyConstituencies = [];
   List<FamilyDetail> familyDetail = [];
+  List<Constituency> btcAssemblyConstituenciesList = [];
   List<JoinedByReferralMember> joinedByReferralMember = [],
       unverifiedJoinedByReferralMember = [];
   List<BTCConstituency> btcConstituency = [];
@@ -121,6 +124,11 @@ class Repository extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setMembersFamilyDetails(FamilyDetail data) {
+    selectedFamilyDetailModel = data;
+    notifyListeners();
+  }
+
   void setJoinedByReferralMember(List<JoinedByReferralMember> data) {
     joinedByReferralMember = data;
     notifyListeners();
@@ -166,8 +174,18 @@ class Repository extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPrimaryList(Map<String, List<Primary>> val) {
+    btcPrimariesList = val;
+    notifyListeners();
+  }
+
   void setConstituency(List<List<Constituency>> val) {
     btcAssemblyConstituencies = val;
+    notifyListeners();
+  }
+
+  void setConstituencyList(List<Constituency> val) {
+    btcAssemblyConstituenciesList = val;
     notifyListeners();
   }
 

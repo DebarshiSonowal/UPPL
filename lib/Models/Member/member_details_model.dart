@@ -21,17 +21,23 @@ class MemberDetailsModel with _$MemberDetailsModel {
 
   factory MemberDetailsModel.fromJson(Map<String, dynamic> json) {
     if (json['status'] == 1) {
+      // Handle success response with valid data
       return MemberDetailsModel.success(
         status: json['status'] as int,
         message: json['message'] as String,
-        data: MemberDetailsData.fromJson(json['data'] as Map<String, dynamic>),
+        data: json['data'] != null && json['data'] is Map<String, dynamic>
+            ? MemberDetailsData.fromJson(json['data'] as Map<String, dynamic>)
+            : null, // Handle missing or null data
         code: json['code'] as int,
       );
     } else {
+      // Handle error response, including cases where data is []
       return MemberDetailsModel.error(
         status: json['status'] as int,
         message: json['message'] as String,
-        data: MemberDetailsError.fromJson(json['data'] as Map<String, dynamic>),
+        data: json['data'] != null && json['data'] is Map<String, dynamic>
+            ? MemberDetailsError.fromJson(json['data'] as Map<String, dynamic>)
+            : const MemberDetailsError(errors: {}), // Default empty errors
         code: json['code'] as int,
       );
     }

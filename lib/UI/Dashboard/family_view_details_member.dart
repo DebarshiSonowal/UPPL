@@ -229,21 +229,22 @@ class _FamilyViewDetailsMemberScreenState
                                 height: 4.h,
                                 child: Configuration.rectangleButton(
                                   onPressed: () {
-                                    // Provider.of<Repository>(context,
-                                    //     listen: false)
-                                    //     .setReferredMembersFamilyDetails(data!);
-                                    // AutoRouter.of(context)
-                                    //     .pushNamed(CustomRoutes
-                                    //     .updateFamilyDetailsScreen)
-                                    //     .then((_) {
-                                    //   fetchFamilyDetails(
-                                    //       context,
-                                    //       Provider.of<Repository>(context,
-                                    //           listen: false)
-                                    //           .memberData
-                                    //           ?.personalDetails
-                                    //           ?.memberId);
-                                    // });
+                                    debugPrint("Show");
+                                    Provider.of<Repository>(context,
+                                            listen: false)
+                                        .setMembersFamilyDetails(data!);
+                                    AutoRouter.of(context)
+                                        .pushNamed(CustomRoutes
+                                            .updateMyFamilyDetailsScreen)
+                                        .then((_) {
+                                      fetchFamilyDetails(
+                                          context,
+                                          Provider.of<Repository>(context,
+                                                  listen: false)
+                                              .memberData
+                                              ?.personalDetails
+                                              ?.memberId);
+                                    });
                                   },
                                   text: 'Edit',
                                   bgColor: Configuration.secondaryColor,
@@ -510,7 +511,7 @@ class _FamilyViewDetailsMemberScreenState
                       height: 2.h,
                     ),
                     Text(
-                      "Primary Booth:",
+                      "Primary:",
                       style: Configuration.primaryFont(
                         fontSize: 13.5.sp,
                         color: Colors.black,
@@ -524,7 +525,7 @@ class _FamilyViewDetailsMemberScreenState
                       return SizedBox(
                         width: 70.w,
                         child: Text(
-                          "${_.booths.indexWhere((e) => e.id == data?.membershipCard.boothId) == -1 ? "N/A" : _.booths.firstWhere((e) => e.id == data?.membershipCard.boothId).id}",
+                          data?.membershipCard.primaryName ?? 'N/A',
                           style: Configuration.primaryFont(
                             fontSize: 15.sp,
                             color: Colors.black,
@@ -537,7 +538,7 @@ class _FamilyViewDetailsMemberScreenState
                       height: 2.h,
                     ),
                     Text(
-                      "Booth Location:",
+                      "Booth:",
                       style: Configuration.primaryFont(
                         fontSize: 13.5.sp,
                         color: Colors.black,

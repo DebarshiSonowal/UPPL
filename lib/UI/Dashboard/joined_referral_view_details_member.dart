@@ -9,6 +9,7 @@ import 'package:uppl/Helper/toast.dart';
 import 'package:uppl/Models/family/referred_family_details_model.dart';
 import 'package:uppl/Repository/repository.dart';
 import 'package:uppl/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
@@ -73,7 +74,7 @@ class _JoinedReferralViewDetailsMemberScreenState
                   horizontal: 4.w,
                   vertical: 1.h,
                 ),
-                height: 78.h,
+                // height: 78.h,
                 width: double.infinity,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -230,7 +231,17 @@ class _JoinedReferralViewDetailsMemberScreenState
                                 width: 30.w,
                                 height: 4.h,
                                 child: Configuration.rectangleButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    try {
+                                      debugPrint(
+                                          "Config ${memberData?.userId} ${memberData?.memberId}");
+                                      AutoRouter.of(context).push(
+                                          EditProfileRoute(
+                                              id: memberData?.memberId ?? 0));
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
                                   text: 'Edit',
                                   bgColor: Configuration.secondaryColor,
                                   fontColor: Colors.white,
@@ -252,6 +263,98 @@ class _JoinedReferralViewDetailsMemberScreenState
                               ),
                             ],
                           ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Text(
+                      "Name:",
+                      style: Configuration.primaryFont(
+                        fontSize: 13.5.sp,
+                        color: Colors.black,
+                        // fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 0.3.h,
+                    ),
+                    SizedBox(
+                      width: 70.w,
+                      child: Text(
+                        (memberData?.memberName ?? "N/A")
+                            .capitalizeFirstOfEach(),
+                        style: Configuration.primaryFont(
+                          fontSize: 15.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Text(
+                      "Mobile Number:",
+                      style: Configuration.primaryFont(
+                        fontSize: 13.5.sp,
+                        color: Colors.black,
+                        // fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 0.3.h,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 25.w, // Adjusted width to accommodate icons
+                          child: Text(
+                            (memberData?.mobileNo ?? "N/A")
+                                .capitalizeFirstOfEach(),
+                            style: Configuration.primaryFont(
+                              fontSize: 15.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        // Spacer(),
+                        GestureDetector(
+                          onTap: () async {
+                            final phoneNumber = memberData?.mobileNo;
+                            if (phoneNumber != null && phoneNumber.isNotEmpty) {
+                              final url = Uri.parse('tel:$phoneNumber');
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            }
+                          },
+                          child: Icon(
+                            Icons.phone,
+                            size: 16.sp,
+                            color: Configuration.thirdColor,
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
+                        GestureDetector(
+                          onTap: () async {
+                            final phoneNumber = memberData?.mobileNo;
+                            if (phoneNumber != null && phoneNumber.isNotEmpty) {
+                              final whatsappUrl = Uri.parse(
+                                'https://wa.me/$phoneNumber',
+                              );
+                              if (await canLaunchUrl(whatsappUrl)) {
+                                await launchUrl(whatsappUrl);
+                              }
+                            }
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.whatsapp,
+                            size: 16.sp,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 2.h,
                     ),
@@ -399,7 +502,7 @@ class _JoinedReferralViewDetailsMemberScreenState
                       height: 2.h,
                     ),
                     Text(
-                      "Primary Booth:",
+                      "Primary:",
                       style: Configuration.primaryFont(
                         fontSize: 13.5.sp,
                         color: Colors.black,
@@ -413,7 +516,7 @@ class _JoinedReferralViewDetailsMemberScreenState
                       return SizedBox(
                         width: 70.w,
                         child: Text(
-                          "${_.booths.indexWhere((e) => e.id == memberData?.boothId) == -1 ? "N/A" : _.booths.firstWhere((e) => e.id == memberData?.boothId).id}",
+                          "${memberData?.primaryName}",
                           style: Configuration.primaryFont(
                             fontSize: 15.sp,
                             color: Colors.black,
@@ -426,7 +529,7 @@ class _JoinedReferralViewDetailsMemberScreenState
                       height: 2.h,
                     ),
                     Text(
-                      "Booth Location:",
+                      "Booth:",
                       style: Configuration.primaryFont(
                         fontSize: 13.5.sp,
                         color: Colors.black,

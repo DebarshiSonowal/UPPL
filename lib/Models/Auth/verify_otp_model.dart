@@ -8,7 +8,7 @@ class VerifyOtpModel with _$VerifyOtpModel {
   const factory VerifyOtpModel({
     required int status,
     required String message,
-    required VerifyOtpData data,
+    required Object data,
     required int code,
   }) = _VerifyOtpModel;
 
