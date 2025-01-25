@@ -295,126 +295,6 @@ class _ContactDetailsState extends State<ContactDetails> {
                         width: 50.w,
                         child: DropdownSearch<String>(
                           items: (String filter, _) async {
-                            return data.districts
-                                .map((district) => district.name)
-                                .where((name) => name
-                                    .toLowerCase()
-                                    .contains(filter.toLowerCase()))
-                                .toList();
-                          },
-                          popupProps: PopupProps.menu(
-                            showSearchBox: true,
-                            searchFieldProps: const TextFieldProps(
-                              decoration: InputDecoration(
-                                hintText: 'Search district...',
-                                prefixIcon: Icon(Icons.search),
-                              ),
-                            ),
-                            showSelectedItems: true,
-                            disabledItemFn: (String s) => s.startsWith('I'),
-                          ),
-                          decoratorProps: DropDownDecoratorProps(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'District*',
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          onChanged: isAllDataAvailable
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    selectedDistrict = value;
-                                  });
-                                },
-                          selectedItem: selectedDistrict,
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 0.5.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.w,
-              ),
-              child: SizedBox(
-                height: 7.h,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Consumer<Repository>(
-                        builder: (context, Repository data, _) {
-                      return SizedBox(
-                        width: 40.w,
-                        child: DropdownSearch<String>(
-                          items: (String filter, _) async {
-                            return data.partyDistricts
-                                .map((district) => district.name)
-                                .where((name) => name
-                                    .toLowerCase()
-                                    .contains(filter.toLowerCase()))
-                                .toList();
-                          },
-                          popupProps: PopupProps.menu(
-                            showSearchBox: true,
-                            searchFieldProps: const TextFieldProps(
-                              decoration: InputDecoration(
-                                hintText: 'Search party district...',
-                                prefixIcon: Icon(Icons.search),
-                              ),
-                            ),
-                            showSelectedItems: true,
-                            disabledItemFn: (String s) => s.startsWith('I'),
-                          ),
-                          decoratorProps: DropDownDecoratorProps(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'Party District*',
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          onChanged: isAllDataAvailable
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    selectedPartyDistrict = value;
-                                  });
-                                },
-                          selectedItem: selectedPartyDistrict,
-                        ),
-                      );
-                    }),
-                    Consumer<Repository>(
-                        builder: (context, Repository data, _) {
-                      return SizedBox(
-                        width: 50.w,
-                        child: DropdownSearch<String>(
-                          items: (String filter, _) async {
                             return data.btcConstituency
                                 .map((constituency) => constituency.name)
                                 .where((name) => name
@@ -475,6 +355,126 @@ class _ContactDetailsState extends State<ContactDetails> {
               padding: EdgeInsets.symmetric(
                 horizontal: 4.w,
               ),
+              child: SizedBox(
+                height: 7.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Consumer<Repository>(
+                        builder: (context, Repository data, _) {
+                      return SizedBox(
+                        width: 50.w,
+                        child: DropdownSearch<String>(
+                          items: (String filter, _) async {
+                            return data.districts
+                                .map((district) => district.name)
+                                .where((name) => name
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase()))
+                                .toList();
+                          },
+                          popupProps: PopupProps.menu(
+                            showSearchBox: true,
+                            searchFieldProps: const TextFieldProps(
+                              decoration: InputDecoration(
+                                hintText: 'Search district...',
+                                prefixIcon: Icon(Icons.search),
+                              ),
+                            ),
+                            showSelectedItems: true,
+                            disabledItemFn: (String s) => s.startsWith('I'),
+                          ),
+                          decoratorProps: DropDownDecoratorProps(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'District*',
+                              labelStyle: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          onChanged: isAllDataAvailable
+                              ? null
+                              : (value) {
+                                  setState(() {
+                                    selectedDistrict = value;
+                                  });
+                                },
+                          selectedItem: selectedDistrict,
+                        ),
+                      );
+                    }),
+                    Consumer<Repository>(
+                        builder: (context, Repository data, _) {
+                      return SizedBox(
+                        width: 40.w,
+                        child: DropdownSearch<String>(
+                          items: (String filter, _) async {
+                            return data.partyDistricts
+                                .map((district) => district.name)
+                                .where((name) => name
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase()))
+                                .toList();
+                          },
+                          popupProps: PopupProps.menu(
+                            showSearchBox: true,
+                            searchFieldProps: const TextFieldProps(
+                              decoration: InputDecoration(
+                                hintText: 'Search party district...',
+                                prefixIcon: Icon(Icons.search),
+                              ),
+                            ),
+                            showSelectedItems: true,
+                            disabledItemFn: (String s) => s.startsWith('I'),
+                          ),
+                          decoratorProps: DropDownDecoratorProps(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Party District*',
+                              labelStyle: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          onChanged: isAllDataAvailable
+                              ? null
+                              : (value) {
+                                  setState(() {
+                                    selectedPartyDistrict = value;
+                                  });
+                                },
+                          selectedItem: selectedPartyDistrict,
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 0.5.h,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 4.w,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -497,7 +497,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                           showSearchBox: true,
                           searchFieldProps: const TextFieldProps(
                             decoration: InputDecoration(
-                              hintText: 'Search BTC Assembly Constituency...',
+                              hintText: 'Search Assembly Constituency...',
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
@@ -508,7 +508,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            labelText: 'BTC Assembly Constituency*',
+                            labelText: 'Assembly Constituency*',
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,

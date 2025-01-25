@@ -291,43 +291,76 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   setState(() {});
                 },
                 decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Mobile Number',
-                  labelStyle: Configuration.primaryFont(
-                    fontSize: 14.sp,
-                    color: Colors.black54,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  suffixIcon: mobile.text.length == 10
-                      ? IconButton(
-                          icon: mobileValidated
-                              ? const Icon(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Mobile Number',
+                    labelStyle: Configuration.primaryFont(
+                      fontSize: 14.sp,
+                      color: Colors.black54,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    suffixIcon: mobile.text.length == 10
+                        ? mobileValidated
+                            ? IconButton(
+                                icon: const Icon(
                                   Icons.check_circle,
                                   color: Configuration.secondaryColor,
-                                )
-                              : const Icon(
-                                  Icons.cancel,
-                                  color: Colors.red,
                                 ),
-                          onPressed: () {
-                            // Logic to validate the phone number
-                            if (mobile.text.isNotEmpty) {
-                              // Assuming a function `validatePhoneNumber` exists
-                              validatePhoneNumber(mobile.text);
-                            } else {
-                              CustomToast.showFailureToast(context, "Error",
-                                  "Please enter a mobile number");
-                            }
-                          },
-                        )
-                      : null,
-                ),
+                                onPressed: () {
+                                  // Logic to validate the phone number
+                                  if (mobile.text.isNotEmpty) {
+                                    // Assuming a function `validatePhoneNumber` exists
+                                    validatePhoneNumber(mobile.text);
+                                  } else {
+                                    CustomToast.showFailureToast(
+                                        context,
+                                        "Error",
+                                        "Please enter a mobile number");
+                                  }
+                                },
+                              )
+                            : GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    right: 2.w,
+                                  ),
+                                  child: Card(
+                                    elevation: 2,
+                                    child: Container(
+                                      width: 18.w,
+                                      height: 3.5.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Center(
+                                          child: Text(
+                                        "Validate",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Logic to validate the phone number
+                                  if (mobile.text.isNotEmpty) {
+                                    validatePhoneNumber(mobile.text);
+                                  } else {
+                                    CustomToast.showFailureToast(
+                                        context,
+                                        "Error",
+                                        "Please enter a mobile number");
+                                  }
+                                },
+                              )
+                        : null),
               ),
             ),
             SizedBox(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:uppl/Constants/routes.dart';
 import 'package:uppl/Repository/repository.dart';
 
@@ -59,22 +60,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   horizontal: 6.w,
                 ),
                 child: Consumer<Repository>(builder: (context, data, _) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Configuration.primaryColor,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          data.memberData?.membershipCardData.photo ?? "",
+                  return Skeletonizer(
+                    enabled: data.memberData == null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Configuration.primaryColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
                         ),
-                        fit: BoxFit.fill,
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            data.memberData?.membershipCardData.photo ?? "",
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
+                      height: 25.w,
+                      width: 25.w,
                     ),
-                    height: 25.w,
-                    width: 25.w,
                   );
                 }),
               ),
@@ -82,13 +86,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: 1.h,
               ),
               Consumer<Repository>(builder: (context, data, _) {
-                return Text(
-                  "${data.memberData?.membershipCardData.name}",
-                  style: Configuration.primaryFont(
-                    fontSize: 17.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    // Add other text styling as needed
+                return Skeletonizer(
+                  enabled: data.memberData == null,
+                  child: Text(
+                    "${data.memberData?.membershipCardData.name}",
+                    style: Configuration.primaryFont(
+                      fontSize: 17.sp,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      // Add other text styling as needed
+                    ),
                   ),
                 );
               }),
@@ -96,13 +103,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: 0.3.h,
               ),
               Consumer<Repository>(builder: (context, data, _) {
-                return Text(
-                  "My Rank : ${data.demographyData?.rank}",
-                  style: Configuration.primaryFont(
-                    fontSize: 15.sp,
-                    color: Configuration.thirdColor,
-                    fontWeight: FontWeight.bold,
-                    // Add other text styling as needed
+                return Skeletonizer(
+                  enabled: data.memberData == null,
+                  child: Text(
+                    "My Rank : ${data.demographyData?.rank}",
+                    style: Configuration.primaryFont(
+                      fontSize: 15.sp,
+                      color: Configuration.thirdColor,
+                      fontWeight: FontWeight.bold,
+                      // Add other text styling as needed
+                    ),
                   ),
                 );
               }),
@@ -110,27 +120,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: 0.3.h,
               ),
               Consumer<Repository>(builder: (context, data, _) {
-                return RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: "My Referral Code: ",
-                      style: Configuration.primaryFont(
-                        fontSize: 15.sp,
-                        color: Configuration.subTextColor,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
+                return Skeletonizer(
+                  enabled: data.memberData == null,
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: "My Referral Code: ",
+                        style: Configuration.primaryFont(
+                          fontSize: 15.sp,
+                          color: Configuration.subTextColor,
+                          fontWeight: FontWeight.bold,
+                          // Add other text styling as needed
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: "${data.memberData?.membershipCardData.refCode}",
-                      style: Configuration.primaryFont(
-                        fontSize: 15.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
+                      TextSpan(
+                        text: "${data.memberData?.membershipCardData.refCode}",
+                        style: Configuration.primaryFont(
+                          fontSize: 15.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          // Add other text styling as needed
+                        ),
                       ),
-                    ),
-                  ]),
+                    ]),
+                  ),
                 );
               }),
               SizedBox(
@@ -162,13 +175,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   children: [
                     Consumer<Repository>(builder: (context, data, _) {
-                      return Text(
-                        "${data.joinedByReferralMember.length}",
-                        style: Configuration.primaryFont(
-                          fontSize: 22.sp,
-                          color: Configuration.thirdColor,
-                          fontWeight: FontWeight.bold,
-                          // Add other text styling as needed
+                      return Skeletonizer(
+                        enabled: data.demographyData == null,
+                        child: Text(
+                          "${data.demographyData?.totalMembers}",
+                          style: Configuration.primaryFont(
+                            fontSize: 22.sp,
+                            color: Configuration.thirdColor,
+                            fontWeight: FontWeight.bold,
+                            // Add other text styling as needed
+                          ),
                         ),
                       );
                     }),
@@ -295,50 +311,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       height: 3.h,
                     ),
                     Consumer<Repository>(builder: (context, data, _) {
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          var item = data.familyDetail[index];
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 25.w,
-                                child: Center(
-                                  child: Text(
-                                    item.personalDetails.name,
-                                    style: Configuration.primaryFont(
-                                      fontSize: 14.sp,
-                                      color: Colors.black,
-                                      // fontWeight: FontWeight.bold,
-                                      // Add other text styling as needed
+                      return Skeletonizer(
+                        enabled: data.familyDetail == null,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            var item = data.familyDetail[index];
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 25.w,
+                                  child: Center(
+                                    child: Text(
+                                      item.personalDetails.name,
+                                      style: Configuration.primaryFont(
+                                        fontSize: 14.sp,
+                                        color: Colors.black,
+                                        // fontWeight: FontWeight.bold,
+                                        // Add other text styling as needed
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              (item.membershipCard.userId == 0)
-                                  ? SizedBox(
-                                      width: 22.w,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          try {
-                                            AutoRouter.of(context).pushNamed(
-                                                CustomRoutes
-                                                    .updateFamilyDetailsScreen);
-                                          } catch (e) {
-                                            CustomToast.showWarningToast(
-                                                context,
-                                                "Oops!",
-                                                "Something Went Wrong. Please try again later.");
-                                          }
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 2.w,
-                                            vertical: 1.h,
+                                (item.membershipCard.userId == 0)
+                                    ? SizedBox(
+                                        width: 22.w,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            try {
+                                              AutoRouter.of(context).pushNamed(
+                                                  CustomRoutes
+                                                      .updateFamilyDetailsScreen);
+                                            } catch (e) {
+                                              CustomToast.showWarningToast(
+                                                  context,
+                                                  "Oops!",
+                                                  "Something Went Wrong. Please try again later.");
+                                            }
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w,
+                                              vertical: 1.h,
+                                            ),
+                                            child: Text(
+                                              "Validate",
+                                              style: Configuration.primaryFont(
+                                                fontSize: 14.sp,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold,
+                                                // Add other text styling as needed
+                                              ),
+                                            ),
                                           ),
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        width: 22.w,
+                                        child: Center(
                                           child: Text(
-                                            "Validate",
+                                            "Verified",
                                             style: Configuration.primaryFont(
                                               fontSize: 14.sp,
                                               color: Colors.green,
@@ -348,79 +381,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           ),
                                         ),
                                       ),
-                                    )
-                                  : SizedBox(
-                                      width: 22.w,
-                                      child: Center(
-                                        child: Text(
-                                          "Verified",
-                                          style: Configuration.primaryFont(
-                                            fontSize: 14.sp,
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.bold,
-                                            // Add other text styling as needed
-                                          ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Configuration.showMembershipCard(
+                                        context: context,
+                                        name: item.membershipCard.name ?? "",
+                                        district:
+                                            item.membershipCard.district.name ??
+                                                "",
+                                        photo: item.membershipCard.photo ?? "",
+                                        memberId: item.membershipCard.id ?? 0,
+                                        joiningDate:
+                                            item.membershipCard!.joiningDate);
+                                  },
+                                  child: (item.membershipCard.userId == 0)
+                                      ? Icon(
+                                          FontAwesomeIcons.download,
+                                          size: 16.sp,
+                                          color: Colors.grey,
+                                        )
+                                      : Icon(
+                                          FontAwesomeIcons.download,
+                                          size: 16.sp,
+                                          color: Configuration.thirdColor,
                                         ),
-                                      ),
-                                    ),
-                              GestureDetector(
-                                onTap: () {
-                                  Configuration.showMembershipCard(
-                                      context: context,
-                                      name: item.membershipCard.name ?? "",
-                                      district:
-                                          item.membershipCard.district.name ??
-                                              "",
-                                      photo: item.membershipCard.photo ?? "",
-                                      memberId: item.membershipCard.id ?? 0,
-                                      joiningDate:
-                                          item.membershipCard!.joiningDate);
-                                },
-                                child: (item.membershipCard.userId == 0)
-                                    ? Icon(
-                                        FontAwesomeIcons.download,
-                                        size: 16.sp,
-                                        color: Colors.grey,
-                                      )
-                                    : Icon(
-                                        FontAwesomeIcons.download,
-                                        size: 16.sp,
-                                        color: Configuration.thirdColor,
-                                      ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  AutoRouter.of(context)
-                                      .push(FamilyViewDetailsMemberRoute(
-                                          id: item.membershipCard.id))
-                                      .then((_) {
-                                    fetchFamilyData(context);
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.remove_red_eye,
-                                  size: 16.sp,
-                                  color: Configuration.thirdColor,
                                 ),
-                              ),
-                              // Text(
-                              //   "${calculateAge(item.personalDetails.dateOfBirth)} Years",
-                              //   style: Configuration.primaryFont(
-                              //     fontSize: 15.sp,
-                              //     color: Colors.black,
-                              //     // fontWeight: FontWeight.bold,
-                              //     // Add other text styling as needed
-                              //   ),
-                              // ),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            height: 1.h,
-                          );
-                        },
-                        itemCount: data.familyDetail.length,
+                                GestureDetector(
+                                  onTap: () {
+                                    AutoRouter.of(context)
+                                        .push(FamilyViewDetailsMemberRoute(
+                                            id: item.membershipCard.id))
+                                        .then((_) {
+                                      fetchFamilyData(context);
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.remove_red_eye,
+                                    size: 16.sp,
+                                    color: Configuration.thirdColor,
+                                  ),
+                                ),
+                                // Text(
+                                //   "${calculateAge(item.personalDetails.dateOfBirth)} Years",
+                                //   style: Configuration.primaryFont(
+                                //     fontSize: 15.sp,
+                                //     color: Colors.black,
+                                //     // fontWeight: FontWeight.bold,
+                                //     // Add other text styling as needed
+                                //   ),
+                                // ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              height: 1.h,
+                            );
+                          },
+                          itemCount: data.familyDetail.length,
+                        ),
                       );
                     }),
                     SizedBox(

@@ -5,6 +5,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      fetchData();
+      fetchProfileData(context);
+      // fetchData();
     });
   }
 
@@ -1015,30 +1017,51 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               ),
               child: Configuration.rectangleButton(
                   onPressed: () {
-                    if (fullname.text.isNotEmpty &&
-                        dob.text.isNotEmpty &&
-                        voterId.text.isNotEmpty &&
-                        (email.text.isEmpty || isValidEmail(email.text)) &&
-                        isValidMobile(mobileController.text) &&
-                        motherTongue != null &&
-                        religion != null &&
-                        cast != null &&
-                        (profession != 'Other' ||
-                            otherProfession.text.isNotEmpty) &&
-                        (education != 'Other' ||
-                            otherEducation.text.isNotEmpty)) {
-                      saveDetails();
-                    } else {
-                      String errorMessage =
-                          "Please enter all the required information";
-                      if (!isValidEmail(email.text)) {
-                        errorMessage += "\nInvalid email address";
-                      }
-                      if (!isValidMobile(mobileController.text)) {
-                        errorMessage += "\nInvalid mobile number";
-                      }
+                    if (fullname.text.isEmpty) {
                       CustomToast.showWarningToast(context,
-                          "Incomplete or Invalid Information", errorMessage);
+                          "Missing Information", "Please enter your full name");
+                    } else if (dob.text.isEmpty) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please select your date of birth");
+                    } else if (voterId.text.isEmpty) {
+                      CustomToast.showWarningToast(context,
+                          "Missing Information", "Please enter your voter ID");
+                    } else if (email.text.isNotEmpty &&
+                        !isValidEmail(email.text)) {
+                      CustomToast.showWarningToast(context, "Invalid Format",
+                          "Please enter a valid email address");
+                    } else if (!isValidMobile(mobileController.text)) {
+                      CustomToast.showWarningToast(context, "Invalid Format",
+                          "Please enter a valid 10 digit mobile number");
+                    } else if (motherTongue == null) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please select your mother tongue");
+                    } else if (religion == null) {
+                      CustomToast.showWarningToast(context,
+                          "Missing Information", "Please select your religion");
+                    } else if (cast == null) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please select your caste/category");
+                    } else if (profession == 'Other' &&
+                        otherProfession.text.isEmpty) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please specify your other profession");
+                    } else if (education == 'Other' &&
+                        otherEducation.text.isEmpty) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please specify your other education");
+                    } else {
+                      saveDetails();
                     }
                   },
                   text: "Save",
@@ -1331,5 +1354,34 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               ?.otherEducation ??
           "";
     });
+  }
+
+  void fetchProfileData(BuildContext context) async {
+    SVProgressHUD.show();
+    final responseJson =
+        await ApiService.instance(context).getMemberDetails(context);
+    if (responseJson.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setData(responseJson.data as MemberDetailsData);
+      setState(() {});
+      SVProgressHUD.dismiss();
+    } else {
+      SVProgressHUD.dismiss();
+    }
+    SVProgressHUD.show();
+    final response = await ApiService.instance(context).getProfileData(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setProfileData(response.data!.profileData);
+      Provider.of<Repository>(context, listen: false)
+          .setSocialData(response.data!.socialDetails);
+      Provider.of<Repository>(context, listen: false)
+          .setPersonalData(response.data!.personalDetails);
+      setData();
+      setState(() {});
+      SVProgressHUD.dismiss();
+    } else {
+      SVProgressHUD.dismiss();
+    }
   }
 }
