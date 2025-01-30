@@ -298,6 +298,8 @@ class GetMemberService {
     mother_tounge,
     other_profession,
     other_education,
+    community,
+    otherCommunity,
     context,
     dio, {
     bool shouldRetry = true,
@@ -331,6 +333,9 @@ class GetMemberService {
     if (category != null && category != "" && category != 0) {
       requestBody["category"] = category;
     }
+    if (community != null && community != "") {
+      requestBody["community"] = community;
+    }
 
     if (profession != null && profession != "" && profession >= 0) {
       requestBody["profession"] = profession;
@@ -351,6 +356,9 @@ class GetMemberService {
 
     if (other_profession != null && other_profession.isNotEmpty) {
       requestBody["other_profession"] = other_profession;
+    }
+    if (otherCommunity != null && otherCommunity.isNotEmpty) {
+      requestBody["other_community"] = otherCommunity;
     }
 
     if (other_education != null && other_education.isNotEmpty) {
@@ -398,6 +406,8 @@ class GetMemberService {
           mother_tounge,
           other_profession,
           other_education,
+          community,
+          otherCommunity,
           context,
           dio,
           shouldRetry: false,
@@ -411,6 +421,62 @@ class GetMemberService {
   }
 
   Future<MemberSocialDetailsModel> updateSocialDetails(context, member_id,
+      aleternate_number, facebook_url, twitter_url, instagram_url, dio,
+      {bool shouldRetry = true}) async {
+    SVProgressHUD.show();
+    String endpoint = 'member-social-details-update';
+
+    var requestBody = {
+      "member_id": member_id,
+      "aleternate_number": aleternate_number,
+      "facebook_url": facebook_url,
+      "twitter_url": twitter_url,
+      "instagram_url": instagram_url,
+    };
+
+    try {
+      final Response response = await dio.post(
+        endpoint,
+        data: json.encode(requestBody),
+      );
+      debugPrint(
+          "MemberSocialDetailsModel response: ${dio.options.baseUrl} ${response.data}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        SVProgressHUD.dismiss();
+        return MemberSocialDetailsModel.fromJson(response.data);
+      } else {
+        SVProgressHUD.dismiss();
+        debugPrint("MemberSocialDetailsModel error: ${response.data}");
+        return MemberSocialDetailsModel.fromJson(response.data);
+      }
+    } on DioException catch (e) {
+      SVProgressHUD.dismiss();
+      debugPrint("MemberSocialDetailsModel error1: ${e.message} ${e.response}");
+
+      if ((e.response?.statusCode == 401) && shouldRetry) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return updateSocialDetails(
+          context,
+          member_id,
+          aleternate_number,
+          facebook_url,
+          twitter_url,
+          instagram_url,
+          dio,
+          shouldRetry: false,
+        );
+      }
+
+      return ErrorHandler.handleDioError(e, context, (val) {
+        return MemberSocialDetailsModel.fromError(
+            "${e.response?.data['message']}");
+      });
+    }
+  }
+
+  Future<MemberSocialDetailsModel> updateContactDetails(context, member_id,
       aleternate_number, facebook_url, twitter_url, instagram_url, dio,
       {bool shouldRetry = true}) async {
     SVProgressHUD.show();

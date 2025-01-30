@@ -24,6 +24,8 @@ _$DropDownDataImpl _$$DropDownDataImplFromJson(Map<String, dynamic> json) =>
       motherTongue: (json['mother_tounge'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      community:
+          (json['community'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$DropDownDataImplToJson(_$DropDownDataImpl instance) =>
@@ -36,6 +38,7 @@ Map<String, dynamic> _$$DropDownDataImplToJson(_$DropDownDataImpl instance) =>
       'relationship': instance.relationships,
       'country': instance.country,
       'mother_tounge': instance.motherTongue,
+      'community': instance.community,
     };
 
 _$DropDownErrorImpl _$$DropDownErrorImplFromJson(Map<String, dynamic> json) =>

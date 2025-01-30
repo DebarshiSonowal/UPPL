@@ -42,10 +42,16 @@ class Repository extends ChangeNotifier {
   List<String> relationships = [];
   List<String> country = [];
   List<String> motherTounge = [];
+  List<String> community = [];
 
   //Methods
   void setMotherTounge(List<String> data) {
     motherTounge = data;
+    notifyListeners();
+  }
+
+  void setCommunity(List<String> data) {
+    community = data;
     notifyListeners();
   }
 

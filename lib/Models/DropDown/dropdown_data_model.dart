@@ -49,6 +49,7 @@ class DropDownData with _$DropDownData {
     @JsonKey(name: 'relationship') required Map<String, String> relationships,
     required Map<String, String> country,
     @JsonKey(name: 'mother_tounge') required List<String> motherTongue,
+    @JsonKey(name: 'community') required List<String> community,
   }) = _DropDownData;
 
   factory DropDownData.fromJson(Map<String, dynamic> json) =>

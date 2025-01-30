@@ -813,6 +813,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Provider.of<Repository>(context, listen: false)
                 .setMotherTounge(val.data.motherTongue);
             Provider.of<Repository>(context, listen: false)
+                .setCommunity(val.data.community);
+            Provider.of<Repository>(context, listen: false)
                 .setEducationLevels(val.data.educationLevels);
             Provider.of<Repository>(context, listen: false).setRelationship(val
                     .data.relationships.values

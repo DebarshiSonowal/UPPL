@@ -1589,6 +1589,10 @@ mixin _$PersonalDetails {
   String get voterId => throw _privateConstructorUsedError;
   @JsonKey(name: 'mobile_no')
   String get mobileNo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'community')
+  String get community => throw _privateConstructorUsedError;
+  @JsonKey(name: 'other_community')
+  String? get otherCommunity => throw _privateConstructorUsedError;
   @JsonKey(name: 'mother_tounge')
   int get motherTongue =>
       throw _privateConstructorUsedError; // Changed from String to int
@@ -1628,6 +1632,8 @@ abstract class $PersonalDetailsCopyWith<$Res> {
       @JsonKey(name: 'aadhaar_no') String? aadhaarNo,
       @JsonKey(name: 'voter_id') String voterId,
       @JsonKey(name: 'mobile_no') String mobileNo,
+      @JsonKey(name: 'community') String community,
+      @JsonKey(name: 'other_community') String? otherCommunity,
       @JsonKey(name: 'mother_tounge') int motherTongue,
       @JsonKey(name: 'other_mother_tounge') String? otherMotherTongue});
 }
@@ -1663,6 +1669,8 @@ class _$PersonalDetailsCopyWithImpl<$Res, $Val extends PersonalDetails>
     Object? aadhaarNo = freezed,
     Object? voterId = null,
     Object? mobileNo = null,
+    Object? community = null,
+    Object? otherCommunity = freezed,
     Object? motherTongue = null,
     Object? otherMotherTongue = freezed,
   }) {
@@ -1731,6 +1739,14 @@ class _$PersonalDetailsCopyWithImpl<$Res, $Val extends PersonalDetails>
           ? _value.mobileNo
           : mobileNo // ignore: cast_nullable_to_non_nullable
               as String,
+      community: null == community
+          ? _value.community
+          : community // ignore: cast_nullable_to_non_nullable
+              as String,
+      otherCommunity: freezed == otherCommunity
+          ? _value.otherCommunity
+          : otherCommunity // ignore: cast_nullable_to_non_nullable
+              as String?,
       motherTongue: null == motherTongue
           ? _value.motherTongue
           : motherTongue // ignore: cast_nullable_to_non_nullable
@@ -1768,6 +1784,8 @@ abstract class _$$PersonalDetailsImplCopyWith<$Res>
       @JsonKey(name: 'aadhaar_no') String? aadhaarNo,
       @JsonKey(name: 'voter_id') String voterId,
       @JsonKey(name: 'mobile_no') String mobileNo,
+      @JsonKey(name: 'community') String community,
+      @JsonKey(name: 'other_community') String? otherCommunity,
       @JsonKey(name: 'mother_tounge') int motherTongue,
       @JsonKey(name: 'other_mother_tounge') String? otherMotherTongue});
 }
@@ -1801,6 +1819,8 @@ class __$$PersonalDetailsImplCopyWithImpl<$Res>
     Object? aadhaarNo = freezed,
     Object? voterId = null,
     Object? mobileNo = null,
+    Object? community = null,
+    Object? otherCommunity = freezed,
     Object? motherTongue = null,
     Object? otherMotherTongue = freezed,
   }) {
@@ -1869,6 +1889,14 @@ class __$$PersonalDetailsImplCopyWithImpl<$Res>
           ? _value.mobileNo
           : mobileNo // ignore: cast_nullable_to_non_nullable
               as String,
+      community: null == community
+          ? _value.community
+          : community // ignore: cast_nullable_to_non_nullable
+              as String,
+      otherCommunity: freezed == otherCommunity
+          ? _value.otherCommunity
+          : otherCommunity // ignore: cast_nullable_to_non_nullable
+              as String?,
       motherTongue: null == motherTongue
           ? _value.motherTongue
           : motherTongue // ignore: cast_nullable_to_non_nullable
@@ -1901,6 +1929,8 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
       @JsonKey(name: 'aadhaar_no') this.aadhaarNo,
       @JsonKey(name: 'voter_id') required this.voterId,
       @JsonKey(name: 'mobile_no') required this.mobileNo,
+      @JsonKey(name: 'community') required this.community,
+      @JsonKey(name: 'other_community') this.otherCommunity,
       @JsonKey(name: 'mother_tounge') required this.motherTongue,
       @JsonKey(name: 'other_mother_tounge') this.otherMotherTongue});
 
@@ -1958,6 +1988,12 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
   @JsonKey(name: 'mobile_no')
   final String mobileNo;
   @override
+  @JsonKey(name: 'community')
+  final String community;
+  @override
+  @JsonKey(name: 'other_community')
+  final String? otherCommunity;
+  @override
   @JsonKey(name: 'mother_tounge')
   final int motherTongue;
 // Changed from String to int
@@ -1967,7 +2003,7 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
 
   @override
   String toString() {
-    return 'PersonalDetails(memberId: $memberId, name: $name, dateOfBirth: $dateOfBirth, gender: $gender, email: $email, religion: $religion, otherReligion: $otherReligion, caste: $caste, category: $category, profession: $profession, otherProfession: $otherProfession, education: $education, otherEducation: $otherEducation, aadhaarNo: $aadhaarNo, voterId: $voterId, mobileNo: $mobileNo, motherTongue: $motherTongue, otherMotherTongue: $otherMotherTongue)';
+    return 'PersonalDetails(memberId: $memberId, name: $name, dateOfBirth: $dateOfBirth, gender: $gender, email: $email, religion: $religion, otherReligion: $otherReligion, caste: $caste, category: $category, profession: $profession, otherProfession: $otherProfession, education: $education, otherEducation: $otherEducation, aadhaarNo: $aadhaarNo, voterId: $voterId, mobileNo: $mobileNo, community: $community, otherCommunity: $otherCommunity, motherTongue: $motherTongue, otherMotherTongue: $otherMotherTongue)';
   }
 
   @override
@@ -2002,6 +2038,10 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
             (identical(other.voterId, voterId) || other.voterId == voterId) &&
             (identical(other.mobileNo, mobileNo) ||
                 other.mobileNo == mobileNo) &&
+            (identical(other.community, community) ||
+                other.community == community) &&
+            (identical(other.otherCommunity, otherCommunity) ||
+                other.otherCommunity == otherCommunity) &&
             (identical(other.motherTongue, motherTongue) ||
                 other.motherTongue == motherTongue) &&
             (identical(other.otherMotherTongue, otherMotherTongue) ||
@@ -2010,26 +2050,29 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      memberId,
-      name,
-      dateOfBirth,
-      gender,
-      email,
-      religion,
-      otherReligion,
-      caste,
-      category,
-      profession,
-      otherProfession,
-      education,
-      otherEducation,
-      aadhaarNo,
-      voterId,
-      mobileNo,
-      motherTongue,
-      otherMotherTongue);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        memberId,
+        name,
+        dateOfBirth,
+        gender,
+        email,
+        religion,
+        otherReligion,
+        caste,
+        category,
+        profession,
+        otherProfession,
+        education,
+        otherEducation,
+        aadhaarNo,
+        voterId,
+        mobileNo,
+        community,
+        otherCommunity,
+        motherTongue,
+        otherMotherTongue
+      ]);
 
   /// Create a copy of PersonalDetails
   /// with the given fields replaced by the non-null parameter values.
@@ -2066,6 +2109,8 @@ abstract class _PersonalDetails implements PersonalDetails {
       @JsonKey(name: 'aadhaar_no') final String? aadhaarNo,
       @JsonKey(name: 'voter_id') required final String voterId,
       @JsonKey(name: 'mobile_no') required final String mobileNo,
+      @JsonKey(name: 'community') required final String community,
+      @JsonKey(name: 'other_community') final String? otherCommunity,
       @JsonKey(name: 'mother_tounge') required final int motherTongue,
       @JsonKey(name: 'other_mother_tounge')
       final String? otherMotherTongue}) = _$PersonalDetailsImpl;
@@ -2113,6 +2158,12 @@ abstract class _PersonalDetails implements PersonalDetails {
   @override
   @JsonKey(name: 'mobile_no')
   String get mobileNo;
+  @override
+  @JsonKey(name: 'community')
+  String get community;
+  @override
+  @JsonKey(name: 'other_community')
+  String? get otherCommunity;
   @override
   @JsonKey(name: 'mother_tounge')
   int get motherTongue; // Changed from String to int

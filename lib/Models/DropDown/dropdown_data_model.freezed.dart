@@ -541,6 +541,8 @@ mixin _$DropDownData {
   Map<String, String> get country => throw _privateConstructorUsedError;
   @JsonKey(name: 'mother_tounge')
   List<String> get motherTongue => throw _privateConstructorUsedError;
+  @JsonKey(name: 'community')
+  List<String> get community => throw _privateConstructorUsedError;
 
   /// Serializes this DropDownData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -566,7 +568,8 @@ abstract class $DropDownDataCopyWith<$Res> {
       @JsonKey(name: 'education_levels') List<String> educationLevels,
       @JsonKey(name: 'relationship') Map<String, String> relationships,
       Map<String, String> country,
-      @JsonKey(name: 'mother_tounge') List<String> motherTongue});
+      @JsonKey(name: 'mother_tounge') List<String> motherTongue,
+      @JsonKey(name: 'community') List<String> community});
 }
 
 /// @nodoc
@@ -592,6 +595,7 @@ class _$DropDownDataCopyWithImpl<$Res, $Val extends DropDownData>
     Object? relationships = null,
     Object? country = null,
     Object? motherTongue = null,
+    Object? community = null,
   }) {
     return _then(_value.copyWith(
       religions: null == religions
@@ -626,6 +630,10 @@ class _$DropDownDataCopyWithImpl<$Res, $Val extends DropDownData>
           ? _value.motherTongue
           : motherTongue // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      community: null == community
+          ? _value.community
+          : community // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -646,7 +654,8 @@ abstract class _$$DropDownDataImplCopyWith<$Res>
       @JsonKey(name: 'education_levels') List<String> educationLevels,
       @JsonKey(name: 'relationship') Map<String, String> relationships,
       Map<String, String> country,
-      @JsonKey(name: 'mother_tounge') List<String> motherTongue});
+      @JsonKey(name: 'mother_tounge') List<String> motherTongue,
+      @JsonKey(name: 'community') List<String> community});
 }
 
 /// @nodoc
@@ -670,6 +679,7 @@ class __$$DropDownDataImplCopyWithImpl<$Res>
     Object? relationships = null,
     Object? country = null,
     Object? motherTongue = null,
+    Object? community = null,
   }) {
     return _then(_$DropDownDataImpl(
       religions: null == religions
@@ -704,6 +714,10 @@ class __$$DropDownDataImplCopyWithImpl<$Res>
           ? _value._motherTongue
           : motherTongue // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      community: null == community
+          ? _value._community
+          : community // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -721,7 +735,8 @@ class _$DropDownDataImpl implements _DropDownData {
       @JsonKey(name: 'relationship')
       required final Map<String, String> relationships,
       required final Map<String, String> country,
-      @JsonKey(name: 'mother_tounge') required final List<String> motherTongue})
+      @JsonKey(name: 'mother_tounge') required final List<String> motherTongue,
+      @JsonKey(name: 'community') required final List<String> community})
       : _religions = religions,
         _categories = categories,
         _castes = castes,
@@ -729,7 +744,8 @@ class _$DropDownDataImpl implements _DropDownData {
         _educationLevels = educationLevels,
         _relationships = relationships,
         _country = country,
-        _motherTongue = motherTongue;
+        _motherTongue = motherTongue,
+        _community = community;
 
   factory _$DropDownDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$DropDownDataImplFromJson(json);
@@ -803,9 +819,18 @@ class _$DropDownDataImpl implements _DropDownData {
     return EqualUnmodifiableListView(_motherTongue);
   }
 
+  final List<String> _community;
+  @override
+  @JsonKey(name: 'community')
+  List<String> get community {
+    if (_community is EqualUnmodifiableListView) return _community;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_community);
+  }
+
   @override
   String toString() {
-    return 'DropDownData(religions: $religions, categories: $categories, castes: $castes, professions: $professions, educationLevels: $educationLevels, relationships: $relationships, country: $country, motherTongue: $motherTongue)';
+    return 'DropDownData(religions: $religions, categories: $categories, castes: $castes, professions: $professions, educationLevels: $educationLevels, relationships: $relationships, country: $country, motherTongue: $motherTongue, community: $community)';
   }
 
   @override
@@ -826,7 +851,9 @@ class _$DropDownDataImpl implements _DropDownData {
                 .equals(other._relationships, _relationships) &&
             const DeepCollectionEquality().equals(other._country, _country) &&
             const DeepCollectionEquality()
-                .equals(other._motherTongue, _motherTongue));
+                .equals(other._motherTongue, _motherTongue) &&
+            const DeepCollectionEquality()
+                .equals(other._community, _community));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -840,7 +867,8 @@ class _$DropDownDataImpl implements _DropDownData {
       const DeepCollectionEquality().hash(_educationLevels),
       const DeepCollectionEquality().hash(_relationships),
       const DeepCollectionEquality().hash(_country),
-      const DeepCollectionEquality().hash(_motherTongue));
+      const DeepCollectionEquality().hash(_motherTongue),
+      const DeepCollectionEquality().hash(_community));
 
   /// Create a copy of DropDownData
   /// with the given fields replaced by the non-null parameter values.
@@ -869,8 +897,9 @@ abstract class _DropDownData implements DropDownData {
       @JsonKey(name: 'relationship')
       required final Map<String, String> relationships,
       required final Map<String, String> country,
-      @JsonKey(name: 'mother_tounge')
-      required final List<String> motherTongue}) = _$DropDownDataImpl;
+      @JsonKey(name: 'mother_tounge') required final List<String> motherTongue,
+      @JsonKey(name: 'community')
+      required final List<String> community}) = _$DropDownDataImpl;
 
   factory _DropDownData.fromJson(Map<String, dynamic> json) =
       _$DropDownDataImpl.fromJson;
@@ -894,6 +923,9 @@ abstract class _DropDownData implements DropDownData {
   @override
   @JsonKey(name: 'mother_tounge')
   List<String> get motherTongue;
+  @override
+  @JsonKey(name: 'community')
+  List<String> get community;
 
   /// Create a copy of DropDownData
   /// with the given fields replaced by the non-null parameter values.

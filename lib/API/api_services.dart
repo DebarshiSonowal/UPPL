@@ -136,6 +136,8 @@ class ApiService {
     dynamic ref_id,
     int declare,
     List<String> photo,
+    int? community,
+    String? otherCommunity,
     context,
   ) async {
     await _checkHaltStatus();
@@ -158,6 +160,8 @@ class ApiService {
       ref_id,
       declare,
       photo,
+      community,
+      otherCommunity,
       context,
     );
   }
@@ -288,6 +292,8 @@ class ApiService {
     mother_tounge,
     other_profession,
     other_education,
+    community,
+    otherCommunity,
     context,
   ) async {
     await _checkHaltStatus();
@@ -306,6 +312,8 @@ class ApiService {
       mother_tounge,
       other_profession,
       other_education,
+      community,
+      otherCommunity,
       context,
       dio,
     );

@@ -8,7 +8,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:uppl/Constants/configuration.dart';
 import 'package:uppl/Repository/repository.dart';
 
+import '../../API/api_services.dart';
 import '../../Constants/routes.dart';
+import '../../Models/Member/member_details_model.dart';
 import '../../Models/Membership/membership_card_model.dart';
 import '../../Navigation/Router/app_router.dart';
 import '../CommonWidgets/custom_nav_drawer.dart';
@@ -316,5 +318,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void showImageDialog(MembershipCardInfoData data) {
     AutoRouter.of(context).push(CustomImageViewerRoute(url: data.file!));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchDetails(context);
+      fetchProfileData(context);
+      fetchDropdown(context);
+    });
+  }
+
+  void fetchDropdown(BuildContext context) async {
+    final response =
+        await ApiService.instance(context).getDropdownData(context);
+    response.map(
+        success: (val) {
+          if (response.status == 1) {
+            Provider.of<Repository>(context, listen: false)
+                .setCastes(val.data.castes ?? []);
+            var list = val.data.categories.values.toList();
+            Provider.of<Repository>(context, listen: false)
+                .setCategories(list ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setReligions(val.data.religions);
+            Provider.of<Repository>(context, listen: false)
+                .setProfessions(val.data.professions ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setCountry(val.data.country.values.toList() ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setMotherTounge(val.data.motherTongue);
+            Provider.of<Repository>(context, listen: false)
+                .setCommunity(val.data.community);
+            Provider.of<Repository>(context, listen: false)
+                .setEducationLevels(val.data.educationLevels);
+            Provider.of<Repository>(context, listen: false).setRelationship(val
+                    .data.relationships.values
+                    .map((e) => e.toString())
+                    .toList() ??
+                []);
+          }
+        },
+        error: (err) {});
+  }
+
+  void fetchProfileData(BuildContext context) async {
+    final response = await ApiService.instance(context).getProfileData(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setProfileData(response.data!.profileData);
+      Provider.of<Repository>(context, listen: false)
+          .setSocialData(response.data!.socialDetails);
+      Provider.of<Repository>(context, listen: false)
+          .setPersonalData(response.data!.personalDetails);
+    }
+  }
+
+  void fetchDetails(BuildContext context) async {
+    final responseJson =
+        await ApiService.instance(context).getMemberDetails(context);
+    if (responseJson.status == 1) {
+      Provider.of<Repository>(context, listen: false)
+          .setData(responseJson.data as MemberDetailsData);
+    }
+    final response = await ApiService.instance(context).generateJSON(context);
+    if (response.status == 1) {
+      Provider.of<Repository>(context, listen: false).setPartyDistricts(
+          response.intermediateData.data.partyDistricts ?? []);
+      Provider.of<Repository>(context, listen: false)
+          .setDistricts(response.intermediateData.data.districts ?? []);
+      Provider.of<Repository>(context, listen: false).setAssemblyConstituencies(
+          response.intermediateData.data.assemblyConstituencies ?? []);
+      final list = response
+          .intermediateData.data.btcAssemblyConstituencies?.values
+          .toList();
+      Provider.of<Repository>(context, listen: false)
+          .setConstituency(list ?? []);
+      // Provider.of<Repository>(context, listen: false)
+      //     .setConstituencyList(list ?? []);
+      final temp = response.intermediateData.data.btcPrimaries?.values.toList();
+      Provider.of<Repository>(context, listen: false).setBTCConstituency(
+          response.intermediateData.data.btcConstituency ?? []);
+      final tempList = (response.intermediateData.data.booths!.values.toList());
+      Provider.of<Repository>(context, listen: false)
+          .setBooths(tempList.expand((innerList) => innerList).toList());
+      Provider.of<Repository>(context, listen: false).setPrimary(temp ?? []);
+      Provider.of<Repository>(context, listen: false)
+          .setPrimaryList(response.intermediateData.data.btcPrimaries ?? {});
+      Provider.of<Repository>(context, listen: false)
+          .setVillages(response.intermediateData.data.villages ?? []);
+      debugPrint(
+          "Setting ${response.intermediateData.data.partyDistricts?.length} ${response.intermediateData.data.districts?.length} ${response.intermediateData.data.assemblyConstituencies?.length} ${response.intermediateData.data.btcAssemblyConstituencies?.length} ${response.intermediateData.data.btcPrimaries?.values}");
+    }
   }
 }

@@ -148,6 +148,8 @@ _$PersonalDetailsImpl _$$PersonalDetailsImplFromJson(
       aadhaarNo: json['aadhaar_no'] as String?,
       voterId: json['voter_id'] as String,
       mobileNo: json['mobile_no'] as String,
+      community: json['community'] as String,
+      otherCommunity: json['other_community'] as String?,
       motherTongue: (json['mother_tounge'] as num).toInt(),
       otherMotherTongue: json['other_mother_tounge'] as String?,
     );
@@ -171,6 +173,8 @@ Map<String, dynamic> _$$PersonalDetailsImplToJson(
       'aadhaar_no': instance.aadhaarNo,
       'voter_id': instance.voterId,
       'mobile_no': instance.mobileNo,
+      'community': instance.community,
+      'other_community': instance.otherCommunity,
       'mother_tounge': instance.motherTongue,
       'other_mother_tounge': instance.otherMotherTongue,
     };

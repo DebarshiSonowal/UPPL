@@ -218,6 +218,8 @@ class GetAuthService {
     int ref_id,
     int declare,
     List<String> photo,
+    int? community,
+    String? otherCommunity,
     context,
   ) async {
     SVProgressHUD.dismiss();
@@ -250,9 +252,12 @@ class GetAuthService {
           for (String path in photo) await MultipartFile.fromFile(path)
         ],
         "other_village": other_village,
+        "community": community,
         "village": village == 0 ? "other" : village,
       };
-
+      if (otherCommunity != "") {
+        dataMap["other_community"] = otherCommunity;
+      }
       if (email != "") {
         dataMap["email"] = email;
       }

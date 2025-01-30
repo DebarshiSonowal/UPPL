@@ -63,6 +63,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
   List<District> filteredDistricts = [];
   List<PartyDistrict> filteredPartyDistricts = [];
   Constituency? currentConstituency;
+  String? community, otherCommunity;
 
   @override
   void initState() {
@@ -1120,6 +1121,88 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
               SizedBox(
                 height: 1.h,
               ),
+              Consumer<Repository>(builder: (context, data, _) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 6.w,
+                  ),
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        // Add this to prevent overflow
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Enter Your Community*',
+                          labelStyle: Configuration.primaryFont(
+                            fontSize: 14.sp,
+                            color: Colors.black54,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        items: data.community
+                            .map((community) => DropdownMenuItem<String>(
+                                  value: community,
+                                  child: Text(
+                                    community,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Configuration.primaryFont(
+                                      fontSize: 16.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            community = "$value";
+                            if (value != 'Other') {
+                              otherCommunity = null;
+                            }
+                          });
+                        },
+                        value: community,
+                      ),
+                      if (community == 'Other')
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                otherCommunity = value;
+                              });
+                            },
+                            initialValue: otherCommunity,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Enter Other Community*',
+                              labelStyle: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
+              SizedBox(
+                height: 1.h,
+              ),
               // Padding(
               //   padding: EdgeInsets.symmetric(
               //     horizontal: 6.w,
@@ -1305,13 +1388,52 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                 ),
                 child: Configuration.rectangleButton(
                   onPressed: () {
-                    if (_validateInputs()) {
-                      register(context);
+                    if (!_validateInputs()) {
+                      if (selectedFile == null) {
+                        CustomToast.showWarningToast(context, "Missing Photo",
+                            "Please upload your photo");
+                      } else if (selectedTitle == null) {
+                        CustomToast.showWarningToast(context, "Missing Title",
+                            "Please select your title (Mr./Mrs./Miss)");
+                      } else if (name.text.isEmpty) {
+                        CustomToast.showWarningToast(context, "Missing Name",
+                            "Please enter your full name");
+                      } else if (dob.text.isEmpty || age.text.isEmpty) {
+                        CustomToast.showWarningToast(
+                            context,
+                            "Missing Date of Birth",
+                            "Please enter your date of birth");
+                      } else if (email.text.isNotEmpty &&
+                          !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(email.text)) {
+                        CustomToast.showWarningToast(context, "Invalid Email",
+                            "Please enter a valid email address");
+                      } else if (pincode.text.isEmpty ||
+                          pincode.text.length != 6) {
+                        CustomToast.showWarningToast(context, "Invalid Pincode",
+                            "Please enter a valid 6-digit pincode");
+                      } else if (selectedBtcConstituency == null ||
+                          selectedDistrict == null ||
+                          selectedPartyDistrict == null ||
+                          selectedAssembly == null) {
+                        CustomToast.showWarningToast(
+                            context,
+                            "Missing Location Details",
+                            "Please select all required location fields");
+                      } else if (selectedPrimary == null ||
+                          selectedBooth == null) {
+                        CustomToast.showWarningToast(
+                            context,
+                            "Missing Booth Details",
+                            "Please select primary and booth");
+                      } else if (!agree) {
+                        CustomToast.showWarningToast(
+                            context,
+                            "Terms Not Accepted",
+                            "Please accept the pledge to receive updates");
+                      }
                     } else {
-                      CustomToast.showWarningToast(
-                          context,
-                          "Please Check Again",
-                          "Please fill all required fields and check your inputs.");
+                      register(context);
                     }
                   },
                   text: "Save",
@@ -1371,6 +1493,10 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
         selectedValidateMemberData?.refId ?? 0,
         1,
         [selectedFile!.path],
+        Provider.of<Repository>(context, listen: false)
+            .community
+            .indexOf(community!),
+        otherCommunity,
         context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)

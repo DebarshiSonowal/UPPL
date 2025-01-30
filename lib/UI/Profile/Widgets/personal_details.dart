@@ -43,7 +43,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   final aadharId = TextEditingController();
   final otherEducation = TextEditingController();
   final otherProfession = TextEditingController();
-  String? religion, cast, profession, education, motherTongue;
+  String? religion,
+      cast,
+      profession,
+      education,
+      motherTongue,
+      community,
+      otherCommunity;
 
   @override
   void initState() {
@@ -839,6 +845,103 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
+                    "Community*",
+                    style: Configuration.primaryFont(
+                      fontSize: 14.sp,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Consumer<Repository>(builder: (context, data, _) {
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 6.w,
+                ),
+                child: Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      // Add this to prevent overflow
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Enter Your Community*',
+                        labelStyle: Configuration.primaryFont(
+                          fontSize: 14.sp,
+                          color: Colors.black54,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: data.community
+                          .map((community) => DropdownMenuItem<String>(
+                                value: community,
+                                child: Text(
+                                  community,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Configuration.primaryFont(
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          community = "$value";
+                          if (value != 'Other') {
+                            otherCommunity = null;
+                          }
+                        });
+                      },
+                      value: community,
+                    ),
+                    if (community == 'Other')
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h),
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              otherCommunity = value;
+                            });
+                          },
+                          initialValue: otherCommunity,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'Enter Other Community*',
+                            labelStyle: Configuration.primaryFont(
+                              fontSize: 14.sp,
+                              color: Colors.black54,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+                vertical: 1.h,
+              ),
+              child: Row(
+                children: [
+                  Text(
                     "Voter Id*",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
@@ -1261,6 +1364,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           .indexWhere((e) => e == motherTongue),
       otherProfession.text,
       otherEducation.text,
+      Provider.of<Repository>(context, listen: false)
+          .community
+          .indexWhere((e) => e == community),
+      otherCommunity,
       context,
     );
     if (response.status == 1) {
@@ -1316,6 +1423,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       if (data?.personalDetails.gender != null) {
         selectedTitle = data?.personalDetails.gender == 1 ? "Mr." : "Miss.";
         selectedGender = (data?.personalDetails.gender ?? 1) - 1;
+      }
+      if (data?.personalDetails.community != null ||
+          (data?.personalDetails.other_community ?? "").isNotEmpty) {
+        community = data?.personalDetails.community;
+        otherCommunity = (data?.personalDetails.other_community);
       }
       if (data?.personalDetails.religion != null) {
         religion = Provider.of<Repository>(context, listen: false)

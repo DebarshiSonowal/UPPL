@@ -32,7 +32,7 @@ class ErrorHandler {
       debugPrint('DioError: ${e.response!.statusCode}');
 
       return failedWithError(
-          "${e.response?.data['error'] ?? "Something Went Wrong"}");
+          "${e.response?.data['errors'] ?? "Something Went Wrong"}");
     } else if (e.type == DioExceptionType.connectionTimeout) {
       // Connection timeout
       return failedWithError(e.message ?? "Network Error try again");

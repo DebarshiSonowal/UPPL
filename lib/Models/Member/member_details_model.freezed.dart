@@ -1195,6 +1195,8 @@ mixin _$MemberPersonalDetails {
   String? get email => throw _privateConstructorUsedError;
   int? get religion => throw _privateConstructorUsedError;
   String? get caste => throw _privateConstructorUsedError;
+  String? get community => throw _privateConstructorUsedError;
+  String? get other_community => throw _privateConstructorUsedError;
   int? get category => throw _privateConstructorUsedError;
   int? get profession => throw _privateConstructorUsedError;
   int? get education => throw _privateConstructorUsedError;
@@ -1229,6 +1231,8 @@ abstract class $MemberPersonalDetailsCopyWith<$Res> {
       String? email,
       int? religion,
       String? caste,
+      String? community,
+      String? other_community,
       int? category,
       int? profession,
       int? education,
@@ -1260,6 +1264,8 @@ class _$MemberPersonalDetailsCopyWithImpl<$Res,
     Object? email = freezed,
     Object? religion = freezed,
     Object? caste = freezed,
+    Object? community = freezed,
+    Object? other_community = freezed,
     Object? category = freezed,
     Object? profession = freezed,
     Object? education = freezed,
@@ -1295,6 +1301,14 @@ class _$MemberPersonalDetailsCopyWithImpl<$Res,
       caste: freezed == caste
           ? _value.caste
           : caste // ignore: cast_nullable_to_non_nullable
+              as String?,
+      community: freezed == community
+          ? _value.community
+          : community // ignore: cast_nullable_to_non_nullable
+              as String?,
+      other_community: freezed == other_community
+          ? _value.other_community
+          : other_community // ignore: cast_nullable_to_non_nullable
               as String?,
       category: freezed == category
           ? _value.category
@@ -1341,6 +1355,8 @@ abstract class _$$MemberPersonalDetailsImplCopyWith<$Res>
       String? email,
       int? religion,
       String? caste,
+      String? community,
+      String? other_community,
       int? category,
       int? profession,
       int? education,
@@ -1370,6 +1386,8 @@ class __$$MemberPersonalDetailsImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? religion = freezed,
     Object? caste = freezed,
+    Object? community = freezed,
+    Object? other_community = freezed,
     Object? category = freezed,
     Object? profession = freezed,
     Object? education = freezed,
@@ -1405,6 +1423,14 @@ class __$$MemberPersonalDetailsImplCopyWithImpl<$Res>
       caste: freezed == caste
           ? _value.caste
           : caste // ignore: cast_nullable_to_non_nullable
+              as String?,
+      community: freezed == community
+          ? _value.community
+          : community // ignore: cast_nullable_to_non_nullable
+              as String?,
+      other_community: freezed == other_community
+          ? _value.other_community
+          : other_community // ignore: cast_nullable_to_non_nullable
               as String?,
       category: freezed == category
           ? _value.category
@@ -1445,6 +1471,8 @@ class _$MemberPersonalDetailsImpl implements _MemberPersonalDetails {
       this.email,
       this.religion,
       this.caste,
+      this.community,
+      this.other_community,
       this.category,
       this.profession,
       this.education,
@@ -1472,6 +1500,10 @@ class _$MemberPersonalDetailsImpl implements _MemberPersonalDetails {
   @override
   final String? caste;
   @override
+  final String? community;
+  @override
+  final String? other_community;
+  @override
   final int? category;
   @override
   final int? profession;
@@ -1489,7 +1521,7 @@ class _$MemberPersonalDetailsImpl implements _MemberPersonalDetails {
 
   @override
   String toString() {
-    return 'MemberPersonalDetails(memberId: $memberId, name: $name, dateOfBirth: $dateOfBirth, gender: $gender, email: $email, religion: $religion, caste: $caste, category: $category, profession: $profession, education: $education, aadhaarNo: $aadhaarNo, voterId: $voterId, mobileNo: $mobileNo)';
+    return 'MemberPersonalDetails(memberId: $memberId, name: $name, dateOfBirth: $dateOfBirth, gender: $gender, email: $email, religion: $religion, caste: $caste, community: $community, other_community: $other_community, category: $category, profession: $profession, education: $education, aadhaarNo: $aadhaarNo, voterId: $voterId, mobileNo: $mobileNo)';
   }
 
   @override
@@ -1507,6 +1539,10 @@ class _$MemberPersonalDetailsImpl implements _MemberPersonalDetails {
             (identical(other.religion, religion) ||
                 other.religion == religion) &&
             (identical(other.caste, caste) || other.caste == caste) &&
+            (identical(other.community, community) ||
+                other.community == community) &&
+            (identical(other.other_community, other_community) ||
+                other.other_community == other_community) &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.profession, profession) ||
@@ -1531,6 +1567,8 @@ class _$MemberPersonalDetailsImpl implements _MemberPersonalDetails {
       email,
       religion,
       caste,
+      community,
+      other_community,
       category,
       profession,
       education,
@@ -1564,6 +1602,8 @@ abstract class _MemberPersonalDetails implements MemberPersonalDetails {
           final String? email,
           final int? religion,
           final String? caste,
+          final String? community,
+          final String? other_community,
           final int? category,
           final int? profession,
           final int? education,
@@ -1591,6 +1631,10 @@ abstract class _MemberPersonalDetails implements MemberPersonalDetails {
   int? get religion;
   @override
   String? get caste;
+  @override
+  String? get community;
+  @override
+  String? get other_community;
   @override
   int? get category;
   @override

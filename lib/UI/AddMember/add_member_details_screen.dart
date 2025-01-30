@@ -63,6 +63,7 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
   List<District> filteredDistricts = [];
   List<PartyDistrict> filteredPartyDistricts = [];
   Constituency? currentConstituency;
+  String? community, otherCommunity;
 
   @override
   void initState() {
@@ -1119,6 +1120,88 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
                   ),
                 );
               }),
+              SizedBox(
+                height: 1.h,
+              ),
+              Consumer<Repository>(builder: (context, data, _) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 6.w,
+                  ),
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        // Add this to prevent overflow
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Enter Your Community*',
+                          labelStyle: Configuration.primaryFont(
+                            fontSize: 14.sp,
+                            color: Colors.black54,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        items: data.community
+                            .map((community) => DropdownMenuItem<String>(
+                                  value: community,
+                                  child: Text(
+                                    community,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Configuration.primaryFont(
+                                      fontSize: 16.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            community = "$value";
+                            if (value != 'Other') {
+                              otherCommunity = null;
+                            }
+                          });
+                        },
+                        value: community,
+                      ),
+                      if (community == 'Other')
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                otherCommunity = value;
+                              });
+                            },
+                            initialValue: otherCommunity,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Enter Other Community*',
+                              labelStyle: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
               // SizedBox(
               //   height: 1.h,
               // ),
@@ -1307,13 +1390,23 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
                 ),
                 child: Configuration.rectangleButton(
                     onPressed: () {
-                      if (_validateInputs()) {
+                      String? validationError = _getValidationError();
+                      if (validationError == null) {
                         SaveDetails();
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Please fill all required fields'),
+                            content: Text(validationError),
                             backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
+                            action: SnackBarAction(
+                              label: 'Dismiss',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                              },
+                            ),
                           ),
                         );
                       }
@@ -1351,6 +1444,66 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
         ),
       ),
     );
+  }
+
+  String? _getValidationError() {
+    if (selectedFile == null) {
+      return "Please upload a photo";
+    }
+    if (selectedTitle == null) {
+      return "Please select a title";
+    }
+    if (name.text.isEmpty) {
+      return "Please enter your name";
+    }
+    if (dob.text.isEmpty) {
+      return "Please enter your date of birth";
+    }
+    if (age.text.isEmpty) {
+      return "Age cannot be empty";
+    }
+    if (email.text.isEmpty) {
+      return "Please enter your email";
+    }
+
+    final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegExp.hasMatch(email.text)) {
+      return "Please enter a valid email address";
+    }
+
+    if (pincode.text.isEmpty) {
+      return "Please enter pincode";
+    }
+    if (pincode.text.length != 6 || int.tryParse(pincode.text) == null) {
+      return "Please enter a valid 6-digit pincode";
+    }
+
+    if (selectedBtcConstituency == null) {
+      return "Please select BTC constituency";
+    }
+    if (selectedDistrict == null) {
+      return "Please select district";
+    }
+    if (selectedPartyDistrict == null) {
+      return "Please select party district";
+    }
+    if (selectedAssembly == null) {
+      return "Please select assembly constituency";
+    }
+    if (selectedPrimary == null) {
+      return "Please select primary";
+    }
+    if (selectedBooth == null) {
+      return "Please select booth";
+    }
+    if (selectedVillage == null) {
+      return "Please select village";
+    }
+    if (!agree) {
+      return "Please agree to receive updates from UPPL";
+    }
+
+    return null; // Return null if all validations pass
   }
 
   bool _validateInputs() {
@@ -1503,6 +1656,10 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
         selectedValidateMemberData?.refId ?? 0,
         1,
         [selectedFile!.path],
+        Provider.of<Repository>(context, listen: false)
+            .community
+            .indexOf(community!),
+        otherCommunity,
         context);
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
