@@ -10,6 +10,59 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AddFamilyMemberDetailsScreen]
+class AddFamilyMemberDetailsRoute
+    extends PageRouteInfo<AddFamilyMemberDetailsRouteArgs> {
+  AddFamilyMemberDetailsRoute({
+    Key? key,
+    required int id,
+    required String name,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AddFamilyMemberDetailsRoute.name,
+          args: AddFamilyMemberDetailsRouteArgs(
+            key: key,
+            id: id,
+            name: name,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AddFamilyMemberDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AddFamilyMemberDetailsRouteArgs>();
+      return AddFamilyMemberDetailsScreen(
+        key: args.key,
+        id: args.id,
+        name: args.name,
+      );
+    },
+  );
+}
+
+class AddFamilyMemberDetailsRouteArgs {
+  const AddFamilyMemberDetailsRouteArgs({
+    this.key,
+    required this.id,
+    required this.name,
+  });
+
+  final Key? key;
+
+  final int id;
+
+  final String name;
+
+  @override
+  String toString() {
+    return 'AddFamilyMemberDetailsRouteArgs{key: $key, id: $id, name: $name}';
+  }
+}
+
+/// generated route for
 /// [AddMemberDetailsScreen]
 class AddMemberDetailsRoute extends PageRouteInfo<AddMemberDetailsRouteArgs> {
   AddMemberDetailsRoute({

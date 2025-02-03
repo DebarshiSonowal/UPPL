@@ -246,8 +246,20 @@ class _ReferralFamilyViewDetailsMemberScreenState
                               height: 4.h,
                               child: Configuration.rectangleButton(
                                 onPressed: () {
-                                  AutoRouter.of(context)
-                                      .pushNamed(CustomRoutes.addMemberScreen);
+                                  AutoRouter.of(context).push(
+                                      AddFamilyMemberDetailsRoute(
+                                          id: Provider.of<Repository>(context,
+                                                      listen: false)
+                                                  .memberData
+                                                  ?.personalDetails
+                                                  .memberId ??
+                                              0,
+                                          name: Provider.of<Repository>(context,
+                                                      listen: false)
+                                                  .memberData
+                                                  ?.personalDetails
+                                                  .name ??
+                                              ''));
                                 },
                                 text: 'Add More Family Member',
                                 bgColor: Configuration.thirdColor,

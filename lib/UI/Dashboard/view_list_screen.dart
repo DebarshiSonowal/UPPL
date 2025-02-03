@@ -63,25 +63,14 @@ class _ViewListScreenState extends State<ViewListScreen>
                     text: TextSpan(children: [
                       TextSpan(
                         text: (controller?.index == 0 ?? false)
-                            ? "Total Verified Members : "
-                            : "Total Unverified Members : ",
+                            ? "Total Verified Members : ${data.joinedByReferralMember.length}"
+                            : "Total Unverified Members : ${data.unverifiedJoinedByReferralMember.length}",
                         style: Configuration.primaryFont(
                           fontSize: 18.sp,
                           color: (controller?.index == 0 ?? false)
                               ? Colors.green
                               : Colors.red,
                           fontWeight: FontWeight.w600,
-                          // Add other text styling as needed
-                        ),
-                      ),
-                      TextSpan(
-                        text: "${data.joinedByReferralMember.length}",
-                        style: Configuration.primaryFont(
-                          fontSize: 18.sp,
-                          color: (controller?.index == 0 ?? false)
-                              ? Colors.green
-                              : Colors.red,
-                          fontWeight: FontWeight.w800,
                           // Add other text styling as needed
                         ),
                       ),
@@ -94,19 +83,20 @@ class _ViewListScreenState extends State<ViewListScreen>
               height: 4.h,
             ),
             Consumer<Repository>(builder: (context, data, _) {
-              return Stack(
-                alignment: const Alignment(0.9, 0.9),
+              final itemsPerPage = 10;
+              final totalItems = controller?.index == 0
+                  ? data.joinedByReferralMember.length
+                  : data.unverifiedJoinedByReferralMember.length;
+              final totalPages = (totalItems / itemsPerPage).ceil();
+              final currentPage = (start ~/ itemsPerPage) + 1;
+
+              return Column(
                 children: [
                   Card(
                     child: Container(
                       decoration: BoxDecoration(
-                        // color: const Color(0xffCCEAE0),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      // padding: EdgeInsets.symmetric(
-                      //   horizontal: 3.w,
-                      //   vertical: 2.h,
-                      // ),
                       child: TabContainer(
                         controller: controller,
                         tabEdge: TabEdge.top,
@@ -142,27 +132,77 @@ class _ViewListScreenState extends State<ViewListScreen>
                       ),
                     ),
                   ),
-                  Consumer<Repository>(builder: (context, data, _) {
-                    return (data.joinedByReferralMember.isNotEmpty ||
-                            data.unverifiedJoinedByReferralMember.isNotEmpty)
-                        ? GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                length = 20;
-                              });
-                              fetchJoinedBy();
-                            },
-                            child: Text(
-                              'View All',
-                              style: Configuration.primaryFont(
-                                fontSize: 12.sp,
-                                color: const Color(0xff5C5C5C),
-                                fontWeight: FontWeight.w600,
+                  if (totalItems > 0)
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 2.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.chevron_left),
+                            onPressed: currentPage > 1
+                                ? () {
+                                    setState(() {
+                                      start = (currentPage - 2) * itemsPerPage;
+                                      length = itemsPerPage;
+                                    });
+                                    fetchJoinedBy();
+                                  }
+                                : null,
+                          ),
+                          for (int i = 1; i <= totalPages; i++)
+                            if (i == 1 ||
+                                i == totalPages ||
+                                (i >= currentPage - 1 && i <= currentPage + 1))
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 0.5.w),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: i == currentPage
+                                        ? Configuration.thirdColor
+                                        : Colors.grey[300],
+                                    minimumSize: Size(8.w, 4.h),
+                                  ),
+                                  onPressed: i != currentPage
+                                      ? () {
+                                          setState(() {
+                                            start = (i - 1) * itemsPerPage;
+                                            length = itemsPerPage;
+                                          });
+                                          fetchJoinedBy();
+                                        }
+                                      : null,
+                                  child: Text(
+                                    '$i',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else if (i == currentPage - 2 ||
+                                i == currentPage + 2)
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 0.5.w),
+                                child: Text('...'),
                               ),
-                            ),
-                          )
-                        : const SizedBox.shrink();
-                  }),
+                          IconButton(
+                            icon: const Icon(Icons.chevron_right),
+                            onPressed: currentPage < totalPages
+                                ? () {
+                                    setState(() {
+                                      start = currentPage * itemsPerPage;
+                                      length = itemsPerPage;
+                                    });
+                                    fetchJoinedBy();
+                                  }
+                                : null,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               );
             }),

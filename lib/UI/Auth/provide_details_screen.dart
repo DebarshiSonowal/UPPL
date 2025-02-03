@@ -1504,8 +1504,38 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
       CustomToast.showSuccessToast(context, "Registered", response.message);
       context.router.pushNamed(CustomRoutes.savedDetailsScreen);
     } else {
-      CustomToast.showFailureToast(
-          context, "Failed to Register", response.message);
+      final errorMessages = response.data?.errors?.values
+              ?.map((e) => e.toString().replaceAll(RegExp(r'[\[\]]'), ''))
+              .join('\n') ??
+          '';
+      if (errorMessages.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error, color: Colors.white),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    errorMessages,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        );
+      }
     }
 
     //context.router.pushNamed(CustomRoutes.savedDetailsScreen);
@@ -1583,19 +1613,19 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     });
                   }
                 },
-                child: Text(
-                  "Take a photo",
-                  style: Configuration.primaryFont(
-                      fontSize: 14.sp, color: Colors.black),
-                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Configuration.primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                child: Text(
+                  "Take a photo",
+                  style: Configuration.primaryFont(
+                      fontSize: 14.sp, color: Colors.black),
+                ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () async {
                   Navigator.of(context).pop();

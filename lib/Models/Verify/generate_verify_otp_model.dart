@@ -8,7 +8,7 @@ class GenerateVerifyOtpModel with _$GenerateVerifyOtpModel {
   const factory GenerateVerifyOtpModel.success({
     required int status,
     required String message,
-    required Data data,
+    Data? data,
     required int code,
   }) = SuccessResponse;
 
@@ -16,6 +16,9 @@ class GenerateVerifyOtpModel with _$GenerateVerifyOtpModel {
     required int status,
     required String message,
     int? code, // Code can be optional in case of errors
+    Data? data, // Optional data field for additional error details
+    // List<String>? errors, // Optional list of error messages
+    // String? errorType, // Optional error type classification
   }) = ErrorResponse;
 
   /// Custom `fromJson` to determine success or error based on `status`
@@ -40,6 +43,7 @@ class GenerateVerifyOtpModel with _$GenerateVerifyOtpModel {
 @freezed
 class Data with _$Data {
   const factory Data({
+    @JsonKey(name: 'errors') Map<String, List<String>>? errors,
     @JsonKey(name: "phone_number")
     required String phoneNumber, // Ensure phoneNumber is String
     int? status, // Optional, but keep it if needed for other logic

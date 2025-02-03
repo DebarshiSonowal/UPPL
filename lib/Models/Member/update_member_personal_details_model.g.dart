@@ -12,7 +12,10 @@ _$UpdateMemberPersonalDetailsModelImpl
         _$UpdateMemberPersonalDetailsModelImpl(
           status: (json['status'] as num).toInt(),
           message: json['message'] as String,
-          data: json['data'],
+          data: json['data'] == null
+              ? null
+              : UpdateMemberPersonalDetailsData.fromJson(
+                  json['data'] as Map<String, dynamic>),
           code: (json['code'] as num).toInt(),
         );
 

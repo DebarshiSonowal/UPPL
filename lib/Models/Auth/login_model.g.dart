@@ -8,11 +8,17 @@ part of 'login_model.dart';
 
 _$SuccessDataImpl _$$SuccessDataImplFromJson(Map<String, dynamic> json) =>
     _$SuccessDataImpl(
-      accessToken: json['access_token'] as String,
-      refreshToken: json['refresh_token'] as String,
-      membershipCardData: MembershipCardData.fromJson(
-          json['membershipCardData'] as Map<String, dynamic>),
-      phoneNumber: json['phone_number'] as String,
+      accessToken: json['access_token'] as String?,
+      refreshToken: json['refresh_token'] as String?,
+      membershipCardData: json['membershipCardData'] == null
+          ? null
+          : MembershipCardData.fromJson(
+              json['membershipCardData'] as Map<String, dynamic>),
+      phoneNumber: json['phone_number'] as String?,
+      errors: (json['errors'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
+      ),
     );
 
 Map<String, dynamic> _$$SuccessDataImplToJson(_$SuccessDataImpl instance) =>
@@ -21,28 +27,6 @@ Map<String, dynamic> _$$SuccessDataImplToJson(_$SuccessDataImpl instance) =>
       'refresh_token': instance.refreshToken,
       'membershipCardData': instance.membershipCardData,
       'phone_number': instance.phoneNumber,
-    };
-
-_$OTPDataImpl _$$OTPDataImplFromJson(Map<String, dynamic> json) =>
-    _$OTPDataImpl(
-      phoneNumber: json['phone_number'] as String,
-    );
-
-Map<String, dynamic> _$$OTPDataImplToJson(_$OTPDataImpl instance) =>
-    <String, dynamic>{
-      'phone_number': instance.phoneNumber,
-    };
-
-_$ErrorDataImpl _$$ErrorDataImplFromJson(Map<String, dynamic> json) =>
-    _$ErrorDataImpl(
-      errors: (json['errors'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
-      ),
-    );
-
-Map<String, dynamic> _$$ErrorDataImplToJson(_$ErrorDataImpl instance) =>
-    <String, dynamic>{
       'errors': instance.errors,
     };
 
@@ -61,6 +45,10 @@ _$MembershipCardDataImpl _$$MembershipCardDataImplFromJson(
       joiningDate: json['joining_date'] as String,
       referralLink: json['referral_link'] as String,
       noOfRegisteredMember: (json['no_of_registered_member'] as num).toInt(),
+      errors: (json['errors'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
+      ),
     );
 
 Map<String, dynamic> _$$MembershipCardDataImplToJson(
@@ -78,4 +66,5 @@ Map<String, dynamic> _$$MembershipCardDataImplToJson(
       'joining_date': instance.joiningDate,
       'referral_link': instance.referralLink,
       'no_of_registered_member': instance.noOfRegisteredMember,
+      'errors': instance.errors,
     };

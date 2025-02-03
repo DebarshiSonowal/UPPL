@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:uppl/Constants/routes.dart';
 
+import '../../UI/AddMember/Widgets/add_family_member_details_screen.dart';
 import '../../UI/AddMember/add_member_details_screen.dart';
 import '../../UI/AddMember/add_member_screen.dart';
 import '../../UI/AddMember/save_member_details_screen.dart';
@@ -143,6 +144,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: CustomRoutes.saveMemberDetailsScreen,
           page: SaveMemberDetailsRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.addFamilyMemberDetailsScreen,
+          page: AddFamilyMemberDetailsRoute.page,
         ),
 
         //Image

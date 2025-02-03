@@ -6,7 +6,6 @@ import 'package:uppl/Navigation/Router/app_router.dart';
 
 import '../../Constants/assets.dart';
 import '../../Constants/configuration.dart';
-import '../../Helper/toast.dart';
 import '../../Models/Auth/login_model.dart';
 
 @RoutePage()
@@ -84,6 +83,7 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
                               controller: mobileController,
                               cursorColor: Colors.black,
                               keyboardType: TextInputType.phone,
+                              maxLength: 10,
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: const Color(0xffFFFDE4),
@@ -176,17 +176,44 @@ class _LoginOtpScreenState extends State<LoginOtpScreen> {
   }
 
   void sendOTP(mobile_number) async {
-    try {
-      final LoginModel response =
-          await ApiService.instance(context).sendOTP(mobile_number, context);
-      if (response.status == 1) {
-        context.router.push(LoginOtpVerifyRoute(phonenumber: mobile_number));
-      } else {
-        CustomToast.showFailureToast(context, "Error", response.message);
+    final LoginModel response =
+        await ApiService.instance(context).sendOTP(mobile_number, context);
+    if (response.status == 1) {
+      context.router.push(LoginOtpVerifyRoute(phonenumber: mobile_number));
+    } else {
+      // CustomToast.showFailureToast(context, "Error", response.message);
+      final errorMessages = response.data.errors?.values
+              ?.map((e) => e.toString().replaceAll(RegExp(r'[\[\]]'), ''))
+              .join('\n') ??
+          '';
+      if (errorMessages.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error, color: Colors.white),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    errorMessages,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        );
       }
-    } catch (e) {
-      print(e);
-      CustomToast.showFailureToast(context, "Error", "Something Went Wrong");
     }
   }
 }

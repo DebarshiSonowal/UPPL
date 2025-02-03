@@ -298,6 +298,8 @@ RegistrationData _$RegistrationDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RegistrationData {
+  @JsonKey(name: 'errors')
+  Map<String, List<String>>? get errors => throw _privateConstructorUsedError;
   @JsonKey(name: 'membershipCardData')
   MembershipCardData? get membershipCardData =>
       throw _privateConstructorUsedError;
@@ -323,7 +325,8 @@ abstract class $RegistrationDataCopyWith<$Res> {
       _$RegistrationDataCopyWithImpl<$Res, RegistrationData>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'membershipCardData')
+      {@JsonKey(name: 'errors') Map<String, List<String>>? errors,
+      @JsonKey(name: 'membershipCardData')
       MembershipCardData? membershipCardData,
       @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'refresh_token') String? refreshToken});
@@ -346,11 +349,16 @@ class _$RegistrationDataCopyWithImpl<$Res, $Val extends RegistrationData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? errors = freezed,
     Object? membershipCardData = freezed,
     Object? accessToken = freezed,
     Object? refreshToken = freezed,
   }) {
     return _then(_value.copyWith(
+      errors: freezed == errors
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>?,
       membershipCardData: freezed == membershipCardData
           ? _value.membershipCardData
           : membershipCardData // ignore: cast_nullable_to_non_nullable
@@ -391,7 +399,8 @@ abstract class _$$RegistrationDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'membershipCardData')
+      {@JsonKey(name: 'errors') Map<String, List<String>>? errors,
+      @JsonKey(name: 'membershipCardData')
       MembershipCardData? membershipCardData,
       @JsonKey(name: 'access_token') String? accessToken,
       @JsonKey(name: 'refresh_token') String? refreshToken});
@@ -413,11 +422,16 @@ class __$$RegistrationDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? errors = freezed,
     Object? membershipCardData = freezed,
     Object? accessToken = freezed,
     Object? refreshToken = freezed,
   }) {
     return _then(_$RegistrationDataImpl(
+      errors: freezed == errors
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>?,
       membershipCardData: freezed == membershipCardData
           ? _value.membershipCardData
           : membershipCardData // ignore: cast_nullable_to_non_nullable
@@ -438,12 +452,25 @@ class __$$RegistrationDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RegistrationDataImpl implements _RegistrationData {
   const _$RegistrationDataImpl(
-      {@JsonKey(name: 'membershipCardData') this.membershipCardData,
+      {@JsonKey(name: 'errors') final Map<String, List<String>>? errors,
+      @JsonKey(name: 'membershipCardData') this.membershipCardData,
       @JsonKey(name: 'access_token') this.accessToken,
-      @JsonKey(name: 'refresh_token') this.refreshToken});
+      @JsonKey(name: 'refresh_token') this.refreshToken})
+      : _errors = errors;
 
   factory _$RegistrationDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$RegistrationDataImplFromJson(json);
+
+  final Map<String, List<String>>? _errors;
+  @override
+  @JsonKey(name: 'errors')
+  Map<String, List<String>>? get errors {
+    final value = _errors;
+    if (value == null) return null;
+    if (_errors is EqualUnmodifiableMapView) return _errors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   @JsonKey(name: 'membershipCardData')
@@ -457,7 +484,7 @@ class _$RegistrationDataImpl implements _RegistrationData {
 
   @override
   String toString() {
-    return 'RegistrationData(membershipCardData: $membershipCardData, accessToken: $accessToken, refreshToken: $refreshToken)';
+    return 'RegistrationData(errors: $errors, membershipCardData: $membershipCardData, accessToken: $accessToken, refreshToken: $refreshToken)';
   }
 
   @override
@@ -465,6 +492,7 @@ class _$RegistrationDataImpl implements _RegistrationData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RegistrationDataImpl &&
+            const DeepCollectionEquality().equals(other._errors, _errors) &&
             (identical(other.membershipCardData, membershipCardData) ||
                 other.membershipCardData == membershipCardData) &&
             (identical(other.accessToken, accessToken) ||
@@ -475,8 +503,12 @@ class _$RegistrationDataImpl implements _RegistrationData {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, membershipCardData, accessToken, refreshToken);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_errors),
+      membershipCardData,
+      accessToken,
+      refreshToken);
 
   /// Create a copy of RegistrationData
   /// with the given fields replaced by the non-null parameter values.
@@ -497,7 +529,8 @@ class _$RegistrationDataImpl implements _RegistrationData {
 
 abstract class _RegistrationData implements RegistrationData {
   const factory _RegistrationData(
-          {@JsonKey(name: 'membershipCardData')
+          {@JsonKey(name: 'errors') final Map<String, List<String>>? errors,
+          @JsonKey(name: 'membershipCardData')
           final MembershipCardData? membershipCardData,
           @JsonKey(name: 'access_token') final String? accessToken,
           @JsonKey(name: 'refresh_token') final String? refreshToken}) =
@@ -506,6 +539,9 @@ abstract class _RegistrationData implements RegistrationData {
   factory _RegistrationData.fromJson(Map<String, dynamic> json) =
       _$RegistrationDataImpl.fromJson;
 
+  @override
+  @JsonKey(name: 'errors')
+  Map<String, List<String>>? get errors;
   @override
   @JsonKey(name: 'membershipCardData')
   MembershipCardData? get membershipCardData;

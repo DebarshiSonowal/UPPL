@@ -20,6 +20,7 @@ class RegistrationResponseModel with _$RegistrationResponseModel {
 @freezed
 class RegistrationData with _$RegistrationData {
   const factory RegistrationData({
+    @JsonKey(name: 'errors') Map<String, List<String>>? errors,
     @JsonKey(name: 'membershipCardData') MembershipCardData? membershipCardData,
     @JsonKey(name: 'access_token') String? accessToken,
     @JsonKey(name: 'refresh_token') String? refreshToken,

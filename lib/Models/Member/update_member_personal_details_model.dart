@@ -8,7 +8,7 @@ class UpdateMemberPersonalDetailsModel with _$UpdateMemberPersonalDetailsModel {
   const factory UpdateMemberPersonalDetailsModel({
     required int status,
     required String message,
-    dynamic data,
+    UpdateMemberPersonalDetailsData? data,
     required int code,
   }) = _UpdateMemberPersonalDetailsModel;
 

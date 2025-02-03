@@ -33,6 +33,10 @@ Map<String, dynamic> _$$RegistrationResponseModelImplToJson(
 _$RegistrationDataImpl _$$RegistrationDataImplFromJson(
         Map<String, dynamic> json) =>
     _$RegistrationDataImpl(
+      errors: (json['errors'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
+      ),
       membershipCardData: json['membershipCardData'] == null
           ? null
           : MembershipCardData.fromJson(
@@ -44,6 +48,7 @@ _$RegistrationDataImpl _$$RegistrationDataImplFromJson(
 Map<String, dynamic> _$$RegistrationDataImplToJson(
         _$RegistrationDataImpl instance) =>
     <String, dynamic>{
+      'errors': instance.errors,
       'membershipCardData': instance.membershipCardData,
       'access_token': instance.accessToken,
       'refresh_token': instance.refreshToken,

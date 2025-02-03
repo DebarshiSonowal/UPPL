@@ -1,31 +1,36 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:uppl/Constants/configuration.dart';
-import 'package:uppl/Navigation/Router/app_router.dart';
 
-import '../../API/api_services.dart';
-import '../../Helper/toast.dart';
-import '../../Repository/repository.dart';
+import '../../../API/api_services.dart';
+import '../../../Constants/configuration.dart';
+import '../../../Constants/routes.dart';
+import '../../../Helper/toast.dart';
+import '../../../Navigation/Router/app_router.dart';
+import '../../../Repository/repository.dart';
 
 @RoutePage()
-class UpdateFamilyDetailsScreen extends StatefulWidget {
-  const UpdateFamilyDetailsScreen({super.key});
+class AddFamilyMemberDetailsScreen extends StatefulWidget {
+  const AddFamilyMemberDetailsScreen(
+      {super.key, required this.id, required this.name});
+
+  final int id;
+  final String name;
 
   @override
-  State<UpdateFamilyDetailsScreen> createState() =>
-      _UpdateFamilyDetailsScreenState();
+  State<AddFamilyMemberDetailsScreen> createState() =>
+      _AddFamilyMemberDetailsScreenState();
 }
 
-class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
+class _AddFamilyMemberDetailsScreenState
+    extends State<AddFamilyMemberDetailsScreen> {
   int selectedGender = 0; // Example state for demonstration
   final List<String> genderOptions = ["Male", "Female", "Others"];
   final name = TextEditingController();
@@ -36,48 +41,29 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
   final dob = TextEditingController();
   String? selectedRelationship;
   File? selectedFile;
+  bool mobileValidated = false;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final selectedFamilyMember =
+      fetchFamilyDetails(
+          context,
           Provider.of<Repository>(context, listen: false)
-              .selectedReferredFamilyDetailsModel;
-      if (selectedFamilyMember != null) {
-        name.text = selectedFamilyMember.personalDetails.name ?? '';
-        mobile.text = selectedFamilyMember.personalDetails.mobileNo ?? '';
-        voterID.text = selectedFamilyMember.personalDetails.voterId ?? '';
-        aadhar.text = selectedFamilyMember.personalDetails.aadhaarNo ?? '';
-
-        if (selectedFamilyMember.personalDetails.dateOfBirth != null) {
-          dob.text = selectedFamilyMember.personalDetails.dateOfBirth ?? "";
-          age.text = _calculateAge2(
-                  selectedFamilyMember.personalDetails.dateOfBirth!.toString())
-              .toString();
-        }
-
-        selectedGender = selectedFamilyMember.personalDetails.gender ?? 1;
-        debugPrint(
-            "Currrent Gender ${selectedFamilyMember.personalDetails.gender}");
-        selectedRelationship =
-            Provider.of<Repository>(context, listen: false).relationships[
-                (selectedFamilyMember.membershipCard.relationship ?? 1) - 1];
-        setState(() {});
-      }
+              .memberData
+              ?.personalDetails
+              .memberId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Configuration.homeBgColor,
       appBar: Configuration.appBar,
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Configuration.homeBgColor,
-        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -85,66 +71,64 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                 height: 1.h,
               ),
               Text(
-                "Update Family Members",
+                "Add Family Members For \n${widget.name}",
                 style: Configuration.primaryFont(
                   fontSize: 16.sp,
                   color: Colors.black87,
                   fontWeight: FontWeight.bold,
                   // Add other text styling as needed
                 ),
+                textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 1.h,
               ),
               Stack(
                 children: [
-                  Consumer<Repository>(
-                    builder: (context, data, _) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Configuration.primaryColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                          image: DecorationImage(
-                            image: selectedFile != null
-                                ? FileImage(selectedFile!)
-                                : CachedNetworkImageProvider(
-                                    Provider.of<Repository>(context,
-                                                listen: false)
-                                            .selectedReferredFamilyDetailsModel
-                                            ?.membershipCard
-                                            .photo ??
-                                        ""),
-                          ),
-                        ),
-                        height: 22.w,
-                        width: 22.w,
-                      );
+                  GestureDetector(
+                    onTap: () {
+                      pickUpFile();
                     },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Configuration.primaryColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                        ),
+                        image: selectedFile != null
+                            ? DecorationImage(
+                                image: FileImage(selectedFile!),
+                              )
+                            : null,
+                      ),
+                      height: 22.w,
+                      width: 22.w,
+                    ),
                   ),
                   Positioned(
-                    bottom: 5.0,
-                    right: 5.0,
+                    bottom: 0,
+                    right: 0,
                     child: GestureDetector(
                       onTap: () {
                         pickUpFile();
                       },
                       child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.black54,
-                          shape: BoxShape.circle,
-                        ),
-                        padding: EdgeInsets.all(8.0),
-                        child: const Icon(
-                          Icons.edit,
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          size: 20.0,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        padding: EdgeInsets.all(2),
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               SizedBox(
@@ -157,11 +141,11 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                 child: TextFormField(
                   controller: name,
                   cursorColor: Colors.black,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Add Family Member Name',
+                    labelText: 'Add Family Member Name*',
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -274,7 +258,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Relationship',
+                      labelText: 'Relationship*',
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -313,21 +297,81 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                   controller: mobile,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.phone,
+                  onChanged: (val) {
+                    setState(() {});
+                  },
                   decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Mobile Number',
-                    labelStyle: Configuration.primaryFont(
-                      fontSize: 14.sp,
-                      color: Colors.black54,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Mobile Number',
+                      labelStyle: Configuration.primaryFont(
+                        fontSize: 14.sp,
+                        color: Colors.black54,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      suffixIcon: mobile.text.length == 10
+                          ? mobileValidated
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.check_circle,
+                                    color: Configuration.secondaryColor,
+                                  ),
+                                  onPressed: () {
+                                    // Logic to validate the phone number
+                                    if (mobile.text.isNotEmpty) {
+                                      // Assuming a function `validatePhoneNumber` exists
+                                      validatePhoneNumber(mobile.text);
+                                    } else {
+                                      CustomToast.showFailureToast(
+                                          context,
+                                          "Error",
+                                          "Please enter a mobile number");
+                                    }
+                                  },
+                                )
+                              : GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      right: 2.w,
+                                    ),
+                                    child: Card(
+                                      elevation: 2,
+                                      child: Container(
+                                        width: 18.w,
+                                        height: 3.5.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: const Center(
+                                            child: Text(
+                                          "Validate",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // Logic to validate the phone number
+                                    if (mobile.text.isNotEmpty) {
+                                      validatePhoneNumber(mobile.text);
+                                    } else {
+                                      CustomToast.showFailureToast(
+                                          context,
+                                          "Error",
+                                          "Please enter a mobile number");
+                                    }
+                                  },
+                                )
+                          : null),
                 ),
               ),
               SizedBox(
@@ -369,7 +413,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            labelText: 'D.O.B',
+                            labelText: 'D.O.B*',
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -393,7 +437,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            labelText: 'Age',
+                            labelText: 'Age*',
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -426,7 +470,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Voter Id',
+                    labelText: 'Voter Id*',
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -454,7 +498,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Aadhar*',
+                    labelText: 'Aadhar',
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -471,48 +515,153 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
               SizedBox(
                 height: 2.h,
               ),
-              Padding(
+              Container(
+                width: double.infinity,
                 padding: EdgeInsets.symmetric(
                   horizontal: 5.w,
                 ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (name.text.isEmpty) {
-                      CustomToast.showFailureToast(
-                          context, "Error", "Please enter a name");
-                    } else if (selectedRelationship == null) {
-                      CustomToast.showFailureToast(
-                          context, "Error", "Please select a relationship");
-                    } else if (dob.text.isEmpty) {
-                      CustomToast.showFailureToast(
-                          context, "Error", "Please enter a date of birth");
-                    } else if (mobile.text.isEmpty) {
-                      CustomToast.showFailureToast(
-                          context, "Error", "Please enter a mobile number");
-                    } else {
-                      addFamilyDetails(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Configuration.primaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    "Update Details",
-                    style: Configuration.primaryFont(
-                      fontSize: 16.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                child: Configuration.rectangleButton(
+                    onPressed: () {
+                      if (name.text.isEmpty) {
+                        CustomToast.showFailureToast(
+                            context, "Error", "Please enter a name");
+                      } else if (selectedRelationship == null) {
+                        CustomToast.showFailureToast(
+                            context, "Error", "Please select a relationship");
+                      } else if (dob.text.isEmpty) {
+                        CustomToast.showFailureToast(
+                            context, "Error", "Please enter a date of birth");
+                      } else if (mobile.text.isEmpty) {
+                        CustomToast.showFailureToast(
+                            context, "Error", "Please enter a mobile number");
+                      } else if (!mobileValidated) {
+                        CustomToast.showFailureToast(context, "Error",
+                            "Please validate the mobile number");
+                      } else {
+                        addFamilyDetails(context);
+                      }
+                    },
+                    text: "Save",
+                    fontSize: 15.sp,
+                    fontColor: Colors.black,
+                    bgColor: Configuration.primaryColor),
               ),
               SizedBox(
                 height: 1.h,
               ),
+              const Divider(),
+              SizedBox(
+                height: 1.h,
+              ),
+              Consumer<Repository>(builder: (context, data, _) {
+                return Table(
+                  defaultColumnWidth: FixedColumnWidth(26.w),
+                  children: [
+                    for (var item in data.referredMembersFamilyDetails)
+                      TableRow(
+                        children: [
+                          SizedBox(
+                            width: 22.w,
+                            child: Center(
+                              child: Text(
+                                item.personalDetails.name,
+                                style: Configuration.primaryFont(
+                                  fontSize: 14.sp,
+                                  color: Colors.black,
+                                  // fontWeight: FontWeight.bold,
+                                  // Add other text styling as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15.w,
+                            child: Center(
+                              child: Text(
+                                "${_calculateAge2(item.personalDetails.dateOfBirth)} Years",
+                                style: Configuration.primaryFont(
+                                  fontSize: 14.sp,
+                                  color: Colors.black,
+                                  // fontWeight: FontWeight.bold,
+                                  // Add other text styling as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Provider.of<Repository>(context, listen: false)
+                                  .setReferredMembersFamilyDetails(item);
+                              AutoRouter.of(context)
+                                  .pushNamed(
+                                      CustomRoutes.updateFamilyDetailsScreen)
+                                  .then((_) {
+                                fetchFamilyDetails(
+                                    context,
+                                    Provider.of<Repository>(context,
+                                            listen: false)
+                                        .memberData
+                                        ?.personalDetails
+                                        ?.memberId);
+                              });
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.edit,
+                              size: 17.sp,
+                              color: Configuration.thirdColor,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              debugPrint("Clicked Here");
+                              AutoRouter.of(context)
+                                  .push(ReferralFamilyViewDetailsMemberRoute(
+                                      id: item.membershipCard.id))
+                                  .then((_) {
+                                fetchFamilyDetails(
+                                    context,
+                                    Provider.of<Repository>(context,
+                                            listen: false)
+                                        .memberData
+                                        ?.personalDetails
+                                        ?.memberId);
+                              });
+                            },
+                            child: Icon(
+                              Icons.remove_red_eye,
+                              size: 17.sp,
+                              color: Configuration.thirdColor,
+                            ),
+                          ),
+                          // Text(
+                          //   "${calculateAge(item.personalDetails.dateOfBirth)} Years",
+                          //   style: Configuration.primaryFont(
+                          //     fontSize: 15.sp,
+                          //     color: Colors.black,
+                          //     // fontWeight: FontWeight.bold,
+                          //     // Add other text styling as needed
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                  ],
+                );
+              }),
+              SizedBox(
+                height: 2.h,
+              ),
+              // SizedBox(
+              //   width: 85.w,
+              //   child: Configuration.rectangleButton(
+              //     onPressed: () {},
+              //     text: 'Add Family',
+              //     bgColor: Configuration.thirdColor,
+              //     fontSize: 17.sp,
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 2.h,
+              // ),
             ],
           ),
         ),
@@ -525,47 +674,37 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
     final response = await ApiService.instance(context)
         .updateFamilyMemberPersonalDetails(
             context,
-            Provider.of<Repository>(context, listen: false)
-                .selectedReferredFamilyDetailsModel
-                ?.membershipCard
-                .id,
-            data.memberData?.personalDetails.memberId,
+            null,
+            widget.id,
             name.text,
             DateFormat("yyyy-mm-dd")
                 .format(DateFormat("dd-mm-yyyy").parse(dob.text)),
             selectedGender,
             data.relationships.indexWhere((e) => e == selectedRelationship) + 1,
-            // mobile.text,
-            null,
+            mobile.text,
             selectedFile?.path,
             data.profileData?.refId,
-            aadhar.text,
+            aadhar.text ?? "",
             voterID.text);
     if (response.status == 1) {
       CustomToast.showSuccessToast(
           context, "Information Added", response.message);
-      AutoRouter.of(context).popForced();
+      fetchFamilyDetails(
+          context,
+          Provider.of<Repository>(context, listen: false)
+              .memberData
+              ?.personalDetails
+              .memberId);
     } else {
-      debugPrint("Errors ${response.data?.errors?.keys}");
-      if (response.data?.errors?.keys.first == "mobile_no") {
-        final result = await AutoRouter.of(context)
-            .push(VerifiedRoute(mobile: mobile.text));
-        if (result != null) {
-          addFamilyDetails(context);
-        } else {
-          CustomToast.showFailureToast(
-              context, "Something Went Wrong", response.message);
-        }
-      } else {
-        CustomToast.showFailureToast(
-            context, "Something Went Wrong", response.message);
-      }
+      CustomToast.showFailureToast(
+          context, "Something Went Wrong", response.message);
     }
   }
 
   void fetchFamilyDetails(BuildContext context, int? memberId) async {
     final response = await ApiService.instance(context)
         .getReferredFamilyDetails(context, memberId);
+    debugPrint("Fetching family details");
     if (response.status == 1) {
       Provider.of<Repository>(context, listen: false)
           .setReferredMemberFamilyDetails(response.data.familyDetails);
@@ -676,5 +815,17 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
         );
       },
     );
+  }
+
+  Future<void> validatePhoneNumber(String text) async {
+    final result =
+        await AutoRouter.of(context).push(VerifiedRoute(mobile: text));
+    // You can now handle 'result' based on its value if needed.
+    if (result != null) {
+      setState(() {
+        mobileValidated = true;
+        mobile.text = "$result";
+      });
+    }
   }
 }

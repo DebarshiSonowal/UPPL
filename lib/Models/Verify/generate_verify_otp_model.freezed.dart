@@ -18,24 +18,27 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GenerateVerifyOtpModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
+  Data? get data => throw _privateConstructorUsedError;
   int? get code => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int status, String message, Data data, int code)
+    required TResult Function(int status, String message, Data? data, int code)
         success,
-    required TResult Function(int status, String message, int? code) error,
+    required TResult Function(int status, String message, int? code, Data? data)
+        error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int status, String message, Data data, int code)? success,
-    TResult? Function(int status, String message, int? code)? error,
+    TResult? Function(int status, String message, Data? data, int code)?
+        success,
+    TResult? Function(int status, String message, int? code, Data? data)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int status, String message, Data data, int code)? success,
-    TResult Function(int status, String message, int? code)? error,
+    TResult Function(int status, String message, Data? data, int code)? success,
+    TResult Function(int status, String message, int? code, Data? data)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -72,7 +75,9 @@ abstract class $GenerateVerifyOtpModelCopyWith<$Res> {
           $Res Function(GenerateVerifyOtpModel) then) =
       _$GenerateVerifyOtpModelCopyWithImpl<$Res, GenerateVerifyOtpModel>;
   @useResult
-  $Res call({int status, String message, int code});
+  $Res call({int status, String message, Data? data, int code});
+
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -93,6 +98,7 @@ class _$GenerateVerifyOtpModelCopyWithImpl<$Res,
   $Res call({
     Object? status = null,
     Object? message = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_value.copyWith(
@@ -104,11 +110,29 @@ class _$GenerateVerifyOtpModelCopyWithImpl<$Res,
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Data?,
       code: null == code
           ? _value.code!
           : code // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
+  }
+
+  /// Create a copy of GenerateVerifyOtpModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $DataCopyWith<$Res>(_value.data!, (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
   }
 }
 
@@ -120,9 +144,10 @@ abstract class _$$SuccessResponseImplCopyWith<$Res>
       __$$SuccessResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, Data data, int code});
+  $Res call({int status, String message, Data? data, int code});
 
-  $DataCopyWith<$Res> get data;
+  @override
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -140,7 +165,7 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? code = null,
   }) {
     return _then(_$SuccessResponseImpl(
@@ -152,25 +177,15 @@ class __$$SuccessResponseImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as Data?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as int,
     ));
-  }
-
-  /// Create a copy of GenerateVerifyOtpModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DataCopyWith<$Res> get data {
-    return $DataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value));
-    });
   }
 }
 
@@ -180,7 +195,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   const _$SuccessResponseImpl(
       {required this.status,
       required this.message,
-      required this.data,
+      this.data,
       required this.code});
 
   @override
@@ -188,7 +203,7 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @override
   final String message;
   @override
-  final Data data;
+  final Data? data;
   @override
   final int code;
 
@@ -223,9 +238,10 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int status, String message, Data data, int code)
+    required TResult Function(int status, String message, Data? data, int code)
         success,
-    required TResult Function(int status, String message, int? code) error,
+    required TResult Function(int status, String message, int? code, Data? data)
+        error,
   }) {
     return success(status, message, data, code);
   }
@@ -233,8 +249,9 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int status, String message, Data data, int code)? success,
-    TResult? Function(int status, String message, int? code)? error,
+    TResult? Function(int status, String message, Data? data, int code)?
+        success,
+    TResult? Function(int status, String message, int? code, Data? data)? error,
   }) {
     return success?.call(status, message, data, code);
   }
@@ -242,8 +259,8 @@ class _$SuccessResponseImpl implements SuccessResponse {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int status, String message, Data data, int code)? success,
-    TResult Function(int status, String message, int? code)? error,
+    TResult Function(int status, String message, Data? data, int code)? success,
+    TResult Function(int status, String message, int? code, Data? data)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -288,14 +305,15 @@ abstract class SuccessResponse implements GenerateVerifyOtpModel {
   const factory SuccessResponse(
       {required final int status,
       required final String message,
-      required final Data data,
+      final Data? data,
       required final int code}) = _$SuccessResponseImpl;
 
   @override
   int get status;
   @override
   String get message;
-  Data get data;
+  @override
+  Data? get data;
   @override
   int get code;
 
@@ -315,7 +333,10 @@ abstract class _$$ErrorResponseImplCopyWith<$Res>
       __$$ErrorResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, int? code});
+  $Res call({int status, String message, int? code, Data? data});
+
+  @override
+  $DataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -334,6 +355,7 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
     Object? status = null,
     Object? message = null,
     Object? code = freezed,
+    Object? data = freezed,
   }) {
     return _then(_$ErrorResponseImpl(
       status: null == status
@@ -348,6 +370,10 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as int?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Data?,
     ));
   }
 }
@@ -356,7 +382,7 @@ class __$$ErrorResponseImplCopyWithImpl<$Res>
 
 class _$ErrorResponseImpl implements ErrorResponse {
   const _$ErrorResponseImpl(
-      {required this.status, required this.message, this.code});
+      {required this.status, required this.message, this.code, this.data});
 
   @override
   final int status;
@@ -364,10 +390,13 @@ class _$ErrorResponseImpl implements ErrorResponse {
   final String message;
   @override
   final int? code;
+// Code can be optional in case of errors
+  @override
+  final Data? data;
 
   @override
   String toString() {
-    return 'GenerateVerifyOtpModel.error(status: $status, message: $message, code: $code)';
+    return 'GenerateVerifyOtpModel.error(status: $status, message: $message, code: $code, data: $data)';
   }
 
   @override
@@ -377,11 +406,12 @@ class _$ErrorResponseImpl implements ErrorResponse {
             other is _$ErrorResponseImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.code, code) || other.code == code));
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.data, data) || other.data == data));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, message, code);
+  int get hashCode => Object.hash(runtimeType, status, message, code, data);
 
   /// Create a copy of GenerateVerifyOtpModel
   /// with the given fields replaced by the non-null parameter values.
@@ -394,31 +424,33 @@ class _$ErrorResponseImpl implements ErrorResponse {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int status, String message, Data data, int code)
+    required TResult Function(int status, String message, Data? data, int code)
         success,
-    required TResult Function(int status, String message, int? code) error,
+    required TResult Function(int status, String message, int? code, Data? data)
+        error,
   }) {
-    return error(status, message, code);
+    return error(status, message, code, data);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int status, String message, Data data, int code)? success,
-    TResult? Function(int status, String message, int? code)? error,
+    TResult? Function(int status, String message, Data? data, int code)?
+        success,
+    TResult? Function(int status, String message, int? code, Data? data)? error,
   }) {
-    return error?.call(status, message, code);
+    return error?.call(status, message, code, data);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int status, String message, Data data, int code)? success,
-    TResult Function(int status, String message, int? code)? error,
+    TResult Function(int status, String message, Data? data, int code)? success,
+    TResult Function(int status, String message, int? code, Data? data)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(status, message, code);
+      return error(status, message, code, data);
     }
     return orElse();
   }
@@ -459,14 +491,17 @@ abstract class ErrorResponse implements GenerateVerifyOtpModel {
   const factory ErrorResponse(
       {required final int status,
       required final String message,
-      final int? code}) = _$ErrorResponseImpl;
+      final int? code,
+      final Data? data}) = _$ErrorResponseImpl;
 
   @override
   int get status;
   @override
   String get message;
   @override
-  int? get code;
+  int? get code; // Code can be optional in case of errors
+  @override
+  Data? get data;
 
   /// Create a copy of GenerateVerifyOtpModel
   /// with the given fields replaced by the non-null parameter values.
@@ -482,6 +517,8 @@ Data _$DataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Data {
+  @JsonKey(name: 'errors')
+  Map<String, List<String>>? get errors => throw _privateConstructorUsedError;
   @JsonKey(name: "phone_number")
   String get phoneNumber =>
       throw _privateConstructorUsedError; // Ensure phoneNumber is String
@@ -504,7 +541,8 @@ abstract class $DataCopyWith<$Res> {
       _$DataCopyWithImpl<$Res, Data>;
   @useResult
   $Res call(
-      {@JsonKey(name: "phone_number") String phoneNumber,
+      {@JsonKey(name: 'errors') Map<String, List<String>>? errors,
+      @JsonKey(name: "phone_number") String phoneNumber,
       int? status,
       bool? registered});
 }
@@ -524,11 +562,16 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? errors = freezed,
     Object? phoneNumber = null,
     Object? status = freezed,
     Object? registered = freezed,
   }) {
     return _then(_value.copyWith(
+      errors: freezed == errors
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>?,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -553,7 +596,8 @@ abstract class _$$DataImplCopyWith<$Res> implements $DataCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "phone_number") String phoneNumber,
+      {@JsonKey(name: 'errors') Map<String, List<String>>? errors,
+      @JsonKey(name: "phone_number") String phoneNumber,
       int? status,
       bool? registered});
 }
@@ -570,11 +614,16 @@ class __$$DataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? errors = freezed,
     Object? phoneNumber = null,
     Object? status = freezed,
     Object? registered = freezed,
   }) {
     return _then(_$DataImpl(
+      errors: freezed == errors
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>?,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -595,12 +644,25 @@ class __$$DataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DataImpl implements _Data {
   const _$DataImpl(
-      {@JsonKey(name: "phone_number") required this.phoneNumber,
+      {@JsonKey(name: 'errors') final Map<String, List<String>>? errors,
+      @JsonKey(name: "phone_number") required this.phoneNumber,
       this.status,
-      this.registered});
+      this.registered})
+      : _errors = errors;
 
   factory _$DataImpl.fromJson(Map<String, dynamic> json) =>
       _$$DataImplFromJson(json);
+
+  final Map<String, List<String>>? _errors;
+  @override
+  @JsonKey(name: 'errors')
+  Map<String, List<String>>? get errors {
+    final value = _errors;
+    if (value == null) return null;
+    if (_errors is EqualUnmodifiableMapView) return _errors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   @JsonKey(name: "phone_number")
@@ -614,7 +676,7 @@ class _$DataImpl implements _Data {
 
   @override
   String toString() {
-    return 'Data(phoneNumber: $phoneNumber, status: $status, registered: $registered)';
+    return 'Data(errors: $errors, phoneNumber: $phoneNumber, status: $status, registered: $registered)';
   }
 
   @override
@@ -622,6 +684,7 @@ class _$DataImpl implements _Data {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DataImpl &&
+            const DeepCollectionEquality().equals(other._errors, _errors) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.status, status) || other.status == status) &&
@@ -631,7 +694,12 @@ class _$DataImpl implements _Data {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, phoneNumber, status, registered);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_errors),
+      phoneNumber,
+      status,
+      registered);
 
   /// Create a copy of Data
   /// with the given fields replaced by the non-null parameter values.
@@ -651,12 +719,16 @@ class _$DataImpl implements _Data {
 
 abstract class _Data implements Data {
   const factory _Data(
-      {@JsonKey(name: "phone_number") required final String phoneNumber,
+      {@JsonKey(name: 'errors') final Map<String, List<String>>? errors,
+      @JsonKey(name: "phone_number") required final String phoneNumber,
       final int? status,
       final bool? registered}) = _$DataImpl;
 
   factory _Data.fromJson(Map<String, dynamic> json) = _$DataImpl.fromJson;
 
+  @override
+  @JsonKey(name: 'errors')
+  Map<String, List<String>>? get errors;
   @override
   @JsonKey(name: "phone_number")
   String get phoneNumber; // Ensure phoneNumber is String

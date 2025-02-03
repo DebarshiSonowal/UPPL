@@ -13,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
-import '../../Constants/routes.dart';
 import '../../Models/Referal/joined_by_referral_model.dart';
 import '../../Navigation/Router/app_router.dart';
 import '../CommonWidgets/custom_nav_drawer.dart';
@@ -124,7 +123,7 @@ class _JoinedReferralViewDetailsMemberScreenState
                               height: 1.h,
                             ),
                             Text(
-                              "Membership ID: ${memberData?.memberId ?? "N/A"}",
+                              "Membership ID: ${memberData?.membershipNo ?? "N/A"}",
                               style: Configuration.primaryFont(
                                 fontSize: 11.sp,
                                 color: Colors.black,
@@ -253,8 +252,11 @@ class _JoinedReferralViewDetailsMemberScreenState
                                 height: 4.h,
                                 child: Configuration.rectangleButton(
                                   onPressed: () {
-                                    AutoRouter.of(context).pushNamed(
-                                        CustomRoutes.addMemberScreen);
+                                    AutoRouter.of(context).push(
+                                        AddFamilyMemberDetailsRoute(
+                                            id: memberData?.memberId ?? 0,
+                                            name:
+                                                memberData?.memberName ?? ''));
                                   },
                                   text: 'Add More Family Member',
                                   bgColor: Configuration.thirdColor,

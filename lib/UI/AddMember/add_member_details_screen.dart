@@ -1667,8 +1667,40 @@ class _AddMemberDetailsScreenState extends State<AddMemberDetailsScreen> {
       CustomToast.showSuccessToast(context, "Registered", response.message);
       AutoRouter.of(context).pushNamed(CustomRoutes.saveMemberDetailsScreen);
     } else {
-      CustomToast.showFailureToast(
-          context, "Failed to Register", response.message);
+      final errorMessages = response.data?.errors?.values
+              ?.map((e) => e.toString().replaceAll(RegExp(r'[\[\]]'), ''))
+              .join('\n') ??
+          '';
+      if (errorMessages.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error, color: Colors.white),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    errorMessages,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        );
+      }
+      // CustomToast.showFailureToast(
+      //     context, "Failed to Register", response.message);
     }
   }
 

@@ -8,6 +8,7 @@ class CustomRoutes {
   static const forgotPasswordScreen = "/forgot_password";
   static const forgotPasswordOtpScreen = "/forgot_password_otp";
   static const savedDetailsScreen = "/saved_details_screen";
+  static const addFamilyMemberDetailsScreen = "/add_family_member_details";
 
   static const homeScreen = "/home_screen";
   static const dashboardScreen = "/dashboard_screen";

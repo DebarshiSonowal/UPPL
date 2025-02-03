@@ -653,6 +653,103 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
+                    "Community*",
+                    style: Configuration.primaryFont(
+                      fontSize: 14.sp,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Consumer<Repository>(builder: (context, data, _) {
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 6.w,
+                ),
+                child: Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      // Add this to prevent overflow
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Enter Your Community*',
+                        labelStyle: Configuration.primaryFont(
+                          fontSize: 14.sp,
+                          color: Colors.black54,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      items: data.community
+                          .map((community) => DropdownMenuItem<String>(
+                                value: community,
+                                child: Text(
+                                  community,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Configuration.primaryFont(
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          community = "$value";
+                          if (value != 'Other') {
+                            otherCommunity = null;
+                          }
+                        });
+                      },
+                      value: community,
+                    ),
+                    if (community == 'Other')
+                      Padding(
+                        padding: EdgeInsets.only(top: 1.h),
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              otherCommunity = value;
+                            });
+                          },
+                          initialValue: otherCommunity,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'Enter Other Community*',
+                            labelStyle: Configuration.primaryFont(
+                              fontSize: 14.sp,
+                              color: Colors.black54,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+                vertical: 1.h,
+              ),
+              child: Row(
+                children: [
+                  Text(
                     "Profession",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
@@ -834,103 +931,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     });
                   },
                   value: motherTongue,
-                ),
-              );
-            }),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 10.w,
-                vertical: 1.h,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    "Community*",
-                    style: Configuration.primaryFont(
-                      fontSize: 14.sp,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Consumer<Repository>(builder: (context, data, _) {
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
-                ),
-                child: Column(
-                  children: [
-                    DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      // Add this to prevent overflow
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Enter Your Community*',
-                        labelStyle: Configuration.primaryFont(
-                          fontSize: 14.sp,
-                          color: Colors.black54,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      items: data.community
-                          .map((community) => DropdownMenuItem<String>(
-                                value: community,
-                                child: Text(
-                                  community,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Configuration.primaryFont(
-                                    fontSize: 16.sp,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          community = "$value";
-                          if (value != 'Other') {
-                            otherCommunity = null;
-                          }
-                        });
-                      },
-                      value: community,
-                    ),
-                    if (community == 'Other')
-                      Padding(
-                        padding: EdgeInsets.only(top: 1.h),
-                        child: TextFormField(
-                          onChanged: (value) {
-                            setState(() {
-                              otherCommunity = value;
-                            });
-                          },
-                          initialValue: otherCommunity,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            labelText: 'Enter Other Community*',
-                            labelStyle: Configuration.primaryFont(
-                              fontSize: 14.sp,
-                              color: Colors.black54,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
                 ),
               );
             }),
@@ -1334,55 +1334,106 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     final data = Provider.of<Repository>(context, listen: false)
         .memberData
         ?.personalDetails;
-    final response = await ApiService.instance(context).updatePersonalDetails(
-      data?.memberId,
-      fullname.text,
-      email.text,
-      DateFormat("yyyy-MM-dd").format(DateFormat("dd-MM-yyyy").parse(dob.text)),
-      selectedGender,
-      Provider.of<Repository>(context, listen: false)
-          .religions
-          .indexWhere((e) => e == religion),
-      cast == null
-          ? 0
-          : Provider.of<Repository>(context, listen: false)
-                  .categories
-                  .indexWhere((e) => e == cast) +
-              1,
-      profession == null
-          ? 0
-          : Provider.of<Repository>(context, listen: false)
-              .professions
-              .indexWhere((e) => e == profession),
-      Provider.of<Repository>(context, listen: false)
-          .educationLevels
-          .indexWhere((e) => e == education),
-      aadharId.text ?? "",
-      voterId.text,
-      Provider.of<Repository>(context, listen: false)
-          .motherTounge
-          .indexWhere((e) => e == motherTongue),
-      otherProfession.text,
-      otherEducation.text,
-      Provider.of<Repository>(context, listen: false)
-          .community
-          .indexWhere((e) => e == community),
-      otherCommunity,
-      context,
-    );
-    if (response.status == 1) {
-      CustomToast.showSuccessToast(
-        context,
-        "Information Updated",
-        response.message,
-      );
-      fetchData();
-    } else {
-      CustomToast.showFailureToast(
-        context,
-        "Something Went Wrong",
-        response.message,
-      );
+    int retryCount = 0;
+    final int maxRetries = 3;
+    while (retryCount < maxRetries) {
+      try {
+        final response =
+            await ApiService.instance(context).updatePersonalDetails(
+          data?.memberId,
+          fullname.text,
+          email.text,
+          DateFormat("yyyy-MM-dd")
+              .format(DateFormat("dd-MM-yyyy").parse(dob.text)),
+          selectedGender,
+          Provider.of<Repository>(context, listen: false)
+              .religions
+              .indexWhere((e) => e == religion),
+          cast == null
+              ? 0
+              : Provider.of<Repository>(context, listen: false)
+                      .categories
+                      .indexWhere((e) => e == cast) +
+                  1,
+          profession == null
+              ? 0
+              : Provider.of<Repository>(context, listen: false)
+                  .professions
+                  .indexWhere((e) => e == profession),
+          Provider.of<Repository>(context, listen: false)
+              .educationLevels
+              .indexWhere((e) => e == education),
+          aadharId.text ?? "",
+          voterId.text,
+          Provider.of<Repository>(context, listen: false)
+              .motherTounge
+              .indexWhere((e) => e == motherTongue),
+          otherProfession.text,
+          otherEducation.text,
+          Provider.of<Repository>(context, listen: false)
+              .community
+              .indexWhere((e) => e == community),
+          otherCommunity,
+          context,
+        );
+        if (response.status == 1) {
+          CustomToast.showSuccessToast(
+            context,
+            "Information Updated",
+            response.message,
+          );
+          fetchData();
+          break;
+        } else {
+          final errorMessages = response.data?.errors?.values
+                  ?.map((e) => e.toString().replaceAll(RegExp(r'[\[\]]'), ''))
+                  .join('\n') ??
+              '';
+          if (errorMessages.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.error, color: Colors.white),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        errorMessages,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.redAccent,
+                behavior: SnackBarBehavior.floating,
+                duration: const Duration(seconds: 3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+            );
+          }
+          break;
+        }
+      } catch (e) {
+        if (e.toString().contains(
+            "List<dynamic>' is not a subtype of type 'Map<String, dynamic>' in type cast")) {
+          retryCount++;
+          if (retryCount >= maxRetries) {
+            CustomToast.showFailureToast(
+              context,
+              "Update Failed",
+              "Failed to update personal details. Please try again.",
+            );
+          }
+        } else {
+          rethrow;
+        }
+      }
     }
   }
 

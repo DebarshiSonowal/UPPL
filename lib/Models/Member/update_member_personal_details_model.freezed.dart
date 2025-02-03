@@ -23,7 +23,8 @@ UpdateMemberPersonalDetailsModel _$UpdateMemberPersonalDetailsModelFromJson(
 mixin _$UpdateMemberPersonalDetailsModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  dynamic get data => throw _privateConstructorUsedError;
+  UpdateMemberPersonalDetailsData? get data =>
+      throw _privateConstructorUsedError;
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateMemberPersonalDetailsModel to a JSON map.
@@ -44,7 +45,13 @@ abstract class $UpdateMemberPersonalDetailsModelCopyWith<$Res> {
       _$UpdateMemberPersonalDetailsModelCopyWithImpl<$Res,
           UpdateMemberPersonalDetailsModel>;
   @useResult
-  $Res call({int status, String message, dynamic data, int code});
+  $Res call(
+      {int status,
+      String message,
+      UpdateMemberPersonalDetailsData? data,
+      int code});
+
+  $UpdateMemberPersonalDetailsDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -80,12 +87,27 @@ class _$UpdateMemberPersonalDetailsModelCopyWithImpl<$Res,
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as UpdateMemberPersonalDetailsData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
+  }
+
+  /// Create a copy of UpdateMemberPersonalDetailsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UpdateMemberPersonalDetailsDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $UpdateMemberPersonalDetailsDataCopyWith<$Res>(_value.data!,
+        (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
   }
 }
 
@@ -98,7 +120,14 @@ abstract class _$$UpdateMemberPersonalDetailsModelImplCopyWith<$Res>
       __$$UpdateMemberPersonalDetailsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int status, String message, dynamic data, int code});
+  $Res call(
+      {int status,
+      String message,
+      UpdateMemberPersonalDetailsData? data,
+      int code});
+
+  @override
+  $UpdateMemberPersonalDetailsDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -133,7 +162,7 @@ class __$$UpdateMemberPersonalDetailsModelImplCopyWithImpl<$Res>
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as UpdateMemberPersonalDetailsData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -161,7 +190,7 @@ class _$UpdateMemberPersonalDetailsModelImpl
   @override
   final String message;
   @override
-  final dynamic data;
+  final UpdateMemberPersonalDetailsData? data;
   @override
   final int code;
 
@@ -177,14 +206,13 @@ class _$UpdateMemberPersonalDetailsModelImpl
             other is _$UpdateMemberPersonalDetailsModelImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            const DeepCollectionEquality().equals(other.data, data) &&
+            (identical(other.data, data) || other.data == data) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, message,
-      const DeepCollectionEquality().hash(data), code);
+  int get hashCode => Object.hash(runtimeType, status, message, data, code);
 
   /// Create a copy of UpdateMemberPersonalDetailsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -209,7 +237,7 @@ abstract class _UpdateMemberPersonalDetailsModel
   const factory _UpdateMemberPersonalDetailsModel(
       {required final int status,
       required final String message,
-      final dynamic data,
+      final UpdateMemberPersonalDetailsData? data,
       required final int code}) = _$UpdateMemberPersonalDetailsModelImpl;
 
   factory _UpdateMemberPersonalDetailsModel.fromJson(
@@ -221,7 +249,7 @@ abstract class _UpdateMemberPersonalDetailsModel
   @override
   String get message;
   @override
-  dynamic get data;
+  UpdateMemberPersonalDetailsData? get data;
   @override
   int get code;
 

@@ -4,74 +4,26 @@ part 'login_model.freezed.dart';
 part 'login_model.g.dart';
 
 @freezed
-class LoginModel with _$LoginModel {
-  const factory LoginModel.success({
+abstract class LoginModel with _$LoginModel {
+  const factory LoginModel({
     required int status,
     required String message,
     required SuccessData data,
     required int code,
-  }) = SuccessResponse;
+  }) = _LoginModel;
 
-  const factory LoginModel.otp({
-    required int status,
-    required String message,
-    required OTPData data,
-    required int code,
-  }) = OTPResponse;
-
-  const factory LoginModel.error({
-    required int status,
-    required String message,
-    required ErrorData data,
-    required int code,
-  }) = ErrorResponse;
-
-  /// Custom `fromJson` to determine success, OTP, or error based on `status`
   factory LoginModel.fromJson(Map<String, dynamic> json) {
-    print("Incoming JSON: $json");
+    final status = json['status'] as int? ?? 0;
+    final message = json['message'] as String? ?? '';
+    final code = json['code'] as int? ?? 0;
 
-    if (json['data'] != null && json['data'] is Map<String, dynamic>) {
-      final dataMap = json['data'] as Map<String, dynamic>;
+    // Handle success response
 
-      // Handle error response first
-      if (dataMap.containsKey('errors')) {
-        return LoginModel.error(
-          status: json['status'] as int,
-          message: json['message'] as String,
-          data: ErrorData.fromJson(dataMap),
-          code: json['code'] as int,
-        );
-      }
-
-      // Check for access_token for success response
-      if (dataMap.containsKey('access_token')) {
-        return LoginModel.success(
-          status: json['status'] as int,
-          message: json['message'] as String,
-          data: SuccessData.fromJson(dataMap),
-          code: json['code'] as int,
-        );
-      }
-
-      // Check for phone_number for OTP response
-      if (dataMap.containsKey('phone_number')) {
-        return LoginModel.otp(
-          status: json['status'] as int,
-          message: json['message'] as String,
-          data: OTPData.fromJson(dataMap),
-          code: json['code'] as int,
-        );
-      }
-    }
-
-    // If the structure doesn't match any known pattern, return error
-    return LoginModel.error(
-      status: json['status'] as int? ?? 0,
-      message: json['message'] as String? ?? 'Unknown error',
-      data: ErrorData(errors: {
-        'unknown': ['Unhandled JSON structure']
-      }),
-      code: json['code'] as int? ?? 500,
+    return LoginModel(
+      status: status,
+      message: message,
+      data: SuccessData.fromJson(json['data']),
+      code: code,
     );
   }
 }
@@ -79,34 +31,15 @@ class LoginModel with _$LoginModel {
 @freezed
 class SuccessData with _$SuccessData {
   const factory SuccessData({
-    @JsonKey(name: "access_token") required String accessToken,
-    @JsonKey(name: "refresh_token") required String refreshToken,
-    required MembershipCardData membershipCardData,
-    @JsonKey(name: "phone_number") required String phoneNumber,
+    @JsonKey(name: "access_token") String? accessToken,
+    @JsonKey(name: "refresh_token") String? refreshToken,
+    MembershipCardData? membershipCardData,
+    @JsonKey(name: "phone_number") String? phoneNumber,
+    @JsonKey(name: 'errors') Map<String, List<String>>? errors,
   }) = _SuccessData;
 
   factory SuccessData.fromJson(Map<String, dynamic> json) =>
       _$SuccessDataFromJson(json);
-}
-
-@freezed
-class OTPData with _$OTPData {
-  const factory OTPData({
-    @JsonKey(name: "phone_number") required String phoneNumber,
-  }) = _OTPData;
-
-  factory OTPData.fromJson(Map<String, dynamic> json) =>
-      _$OTPDataFromJson(json);
-}
-
-@freezed
-class ErrorData with _$ErrorData {
-  const factory ErrorData({
-    required Map<String, List<String>> errors,
-  }) = _ErrorData;
-
-  factory ErrorData.fromJson(Map<String, dynamic> json) =>
-      _$ErrorDataFromJson(json);
 }
 
 @freezed
@@ -124,6 +57,7 @@ class MembershipCardData with _$MembershipCardData {
     @JsonKey(name: "joining_date") required String joiningDate,
     @JsonKey(name: "referral_link") required String referralLink,
     @JsonKey(name: "no_of_registered_member") required int noOfRegisteredMember,
+    @JsonKey(name: 'errors') Map<String, List<String>>? errors,
   }) = _MembershipCardData;
 
   factory MembershipCardData.fromJson(Map<String, dynamic> json) =>
