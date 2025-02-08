@@ -185,7 +185,7 @@ class GetAuthService {
     } on DioException catch (e) {
       SVProgressHUD.dismiss();
       CustomToast.showFailureToast(
-          context, "Error", e.response?.data.message ?? "Something Went Wrong");
+          context, "Error", "${e.response?.data ?? "Something Went Wrong"}");
       if (e.response?.statusCode == 401 ?? false) {
         debugPrint("login error: ${e.response?.data}");
         return LoginModel.fromJson(e.response?.data);

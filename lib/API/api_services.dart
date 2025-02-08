@@ -18,6 +18,7 @@ import '../Models/Member/member_social_details_model.dart';
 import '../Models/Member/update_member_family_details_model.dart';
 import '../Models/Member/update_member_personal_details_model.dart';
 import '../Models/Membership/membership_card_model.dart';
+import '../Models/Profile/contact_details_update_model.dart';
 import '../Models/Profile/profile_data_model.dart';
 import '../Models/Referal/joined_by_referral_model.dart';
 import '../Models/Referal/validate_referal_code_model.dart';
@@ -356,6 +357,38 @@ class ApiService {
         ref_id,
         aadhaar_no,
         voter_id,
+        dio);
+  }
+
+  Future<ContactDetailsUpdateModel> updateContactDetails(
+      context,
+      member_id,
+      country,
+      address,
+      pincode,
+      btc_constituency,
+      assembly_constituency,
+      district,
+      party_district,
+      priamries,
+      booth,
+      village,
+      other_village,
+      {bool shouldRetry = true}) async {
+    return GetMemberService.instance.updateContactDetails(
+        context,
+        member_id,
+        country,
+        address,
+        pincode,
+        btc_constituency,
+        assembly_constituency,
+        district,
+        party_district,
+        priamries,
+        booth,
+        village,
+        other_village,
         dio);
   }
 }

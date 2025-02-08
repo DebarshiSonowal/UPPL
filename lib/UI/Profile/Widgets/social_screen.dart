@@ -19,6 +19,7 @@ class _SocialScreenState extends State<SocialScreen> {
   final facebook = TextEditingController();
   final twitter = TextEditingController();
   final instagram = TextEditingController();
+  Map<String, String> errorMessages = {};
 
   @override
   void initState() {
@@ -263,7 +264,11 @@ class _SocialScreenState extends State<SocialScreen> {
               ),
               child: Configuration.rectangleButton(
                   onPressed: () {
-                    updateSocialData(context);
+                    try {
+                      updateSocialData(context);
+                    } catch (e) {
+                      updateSocialData(context);
+                    }
                   },
                   text: "Save",
                   fontSize: 15.sp,
@@ -301,10 +306,54 @@ class _SocialScreenState extends State<SocialScreen> {
       );
       fetchProfileData(context);
     } else {
-      CustomToast.showFailureToast(
-        context,
-        "Something went wrong",
-        response.message,
+      errorMessages = Map.fromEntries((response.data?.errors?.entries ?? [])
+          .map((entry) => MapEntry(entry.key, entry.value)));
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: response.data?.errors?.isEmpty ?? true
+              ? Text(response.message ?? 'An error occurred')
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Please check the following:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...response.data?.errors?.entries
+                            .map((error) => Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.error_outline,
+                                          size: 16, color: Colors.white70),
+                                      SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          '${error.value}',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList() ??
+                        [Text('An error occurred')]
+                  ],
+                ),
+          backgroundColor: response.data?.errors?.isEmpty ?? true
+              ? Colors.green
+              : Colors.red.shade700,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          duration: const Duration(seconds: 5),
+          margin: const EdgeInsets.all(8),
+        ),
       );
     }
   }

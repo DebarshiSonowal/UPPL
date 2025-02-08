@@ -36,6 +36,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
   String? selectedRelationship;
   File? selectedFile;
   bool mobileValidated = false;
+  Map<String, String> errorMessages = {};
 
   @override
   void initState() {
@@ -249,6 +250,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Relationship*',
+                    errorText: errorMessages['relationship'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -403,6 +405,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'D.O.B*',
+                          errorText: errorMessages['dob'],
                           labelStyle: Configuration.primaryFont(
                             fontSize: 14.sp,
                             color: Colors.black54,
@@ -427,6 +430,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Age*',
+                          errorText: errorMessages['age'],
                           labelStyle: Configuration.primaryFont(
                             fontSize: 14.sp,
                             color: Colors.black54,
@@ -460,6 +464,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Voter Id*',
+                  errorText: errorMessages['voter_id'],
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
                     color: Colors.black54,
@@ -488,6 +493,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Aadhar',
+                  errorText: errorMessages['aadhar'],
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
                     color: Colors.black54,
@@ -520,12 +526,6 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                     } else if (dob.text.isEmpty) {
                       CustomToast.showFailureToast(
                           context, "Error", "Please enter a date of birth");
-                    } else if (mobile.text.isEmpty) {
-                      CustomToast.showFailureToast(
-                          context, "Error", "Please enter a mobile number");
-                    } else if (!mobileValidated) {
-                      CustomToast.showFailureToast(context, "Error",
-                          "Please validate the mobile number");
                     } else {
                       addFamilyDetails(context);
                     }
@@ -684,8 +684,55 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               ?.personalDetails
               .memberId);
     } else {
-      CustomToast.showFailureToast(
-          context, "Something Went Wrong", response.message);
+      errorMessages = Map.fromEntries((response.data?.errors?.entries ?? [])
+          .map((entry) => MapEntry(entry.key, entry.value.join('\n'))));
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: response.data?.errors?.isEmpty ?? true
+              ? Text(response.message ?? 'An error occurred')
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Please check the following:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...response.data?.errors?.entries
+                            .map((error) => Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.error_outline,
+                                          size: 16, color: Colors.white70),
+                                      SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          '${error.value.first}',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList() ??
+                        [Text('An error occurred')]
+                  ],
+                ),
+          backgroundColor: response.data?.errors?.isEmpty ?? true
+              ? Colors.green
+              : Colors.red.shade700,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          duration: const Duration(seconds: 5),
+          margin: EdgeInsets.all(8),
+        ),
+      );
     }
   }
 

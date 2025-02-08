@@ -9,7 +9,7 @@ class UpdateMemberFamilyDetailsModel with _$UpdateMemberFamilyDetailsModel {
     required int status,
     required String message,
     @JsonKey(name: 'data', fromJson: _dataFromJson)
-    dynamic data, // Dynamic type to handle Map or List
+    MemberData? data, // Dynamic type to handle Map or List
     required int code,
   }) = _UpdateMemberFamilyDetailsModel;
 

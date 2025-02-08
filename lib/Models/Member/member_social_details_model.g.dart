@@ -31,22 +31,26 @@ _$MemberSocialDetailsDataImpl _$$MemberSocialDetailsDataImplFromJson(
       member: (json['member'] as List<dynamic>)
           .map((e) => MemberSocialDetails.fromJson(e as Map<String, dynamic>))
           .toList(),
+      errors: (json['errors'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
     );
 
 Map<String, dynamic> _$$MemberSocialDetailsDataImplToJson(
         _$MemberSocialDetailsDataImpl instance) =>
     <String, dynamic>{
       'member': instance.member,
+      'errors': instance.errors,
     };
 
 _$MemberSocialDetailsImpl _$$MemberSocialDetailsImplFromJson(
         Map<String, dynamic> json) =>
     _$MemberSocialDetailsImpl(
       memberId: (json['member_id'] as num).toInt(),
-      alternateNumber: json['aleternate_number'] as String,
-      facebookUrl: json['facebook_url'] as String,
-      twitterUrl: json['twitter_url'] as String,
-      instagramUrl: json['instagram_url'] as String,
+      alternateNumber: json['aleternate_number'] as String?,
+      facebookUrl: json['facebook_url'] as String?,
+      twitterUrl: json['twitter_url'] as String?,
+      instagramUrl: json['instagram_url'] as String?,
     );
 
 Map<String, dynamic> _$$MemberSocialDetailsImplToJson(

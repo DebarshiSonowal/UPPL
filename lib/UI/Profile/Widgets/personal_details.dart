@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
@@ -50,6 +51,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       motherTongue,
       community,
       otherCommunity;
+  final Map<String, String> errorMessages = {};
 
   @override
   void initState() {
@@ -172,9 +174,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 controller: mobileController,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.phone,
+                enabled: false,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.white,
+                  errorText: errorMessages['mobile_number'],
+                  // Display sp
+                  fillColor: Colors.grey[200],
                   labelText: 'Mobile Number',
                   prefixIcon: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -191,6 +196,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.grey),
                   ),
                 ),
               ),
@@ -277,6 +286,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Full Name',
+                          errorText: errorMessages['full_name'],
                           hintStyle: Configuration.primaryFont(
                             fontSize: 16.sp,
                             color: Configuration.secondaryColor,
@@ -328,6 +338,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'D.O.B',
+                              errorText: errorMessages['dob'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -500,6 +511,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
+                  errorText: errorMessages['email'],
                   labelText: 'Email',
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
@@ -551,6 +563,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Select Your Religion*',
+                      errorText: errorMessages['religion'],
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -611,6 +624,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
+                      errorText: errorMessages['cast'],
                       labelText: 'Select Your Cast/Category*',
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
@@ -677,6 +691,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Enter Your Community*',
+                        errorText: errorMessages['community'],
                         labelStyle: Configuration.primaryFont(
                           fontSize: 14.sp,
                           color: Colors.black54,
@@ -725,6 +740,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                             filled: true,
                             fillColor: Colors.white,
                             labelText: 'Enter Other Community*',
+                            errorText: errorMessages['other_community'],
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -771,6 +787,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Select Your Profession',
+                    errorText: errorMessages['profession'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -852,6 +869,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Enter Your Education',
+                      errorText: errorMessages['education'],
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -902,6 +920,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Enter Your Mother Tongue*',
+                    errorText: errorMessages['mother_tongue'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -965,6 +984,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Enter Your Voter Id*',
+                  errorText: errorMessages['voter_id'],
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
                     color: Colors.black54,
@@ -1009,6 +1029,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Enter Your Aadhar',
+                  errorText: errorMessages['aadhar'],
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
                     color: Colors.black54,
@@ -1053,6 +1074,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Enter Other Profession*',
+                    errorText: errorMessages['profession'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -1097,6 +1119,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Enter Other Education',
+                    errorText: errorMessages['other_education'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -1330,6 +1353,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   }
 
   void saveDetails() async {
+    errorMessages.clear();
     debugPrint("Saving details $profession");
     final data = Provider.of<Repository>(context, listen: false)
         .memberData
@@ -1385,38 +1409,15 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           fetchData();
           break;
         } else {
-          final errorMessages = response.data?.errors?.values
-                  ?.map((e) => e.toString().replaceAll(RegExp(r'[\[\]]'), ''))
-                  .join('\n') ??
-              '';
-          if (errorMessages.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Row(
-                  children: [
-                    Icon(Icons.error, color: Colors.white),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        errorMessages,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                backgroundColor: Colors.redAccent,
-                behavior: SnackBarBehavior.floating,
-                duration: const Duration(seconds: 3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
-            );
+          errorMessages.clear(); // Clear previous error messages
+          final Map<String, List<String>>? errors = response.data?.errors;
+          if (errors != null) {
+            // Update the errorMessages map
+            errors.forEach((field, messages) {
+              errorMessages[field] = messages.join('\n');
+            });
           }
+          setState(() {});
           break;
         }
       } catch (e) {

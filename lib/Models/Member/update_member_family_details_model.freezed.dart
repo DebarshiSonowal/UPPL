@@ -24,7 +24,7 @@ mixin _$UpdateMemberFamilyDetailsModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   @JsonKey(name: 'data', fromJson: _dataFromJson)
-  dynamic get data =>
+  MemberData? get data =>
       throw _privateConstructorUsedError; // Dynamic type to handle Map or List
   int get code => throw _privateConstructorUsedError;
 
@@ -49,8 +49,10 @@ abstract class $UpdateMemberFamilyDetailsModelCopyWith<$Res> {
   $Res call(
       {int status,
       String message,
-      @JsonKey(name: 'data', fromJson: _dataFromJson) dynamic data,
+      @JsonKey(name: 'data', fromJson: _dataFromJson) MemberData? data,
       int code});
+
+  $MemberDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -86,12 +88,26 @@ class _$UpdateMemberFamilyDetailsModelCopyWithImpl<$Res,
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as MemberData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
+  }
+
+  /// Create a copy of UpdateMemberFamilyDetailsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MemberDataCopyWith<$Res>? get data {
+    if (_value.data == null) {
+      return null;
+    }
+
+    return $MemberDataCopyWith<$Res>(_value.data!, (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
   }
 }
 
@@ -107,8 +123,11 @@ abstract class _$$UpdateMemberFamilyDetailsModelImplCopyWith<$Res>
   $Res call(
       {int status,
       String message,
-      @JsonKey(name: 'data', fromJson: _dataFromJson) dynamic data,
+      @JsonKey(name: 'data', fromJson: _dataFromJson) MemberData? data,
       int code});
+
+  @override
+  $MemberDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -143,7 +162,7 @@ class __$$UpdateMemberFamilyDetailsModelImplCopyWithImpl<$Res>
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as MemberData?,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -172,7 +191,7 @@ class _$UpdateMemberFamilyDetailsModelImpl
   final String message;
   @override
   @JsonKey(name: 'data', fromJson: _dataFromJson)
-  final dynamic data;
+  final MemberData? data;
 // Dynamic type to handle Map or List
   @override
   final int code;
@@ -189,14 +208,13 @@ class _$UpdateMemberFamilyDetailsModelImpl
             other is _$UpdateMemberFamilyDetailsModelImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            const DeepCollectionEquality().equals(other.data, data) &&
+            (identical(other.data, data) || other.data == data) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, message,
-      const DeepCollectionEquality().hash(data), code);
+  int get hashCode => Object.hash(runtimeType, status, message, data, code);
 
   /// Create a copy of UpdateMemberFamilyDetailsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -221,7 +239,7 @@ abstract class _UpdateMemberFamilyDetailsModel
   const factory _UpdateMemberFamilyDetailsModel(
       {required final int status,
       required final String message,
-      @JsonKey(name: 'data', fromJson: _dataFromJson) final dynamic data,
+      @JsonKey(name: 'data', fromJson: _dataFromJson) final MemberData? data,
       required final int code}) = _$UpdateMemberFamilyDetailsModelImpl;
 
   factory _UpdateMemberFamilyDetailsModel.fromJson(Map<String, dynamic> json) =
@@ -233,7 +251,7 @@ abstract class _UpdateMemberFamilyDetailsModel
   String get message;
   @override
   @JsonKey(name: 'data', fromJson: _dataFromJson)
-  dynamic get data; // Dynamic type to handle Map or List
+  MemberData? get data; // Dynamic type to handle Map or List
   @override
   int get code;
 

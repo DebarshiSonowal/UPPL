@@ -30,6 +30,7 @@ class MemberSocialDetailsModel with _$MemberSocialDetailsModel {
 class MemberSocialDetailsData with _$MemberSocialDetailsData {
   const factory MemberSocialDetailsData({
     required List<MemberSocialDetails> member,
+    final Map<String, String>? errors,
   }) = _MemberSocialDetailsData;
 
   factory MemberSocialDetailsData.fromJson(Map<String, dynamic> json) =>
@@ -40,10 +41,10 @@ class MemberSocialDetailsData with _$MemberSocialDetailsData {
 class MemberSocialDetails with _$MemberSocialDetails {
   const factory MemberSocialDetails({
     @JsonKey(name: 'member_id') required int memberId,
-    @JsonKey(name: 'aleternate_number') required String alternateNumber,
-    @JsonKey(name: 'facebook_url') required String facebookUrl,
-    @JsonKey(name: 'twitter_url') required String twitterUrl,
-    @JsonKey(name: 'instagram_url') required String instagramUrl,
+    @JsonKey(name: 'aleternate_number') String? alternateNumber,
+    @JsonKey(name: 'facebook_url') String? facebookUrl,
+    @JsonKey(name: 'twitter_url') String? twitterUrl,
+    @JsonKey(name: 'instagram_url') String? instagramUrl,
   }) = _MemberSocialDetails;
 
   factory MemberSocialDetails.fromJson(Map<String, dynamic> json) =>

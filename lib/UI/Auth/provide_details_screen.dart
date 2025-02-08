@@ -64,6 +64,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
   List<PartyDistrict> filteredPartyDistricts = [];
   Constituency? currentConstituency;
   String? community, otherCommunity;
+  Map<String, String> errorMessages = {};
 
   @override
   void initState() {
@@ -213,6 +214,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Mobile Number*',
+                      errorText: errorMessages['mobile_number'],
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -355,6 +357,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                             filled: true,
                             fillColor: Colors.white,
                             labelText: 'D.O.B*',
+                            errorText: errorMessages['dob'],
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -507,6 +510,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Email',
+                    errorText: errorMessages['email'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -568,6 +572,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Full Address*',
+                    errorText: errorMessages['address'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -596,6 +601,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Pin Code*',
+                    errorText: errorMessages['pin_code'],
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -641,6 +647,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'BTC Constituency*',
+                        errorText: errorMessages['btc_constituency'],
                         labelStyle: Configuration.primaryFont(
                           fontSize: 14.sp,
                           color: Colors.black54,
@@ -731,6 +738,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Assembly Constituency*',
+                        errorText: errorMessages['constituency'],
                         labelStyle: Configuration.primaryFont(
                           fontSize: 14.sp,
                           color: Colors.black54,
@@ -818,6 +826,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'District*',
+                              errorText: errorMessages['district'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -850,6 +859,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'Party District *',
+                              errorText: errorMessages['party_district'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -914,6 +924,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Primary*',
+                        errorText: errorMessages['primary'],
                         labelStyle: Configuration.primaryFont(
                           fontSize: 14.sp,
                           color: Colors.black54,
@@ -981,6 +992,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Booth*',
+                        errorText: errorMessages['booth'],
                         labelStyle: Configuration.primaryFont(
                           fontSize: 14.sp,
                           color: Colors.black54,
@@ -1047,6 +1059,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                             filled: true,
                             fillColor: Colors.white,
                             labelText: 'Village*',
+                            errorText: errorMessages['village'],
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -1094,6 +1107,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'Enter Village Name',
+                              errorText: errorMessages['other_village'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -1135,6 +1149,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter Your Community*',
+                          errorText: errorMessages['community'],
                           labelStyle: Configuration.primaryFont(
                             fontSize: 14.sp,
                             color: Colors.black54,
@@ -1183,6 +1198,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'Enter Other Community*',
+                              errorText: errorMessages['other_community'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -1473,6 +1489,8 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
   }
 
   void register(BuildContext context) async {
+    errorMessages = {};
+    setState(() {});
     final response = await ApiService.instance(context).registration(
         mobile.text,
         name.text,
@@ -1504,11 +1522,17 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
       CustomToast.showSuccessToast(context, "Registered", response.message);
       context.router.pushNamed(CustomRoutes.savedDetailsScreen);
     } else {
-      final errorMessages = response.data?.errors?.values
+      errorMessages = Map<String, String>.fromEntries(
+        (response.data?.errors ?? {}).entries.map(
+              (entry) => MapEntry(entry.key, entry.value.join(', ')),
+            ),
+      );
+      setState(() {});
+      final error = response.data?.errors?.values
               ?.map((e) => e.toString().replaceAll(RegExp(r'[\[\]]'), ''))
               .join('\n') ??
           '';
-      if (errorMessages.isNotEmpty) {
+      if (error.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -1517,7 +1541,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    errorMessages,
+                    error,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

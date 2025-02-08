@@ -531,12 +531,6 @@ class _AddFamilyMemberDetailsScreenState
                       } else if (dob.text.isEmpty) {
                         CustomToast.showFailureToast(
                             context, "Error", "Please enter a date of birth");
-                      } else if (mobile.text.isEmpty) {
-                        CustomToast.showFailureToast(
-                            context, "Error", "Please enter a mobile number");
-                      } else if (!mobileValidated) {
-                        CustomToast.showFailureToast(context, "Error",
-                            "Please validate the mobile number");
                       } else {
                         addFamilyDetails(context);
                       }

@@ -11,6 +11,7 @@ import 'package:uppl/Models/audience/audience_demography_model.dart';
 import '../../Models/Member/member_social_details_model.dart';
 import '../../Models/Member/update_member_family_details_model.dart';
 import '../../Models/Member/update_member_personal_details_model.dart';
+import '../../Models/Profile/contact_details_update_model.dart';
 import '../../Models/Referal/joined_by_referral_model.dart';
 import '../../Storage/config_storage.dart';
 import '../api_services.dart';
@@ -476,18 +477,38 @@ class GetMemberService {
     }
   }
 
-  Future<MemberSocialDetailsModel> updateContactDetails(context, member_id,
-      aleternate_number, facebook_url, twitter_url, instagram_url, dio,
+  Future<ContactDetailsUpdateModel> updateContactDetails(
+      context,
+      member_id,
+      country,
+      address,
+      pincode,
+      btc_constituency,
+      assembly_constituency,
+      district,
+      party_district,
+      priamries,
+      booth,
+      village,
+      other_village,
+      dio,
       {bool shouldRetry = true}) async {
     SVProgressHUD.show();
-    String endpoint = 'member-social-details-update';
+    String endpoint = 'member-contact-details-update';
 
     var requestBody = {
       "member_id": member_id,
-      "aleternate_number": aleternate_number,
-      "facebook_url": facebook_url,
-      "twitter_url": twitter_url,
-      "instagram_url": instagram_url,
+      "country": country,
+      "address": address,
+      "pincode": pincode,
+      "btc_constituency": btc_constituency,
+      "assembly_constituency": assembly_constituency,
+      "district": district,
+      "party_district": party_district,
+      "priamries": priamries,
+      "booth": booth,
+      "village": village,
+      "other_village": other_village
     };
 
     try {
@@ -496,38 +517,45 @@ class GetMemberService {
         data: json.encode(requestBody),
       );
       debugPrint(
-          "MemberSocialDetailsModel response: ${dio.options.baseUrl} ${response.data}");
+          "ContactDetailsUpdateModel response: ${dio.options.baseUrl} ${response.data}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         SVProgressHUD.dismiss();
-        return MemberSocialDetailsModel.fromJson(response.data);
+        return ContactDetailsUpdateModel.fromJson(response.data);
       } else {
         SVProgressHUD.dismiss();
-        debugPrint("MemberSocialDetailsModel error: ${response.data}");
-        return MemberSocialDetailsModel.fromJson(response.data);
+        debugPrint("ContactDetailsUpdateModel error: ${response.data}");
+        return ContactDetailsUpdateModel.fromJson(response.data);
       }
     } on DioException catch (e) {
       SVProgressHUD.dismiss();
-      debugPrint("MemberSocialDetailsModel error1: ${e.message} ${e.response}");
+      debugPrint(
+          "ContactDetailsUpdateModel error1: ${e.message} ${e.response}");
 
       if ((e.response?.statusCode == 401) && shouldRetry) {
         debugPrint("Unauthorized. Regenerating token and retrying request...");
         await GetAuthService.instance
             .regenerateToken(ConfigStorage.instance.refreshToken, context);
-        return updateSocialDetails(
+        return updateContactDetails(
           context,
           member_id,
-          aleternate_number,
-          facebook_url,
-          twitter_url,
-          instagram_url,
+          country,
+          address,
+          pincode,
+          btc_constituency,
+          assembly_constituency,
+          district,
+          party_district,
+          priamries,
+          booth,
+          village,
+          other_village,
           dio,
           shouldRetry: false,
         );
       }
 
       return ErrorHandler.handleDioError(e, context, (val) {
-        return MemberSocialDetailsModel.fromError(
-            "${e.response?.data['message']}");
+        return ContactDetailsUpdateModel.fromJson(e.response?.data);
       });
     }
   }

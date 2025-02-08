@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/Repository/repository.dart';
 
+import '../../../API/api_services.dart';
 import '../../../Constants/configuration.dart';
 import '../../../Models/JSON/generate_json_model.dart';
 
@@ -15,19 +16,21 @@ class ContactDetails extends StatefulWidget {
 }
 
 class _ContactDetailsState extends State<ContactDetails> {
-  String? selectedDistrict,
+  String? otherVillage;
+  int? selectedDistrict,
       selectedPartyDistrict,
       selectedBtcConstituency,
       selectedBtcAssemblyConstituency,
       selectConstituency,
       selectPrimary,
-      selectBooth,
-      selectVillage;
+      selectBooth;
+  int? selectVillage;
   final address = TextEditingController();
   final pincode = TextEditingController();
   bool isAllDataAvailable = false;
   int indexBtcAssemblyConstituency = 0;
   int idBtcAssemblyConstituency = 0;
+  Map<String, String> errorMessages = {};
 
   @override
   void didChangeDependencies() {
@@ -42,43 +45,43 @@ class _ContactDetailsState extends State<ContactDetails> {
             .firstWhere((e) =>
                 e.name.toLowerCase() ==
                 data.profileData!.district.toLowerCase())
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
         selectedPartyDistrict = data.partyDistricts
             .firstWhere((e) => e.id == data.profileData!.partyDistrict)
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
         selectedBtcConstituency = data.btcConstituency
             .firstWhere((e) => e.id == data.profileData!.btcConstituency)
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
         selectConstituency = data.assemblyConstituencies
             .firstWhere((e) => e.id == data.profileData!.assemblyConstituency)
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
-        selectPrimary = data.profileData!.primaryId.toString();
+        selectPrimary = data.profileData!.primaryId;
       } catch (e) {
         print(e);
       }
       try {
-        selectBooth = data.profileData!.boothId.toString();
+        selectBooth = data.profileData!.boothId;
       } catch (e) {
         print(e);
       }
       try {
-        selectVillage = data.profileData!.villageId.toString();
+        selectVillage = data.profileData!.villageId;
       } catch (e) {
         print(e);
       }
@@ -115,43 +118,43 @@ class _ContactDetailsState extends State<ContactDetails> {
             .firstWhere((e) =>
                 e.name.toLowerCase() ==
                 data.profileData!.district.toLowerCase())
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
         selectedPartyDistrict = data.partyDistricts
             .firstWhere((e) => e.id == data.profileData!.partyDistrict)
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
         selectedBtcConstituency = data.btcConstituency
             .firstWhere((e) => e.id == data.profileData!.btcConstituency)
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
         selectConstituency = data.assemblyConstituencies
             .firstWhere((e) => e.id == data.profileData!.assemblyConstituency)
-            .name;
+            .id;
       } catch (e) {
         print(e);
       }
       try {
-        selectPrimary = data.profileData!.primaryId.toString();
+        selectPrimary = data.profileData!.primaryId;
       } catch (e) {
         print(e);
       }
       try {
-        selectBooth = data.profileData!.boothId.toString();
+        selectBooth = data.profileData!.boothId;
       } catch (e) {
         print(e);
       }
       try {
-        selectVillage = data.profileData!.villageId.toString();
+        selectVillage = data.profileData!.villageId;
       } catch (e) {
         print(e);
       }
@@ -232,6 +235,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Enter Your Address',
+                  errorText: errorMessages['address'],
                   labelStyle: Configuration.primaryFont(
                     fontSize: 14.sp,
                     color: Colors.black54,
@@ -275,6 +279,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
+                          errorText: errorMessages['pin_code'],
                           labelText: 'PIN Code',
                           labelStyle: Configuration.primaryFont(
                             fontSize: 14.sp,
@@ -311,13 +316,14 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ),
                             ),
                             showSelectedItems: true,
-                            disabledItemFn: (String s) => s.startsWith('I'),
+                            disabledItemFn: (String s) => false,
                           ),
                           decoratorProps: DropDownDecoratorProps(
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'BTC Constituency',
+                              errorText: errorMessages['btc_constituency'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -332,15 +338,22 @@ class _ContactDetailsState extends State<ContactDetails> {
                           ),
                           onChanged: (value) {
                             setState(() {
-                              selectedBtcConstituency = value;
+                              selectedBtcConstituency = data.btcConstituency
+                                  .firstWhere((c) => c.name == value)
+                                  .id;
                               indexBtcAssemblyConstituency =
                                   data.btcConstituency.indexWhere(
-                                      (e) => e.name == selectedBtcConstituency);
+                                      (e) => e.id == selectedBtcConstituency);
                             });
                             debugPrint(
                                 "selectedBtcAssemblyConstituency $indexBtcAssemblyConstituency");
                           },
-                          selectedItem: selectedBtcConstituency,
+                          selectedItem: selectedBtcConstituency != null
+                              ? data.btcConstituency
+                                  .firstWhere(
+                                      (c) => c.id == selectedBtcConstituency)
+                                  .name
+                              : null,
                         ),
                       );
                     }),
@@ -382,13 +395,14 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ),
                             ),
                             showSelectedItems: true,
-                            disabledItemFn: (String s) => s.startsWith('I'),
+                            disabledItemFn: (String s) => false,
                           ),
                           decoratorProps: DropDownDecoratorProps(
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'District*',
+                              errorText: errorMessages['district'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -405,10 +419,18 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ? null
                               : (value) {
                                   setState(() {
-                                    selectedDistrict = value;
+                                    selectedDistrict = data.districts
+                                        .firstWhere((district) =>
+                                            district.name == value)
+                                        .id;
                                   });
                                 },
-                          selectedItem: selectedDistrict,
+                          selectedItem: selectedDistrict != null
+                              ? data.districts
+                                  .firstWhere((district) =>
+                                      district.id == selectedDistrict)
+                                  .name
+                              : null,
                         ),
                       );
                     }),
@@ -434,13 +456,14 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ),
                             ),
                             showSelectedItems: true,
-                            disabledItemFn: (String s) => s.startsWith('I'),
+                            disabledItemFn: (String s) => false,
                           ),
                           decoratorProps: DropDownDecoratorProps(
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'Party District*',
+                              errorText: errorMessages['party_district'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -457,10 +480,18 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ? null
                               : (value) {
                                   setState(() {
-                                    selectedPartyDistrict = value;
+                                    selectedPartyDistrict = data.partyDistricts
+                                        .firstWhere((district) =>
+                                            district.name == value)
+                                        .id;
                                   });
                                 },
-                          selectedItem: selectedPartyDistrict,
+                          selectedItem: selectedPartyDistrict != null
+                              ? data.partyDistricts
+                                  .firstWhere((district) =>
+                                      district.id == selectedPartyDistrict)
+                                  .name
+                              : null,
                         ),
                       );
                     }),
@@ -484,10 +515,11 @@ class _ContactDetailsState extends State<ContactDetails> {
                         items: (String filter, _) async {
                           return data.btcAssemblyConstituencies[
                                   indexBtcAssemblyConstituency]
-                              .map((Constituency value) =>
-                                  (data.assemblyConstituencies.firstWhere((e) =>
-                                          e.id == value.assemblyConstituencyId))
-                                      .name)
+                              .map((Constituency value) => data
+                                  .assemblyConstituencies
+                                  .firstWhere((e) =>
+                                      e.id == value.assemblyConstituencyId)
+                                  .name)
                               .where((name) => name
                                   .toLowerCase()
                                   .contains(filter.toLowerCase()))
@@ -502,13 +534,14 @@ class _ContactDetailsState extends State<ContactDetails> {
                             ),
                           ),
                           showSelectedItems: true,
-                          disabledItemFn: (String s) => s.startsWith('I'),
+                          disabledItemFn: (String s) => false,
                         ),
                         decoratorProps: DropDownDecoratorProps(
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
                             labelText: 'Assembly Constituency*',
+                            errorText: errorMessages['constituency'],
                             labelStyle: Configuration.primaryFont(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -521,8 +554,13 @@ class _ContactDetailsState extends State<ContactDetails> {
                             ),
                           ),
                         ),
-                        onChanged: (val) {
+                        onChanged: (name) {
+                          if (name == null) return;
                           setState(() {
+                            final constituency = data.assemblyConstituencies
+                                .firstWhere((e) => e.name == name);
+                            selectedBtcAssemblyConstituency = constituency.id;
+
                             selectedDistrict = data.districts
                                 .firstWhere(
                                   (district) =>
@@ -530,36 +568,33 @@ class _ContactDetailsState extends State<ContactDetails> {
                                       data.btcAssemblyConstituencies[
                                           indexBtcAssemblyConstituency],
                                 )
-                                .name;
+                                .id;
                             debugPrint("selectedDistrict ");
                           });
                         },
-                        onSaved: (String? value) {
+                        onSaved: (String? name) {
+                          if (name == null) return;
                           final tempList = data.btcAssemblyConstituencies[
                                   indexBtcAssemblyConstituency]
-                              .map((Constituency value) => (data
+                              .map((Constituency value) => data
                                   .assemblyConstituencies
                                   .firstWhere((e) =>
                                       e.id == value.assemblyConstituencyId)
-                                  .name))
+                                  .name)
                               .toList();
-
-                          // "constituency_type": "ST",
-                          //                         "assembly_constituency_id": 11,
-                          //                         "district_id": 3,
-                          //                         "party_district_id": 7,
                           setState(() {});
                         },
                         selectedItem: selectedBtcAssemblyConstituency != null
-                            ? data.btcAssemblyConstituencies[
-                                    indexBtcAssemblyConstituency]
-                                .map((Constituency value) => data
-                                    .assemblyConstituencies
-                                    .firstWhere((e) =>
-                                        e.id == value.assemblyConstituencyId)
-                                    .name)
-                                .first
-                            : '',
+                            ? data.assemblyConstituencies
+                                .firstWhere((e) =>
+                                    e.id ==
+                                    data
+                                        .btcAssemblyConstituencies[
+                                            indexBtcAssemblyConstituency]
+                                        .first
+                                        .assemblyConstituencyId)
+                                .name
+                            : null,
                       );
                     }),
                   ),
@@ -594,13 +629,14 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ),
                             ),
                             showSelectedItems: true,
-                            disabledItemFn: (String s) => s.startsWith('I'),
+                            disabledItemFn: (String s) => false,
                           ),
                           decoratorProps: DropDownDecoratorProps(
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'Primary',
+                              errorText: errorMessages['primary'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
                                 color: Colors.black54,
@@ -621,20 +657,21 @@ class _ContactDetailsState extends State<ContactDetails> {
                                         .expand((primaryList) => primaryList)
                                         .firstWhere(
                                             (primary) => primary.name == value)
-                                        .id
-                                        .toString();
+                                        .id;
                                   });
                                 },
-                          selectedItem: data.btcPrimaries
-                              .expand((primaryList) => primaryList)
-                              .firstWhere(
-                                  (primary) =>
-                                      primary.id.toString() == selectPrimary,
-                                  orElse: () => const Primary(
-                                      id: 0,
-                                      name: '',
-                                      btcAssemblyConstituencyId: 0))
-                              .name,
+                          selectedItem: selectPrimary != null
+                              ? data.btcPrimaries
+                                  .expand((primaryList) => primaryList)
+                                  .firstWhere(
+                                    (primary) => primary.id == selectPrimary,
+                                    orElse: () => const Primary(
+                                        id: 0,
+                                        name: '',
+                                        btcAssemblyConstituencyId: 0),
+                                  )
+                                  .name
+                              : null,
                         );
                       },
                     ),
@@ -675,6 +712,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Enter Your Booth',
+                      errorText: errorMessages['booth'],
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -693,8 +731,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                           setState(() {
                             selectBooth = data.booths
                                 .firstWhere((booth) => booth.name == value)
-                                .id
-                                .toString();
+                                .id;
                           });
                         },
                   selectedItem: data.booths
@@ -715,11 +752,19 @@ class _ContactDetailsState extends State<ContactDetails> {
                 ),
                 child: DropdownSearch<String>(
                   items: (String filter, _) async {
-                    return data.villages
+                    var filteredVillages = data.villages
+                        .where((village) => village.name
+                            .toLowerCase()
+                            .contains(filter.toLowerCase()))
                         .map((village) => village.name)
-                        .where((name) =>
-                            name.toLowerCase().contains(filter.toLowerCase()))
-                        .toList();
+                        .toList()
+                      ..sort();
+
+                    if (filter.isEmpty ||
+                        "Other".toLowerCase().contains(filter.toLowerCase())) {
+                      filteredVillages.add("Other");
+                    }
+                    return filteredVillages;
                   },
                   popupProps: PopupProps.menu(
                     showSearchBox: true,
@@ -730,13 +775,14 @@ class _ContactDetailsState extends State<ContactDetails> {
                       ),
                     ),
                     showSelectedItems: true,
-                    disabledItemFn: (String s) => s.startsWith('I'),
+                    disabledItemFn: (String s) => false,
                   ),
                   decoratorProps: DropDownDecoratorProps(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Village*',
+                      errorText: errorMessages['village'],
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
                         color: Colors.black54,
@@ -753,40 +799,84 @@ class _ContactDetailsState extends State<ContactDetails> {
                       ? null
                       : (value) {
                           setState(() {
-                            selectVillage = data.villages
-                                .firstWhere((village) => village.name == value)
-                                .id
-                                .toString();
+                            if (value == "Other") {
+                              selectVillage = 0; // Some identifier for "Other"
+                            } else {
+                              selectVillage = data.villages
+                                  .firstWhere(
+                                      (village) => village.name == value)
+                                  .id;
+                            }
                           });
                         },
-                  selectedItem: data.villages
-                      .firstWhere(
-                          (village) => village.id.toString() == selectVillage,
-                          orElse: () => Village(id: 0, name: '', vcdc: ""))
-                      .name,
+                  selectedItem: selectVillage == 0
+                      ? "Other"
+                      : selectVillage != null
+                          ? data.villages
+                              .firstWhere(
+                                (village) => village.id == selectVillage,
+                                orElse: () =>
+                                    const Village(id: 0, name: '', vcdc: ""),
+                              )
+                              .name
+                          : "",
                 ),
               );
             }),
             SizedBox(
               height: 1.5.h,
             ),
-            isAllDataAvailable
-                ? Container()
-                : Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 5.w,
+            Visibility(
+              visible: selectVillage == 0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                ),
+                child: TextField(
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Enter Village Name',
+                    errorText: errorMessages['other_village'],
+                    labelStyle: Configuration.primaryFont(
+                      fontSize: 14.sp,
+                      color: Colors.black54,
                     ),
-                    child: Configuration.rectangleButton(
-                      onPressed: () {
-                        updateContactDetails(context);
-                      },
-                      text: "Save",
-                      fontSize: 15.sp,
-                      fontColor: Colors.black,
-                      bgColor: Configuration.primaryColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  onChanged: (text) {
+                    setState(() {
+                      otherVillage = text;
+                    });
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 1.5.h,
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: 5.w,
+              ),
+              child: Configuration.rectangleButton(
+                onPressed: () {
+                  updateContactDetails(context);
+                  debugPrint("${selectVillage}");
+                },
+                text: "Save",
+                fontSize: 15.sp,
+                fontColor: Colors.black,
+                bgColor: Configuration.primaryColor,
+              ),
+            ),
           ],
         ),
       ),
@@ -794,6 +884,105 @@ class _ContactDetailsState extends State<ContactDetails> {
   }
 
   void updateContactDetails(BuildContext context) async {
-    // final response = await ApiService.instance(context).up
+    Future<void> attemptUpdate() async {
+      final response = await ApiService.instance(context).updateContactDetails(
+          context,
+          Provider.of<Repository>(context, listen: false).profileData?.userId,
+          "",
+          address.text,
+          pincode.text,
+          selectedBtcConstituency,
+          selectConstituency,
+          selectedDistrict,
+          selectedPartyDistrict,
+          selectPrimary,
+          selectBooth,
+          selectVillage == 0
+              ? "other"
+              : Provider.of<Repository>(context, listen: false)
+                  .villages
+                  .firstWhere((e) => e.id == selectVillage)
+                  .name,
+          otherVillage ?? "");
+
+      if (response.status == 1 ?? false) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                response.message ?? 'Contact details updated successfully'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else {
+        errorMessages = Map.fromEntries((response.data?.errors?.entries ?? [])
+            .map((entry) => MapEntry(entry.key, entry.value.join('\n'))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: response.data?.errors?.isEmpty ?? true
+                ? Text(response.message ?? 'An error occurred')
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Please check the following:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      ...response.data?.errors?.entries
+                              .map((error) => Padding(
+                                    padding: EdgeInsets.only(left: 8),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.error_outline,
+                                            size: 16, color: Colors.white70),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            '${error.value.first}',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                              .toList() ??
+                          [Text('An error occurred')]
+                    ],
+                  ),
+            backgroundColor: response.data?.errors?.isEmpty ?? true
+                ? Colors.green
+                : Colors.red.shade700,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            duration: const Duration(seconds: 5),
+            margin: EdgeInsets.all(8),
+          ),
+        );
+      }
+    }
+
+    try {
+      await attemptUpdate();
+    } catch (e) {
+      // Retry once on failure
+      try {
+        await attemptUpdate();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text('Failed to update contact details. Please try again.'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
   }
 }

@@ -250,6 +250,7 @@ MemberSocialDetailsData _$MemberSocialDetailsDataFromJson(
 /// @nodoc
 mixin _$MemberSocialDetailsData {
   List<MemberSocialDetails> get member => throw _privateConstructorUsedError;
+  Map<String, String>? get errors => throw _privateConstructorUsedError;
 
   /// Serializes this MemberSocialDetailsData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -267,7 +268,7 @@ abstract class $MemberSocialDetailsDataCopyWith<$Res> {
           $Res Function(MemberSocialDetailsData) then) =
       _$MemberSocialDetailsDataCopyWithImpl<$Res, MemberSocialDetailsData>;
   @useResult
-  $Res call({List<MemberSocialDetails> member});
+  $Res call({List<MemberSocialDetails> member, Map<String, String>? errors});
 }
 
 /// @nodoc
@@ -287,12 +288,17 @@ class _$MemberSocialDetailsDataCopyWithImpl<$Res,
   @override
   $Res call({
     Object? member = null,
+    Object? errors = freezed,
   }) {
     return _then(_value.copyWith(
       member: null == member
           ? _value.member
           : member // ignore: cast_nullable_to_non_nullable
               as List<MemberSocialDetails>,
+      errors: freezed == errors
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>?,
     ) as $Val);
   }
 }
@@ -306,7 +312,7 @@ abstract class _$$MemberSocialDetailsDataImplCopyWith<$Res>
       __$$MemberSocialDetailsDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<MemberSocialDetails> member});
+  $Res call({List<MemberSocialDetails> member, Map<String, String>? errors});
 }
 
 /// @nodoc
@@ -325,12 +331,17 @@ class __$$MemberSocialDetailsDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? member = null,
+    Object? errors = freezed,
   }) {
     return _then(_$MemberSocialDetailsDataImpl(
       member: null == member
           ? _value._member
           : member // ignore: cast_nullable_to_non_nullable
               as List<MemberSocialDetails>,
+      errors: freezed == errors
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, String>?,
     ));
   }
 }
@@ -339,8 +350,10 @@ class __$$MemberSocialDetailsDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MemberSocialDetailsDataImpl implements _MemberSocialDetailsData {
   const _$MemberSocialDetailsDataImpl(
-      {required final List<MemberSocialDetails> member})
-      : _member = member;
+      {required final List<MemberSocialDetails> member,
+      final Map<String, String>? errors})
+      : _member = member,
+        _errors = errors;
 
   factory _$MemberSocialDetailsDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$MemberSocialDetailsDataImplFromJson(json);
@@ -353,9 +366,19 @@ class _$MemberSocialDetailsDataImpl implements _MemberSocialDetailsData {
     return EqualUnmodifiableListView(_member);
   }
 
+  final Map<String, String>? _errors;
+  @override
+  Map<String, String>? get errors {
+    final value = _errors;
+    if (value == null) return null;
+    if (_errors is EqualUnmodifiableMapView) return _errors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   String toString() {
-    return 'MemberSocialDetailsData(member: $member)';
+    return 'MemberSocialDetailsData(member: $member, errors: $errors)';
   }
 
   @override
@@ -363,13 +386,16 @@ class _$MemberSocialDetailsDataImpl implements _MemberSocialDetailsData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MemberSocialDetailsDataImpl &&
-            const DeepCollectionEquality().equals(other._member, _member));
+            const DeepCollectionEquality().equals(other._member, _member) &&
+            const DeepCollectionEquality().equals(other._errors, _errors));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_member));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_member),
+      const DeepCollectionEquality().hash(_errors));
 
   /// Create a copy of MemberSocialDetailsData
   /// with the given fields replaced by the non-null parameter values.
@@ -390,14 +416,16 @@ class _$MemberSocialDetailsDataImpl implements _MemberSocialDetailsData {
 
 abstract class _MemberSocialDetailsData implements MemberSocialDetailsData {
   const factory _MemberSocialDetailsData(
-          {required final List<MemberSocialDetails> member}) =
-      _$MemberSocialDetailsDataImpl;
+      {required final List<MemberSocialDetails> member,
+      final Map<String, String>? errors}) = _$MemberSocialDetailsDataImpl;
 
   factory _MemberSocialDetailsData.fromJson(Map<String, dynamic> json) =
       _$MemberSocialDetailsDataImpl.fromJson;
 
   @override
   List<MemberSocialDetails> get member;
+  @override
+  Map<String, String>? get errors;
 
   /// Create a copy of MemberSocialDetailsData
   /// with the given fields replaced by the non-null parameter values.
@@ -416,13 +444,13 @@ mixin _$MemberSocialDetails {
   @JsonKey(name: 'member_id')
   int get memberId => throw _privateConstructorUsedError;
   @JsonKey(name: 'aleternate_number')
-  String get alternateNumber => throw _privateConstructorUsedError;
+  String? get alternateNumber => throw _privateConstructorUsedError;
   @JsonKey(name: 'facebook_url')
-  String get facebookUrl => throw _privateConstructorUsedError;
+  String? get facebookUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'twitter_url')
-  String get twitterUrl => throw _privateConstructorUsedError;
+  String? get twitterUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'instagram_url')
-  String get instagramUrl => throw _privateConstructorUsedError;
+  String? get instagramUrl => throw _privateConstructorUsedError;
 
   /// Serializes this MemberSocialDetails to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -442,10 +470,10 @@ abstract class $MemberSocialDetailsCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'member_id') int memberId,
-      @JsonKey(name: 'aleternate_number') String alternateNumber,
-      @JsonKey(name: 'facebook_url') String facebookUrl,
-      @JsonKey(name: 'twitter_url') String twitterUrl,
-      @JsonKey(name: 'instagram_url') String instagramUrl});
+      @JsonKey(name: 'aleternate_number') String? alternateNumber,
+      @JsonKey(name: 'facebook_url') String? facebookUrl,
+      @JsonKey(name: 'twitter_url') String? twitterUrl,
+      @JsonKey(name: 'instagram_url') String? instagramUrl});
 }
 
 /// @nodoc
@@ -464,32 +492,32 @@ class _$MemberSocialDetailsCopyWithImpl<$Res, $Val extends MemberSocialDetails>
   @override
   $Res call({
     Object? memberId = null,
-    Object? alternateNumber = null,
-    Object? facebookUrl = null,
-    Object? twitterUrl = null,
-    Object? instagramUrl = null,
+    Object? alternateNumber = freezed,
+    Object? facebookUrl = freezed,
+    Object? twitterUrl = freezed,
+    Object? instagramUrl = freezed,
   }) {
     return _then(_value.copyWith(
       memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      alternateNumber: null == alternateNumber
+      alternateNumber: freezed == alternateNumber
           ? _value.alternateNumber
           : alternateNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      facebookUrl: null == facebookUrl
+              as String?,
+      facebookUrl: freezed == facebookUrl
           ? _value.facebookUrl
           : facebookUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      twitterUrl: null == twitterUrl
+              as String?,
+      twitterUrl: freezed == twitterUrl
           ? _value.twitterUrl
           : twitterUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      instagramUrl: null == instagramUrl
+              as String?,
+      instagramUrl: freezed == instagramUrl
           ? _value.instagramUrl
           : instagramUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -504,10 +532,10 @@ abstract class _$$MemberSocialDetailsImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'member_id') int memberId,
-      @JsonKey(name: 'aleternate_number') String alternateNumber,
-      @JsonKey(name: 'facebook_url') String facebookUrl,
-      @JsonKey(name: 'twitter_url') String twitterUrl,
-      @JsonKey(name: 'instagram_url') String instagramUrl});
+      @JsonKey(name: 'aleternate_number') String? alternateNumber,
+      @JsonKey(name: 'facebook_url') String? facebookUrl,
+      @JsonKey(name: 'twitter_url') String? twitterUrl,
+      @JsonKey(name: 'instagram_url') String? instagramUrl});
 }
 
 /// @nodoc
@@ -524,32 +552,32 @@ class __$$MemberSocialDetailsImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? memberId = null,
-    Object? alternateNumber = null,
-    Object? facebookUrl = null,
-    Object? twitterUrl = null,
-    Object? instagramUrl = null,
+    Object? alternateNumber = freezed,
+    Object? facebookUrl = freezed,
+    Object? twitterUrl = freezed,
+    Object? instagramUrl = freezed,
   }) {
     return _then(_$MemberSocialDetailsImpl(
       memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      alternateNumber: null == alternateNumber
+      alternateNumber: freezed == alternateNumber
           ? _value.alternateNumber
           : alternateNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      facebookUrl: null == facebookUrl
+              as String?,
+      facebookUrl: freezed == facebookUrl
           ? _value.facebookUrl
           : facebookUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      twitterUrl: null == twitterUrl
+              as String?,
+      twitterUrl: freezed == twitterUrl
           ? _value.twitterUrl
           : twitterUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      instagramUrl: null == instagramUrl
+              as String?,
+      instagramUrl: freezed == instagramUrl
           ? _value.instagramUrl
           : instagramUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -559,10 +587,10 @@ class __$$MemberSocialDetailsImplCopyWithImpl<$Res>
 class _$MemberSocialDetailsImpl implements _MemberSocialDetails {
   const _$MemberSocialDetailsImpl(
       {@JsonKey(name: 'member_id') required this.memberId,
-      @JsonKey(name: 'aleternate_number') required this.alternateNumber,
-      @JsonKey(name: 'facebook_url') required this.facebookUrl,
-      @JsonKey(name: 'twitter_url') required this.twitterUrl,
-      @JsonKey(name: 'instagram_url') required this.instagramUrl});
+      @JsonKey(name: 'aleternate_number') this.alternateNumber,
+      @JsonKey(name: 'facebook_url') this.facebookUrl,
+      @JsonKey(name: 'twitter_url') this.twitterUrl,
+      @JsonKey(name: 'instagram_url') this.instagramUrl});
 
   factory _$MemberSocialDetailsImpl.fromJson(Map<String, dynamic> json) =>
       _$$MemberSocialDetailsImplFromJson(json);
@@ -572,16 +600,16 @@ class _$MemberSocialDetailsImpl implements _MemberSocialDetails {
   final int memberId;
   @override
   @JsonKey(name: 'aleternate_number')
-  final String alternateNumber;
+  final String? alternateNumber;
   @override
   @JsonKey(name: 'facebook_url')
-  final String facebookUrl;
+  final String? facebookUrl;
   @override
   @JsonKey(name: 'twitter_url')
-  final String twitterUrl;
+  final String? twitterUrl;
   @override
   @JsonKey(name: 'instagram_url')
-  final String instagramUrl;
+  final String? instagramUrl;
 
   @override
   String toString() {
@@ -629,12 +657,12 @@ class _$MemberSocialDetailsImpl implements _MemberSocialDetails {
 
 abstract class _MemberSocialDetails implements MemberSocialDetails {
   const factory _MemberSocialDetails(
-      {@JsonKey(name: 'member_id') required final int memberId,
-      @JsonKey(name: 'aleternate_number') required final String alternateNumber,
-      @JsonKey(name: 'facebook_url') required final String facebookUrl,
-      @JsonKey(name: 'twitter_url') required final String twitterUrl,
-      @JsonKey(name: 'instagram_url')
-      required final String instagramUrl}) = _$MemberSocialDetailsImpl;
+          {@JsonKey(name: 'member_id') required final int memberId,
+          @JsonKey(name: 'aleternate_number') final String? alternateNumber,
+          @JsonKey(name: 'facebook_url') final String? facebookUrl,
+          @JsonKey(name: 'twitter_url') final String? twitterUrl,
+          @JsonKey(name: 'instagram_url') final String? instagramUrl}) =
+      _$MemberSocialDetailsImpl;
 
   factory _MemberSocialDetails.fromJson(Map<String, dynamic> json) =
       _$MemberSocialDetailsImpl.fromJson;
@@ -644,16 +672,16 @@ abstract class _MemberSocialDetails implements MemberSocialDetails {
   int get memberId;
   @override
   @JsonKey(name: 'aleternate_number')
-  String get alternateNumber;
+  String? get alternateNumber;
   @override
   @JsonKey(name: 'facebook_url')
-  String get facebookUrl;
+  String? get facebookUrl;
   @override
   @JsonKey(name: 'twitter_url')
-  String get twitterUrl;
+  String? get twitterUrl;
   @override
   @JsonKey(name: 'instagram_url')
-  String get instagramUrl;
+  String? get instagramUrl;
 
   /// Create a copy of MemberSocialDetails
   /// with the given fields replaced by the non-null parameter values.
