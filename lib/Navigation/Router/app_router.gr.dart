@@ -156,6 +156,25 @@ class AddMemberRouteArgs {
 }
 
 /// generated route for
+/// [AnalyticsScreen]
+class AnalyticsRoute extends PageRouteInfo<void> {
+  const AnalyticsRoute({List<PageRouteInfo>? children})
+      : super(
+          AnalyticsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AnalyticsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AnalyticsScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [CompleteProfileScreen]
 class CompleteProfileRoute extends PageRouteInfo<void> {
   const CompleteProfileRoute({List<PageRouteInfo>? children})

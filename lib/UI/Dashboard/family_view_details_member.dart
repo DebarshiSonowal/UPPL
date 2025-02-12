@@ -877,7 +877,9 @@ class _FamilyViewDetailsMemberScreenState
             referredItem?.membershipCard.relationship,
             result,
             null,
-            referredItem?.membershipCard.refId,
+            FindTheHeadOfTheFamilyMember(
+                Provider.of<Repository>(context, listen: false)
+                    .referredMembersFamilyDetails),
             referredItem?.personalDetails.aadhaarNo,
             referredItem?.personalDetails.voterId);
     if (response.status == 1) {

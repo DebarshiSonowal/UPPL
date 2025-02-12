@@ -826,7 +826,7 @@ class _JoinedReferralViewDetailsMemberScreenState
               item.relationshipId,
               result,
               null,
-              item.refId,
+              item.headMemberId,
               null,
               item.voterId);
       if (response.status == 1) {
@@ -851,7 +851,9 @@ class _JoinedReferralViewDetailsMemberScreenState
               referredItem?.membershipCard.relationship,
               result,
               referredItem?.membershipCard.photo,
-              referredItem?.membershipCard.refId,
+              FindTheHeadOfTheFamilyMember(
+                  Provider.of<Repository>(context, listen: false)
+                      .referredMembersFamilyDetails),
               referredItem?.personalDetails.aadhaarNo,
               referredItem?.personalDetails.voterId);
       if (response.status == 1) {

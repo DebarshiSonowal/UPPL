@@ -34,4 +34,5 @@ class CustomRoutes {
   //
   static const customImageViewer = "/custom_image_viewer_screen";
   static const verifiedScreen = "/verified_screen";
+  static const analyticsScreen = "/analytics_screen";
 }

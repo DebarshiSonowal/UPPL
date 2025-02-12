@@ -6,6 +6,7 @@ import '../../UI/AddMember/Widgets/add_family_member_details_screen.dart';
 import '../../UI/AddMember/add_member_details_screen.dart';
 import '../../UI/AddMember/add_member_screen.dart';
 import '../../UI/AddMember/save_member_details_screen.dart';
+import '../../UI/Analytics/analytics_screen.dart';
 import '../../UI/Auth/edit_profile_screen.dart';
 import '../../UI/Auth/forget_password_screen.dart';
 import '../../UI/Auth/forgot_password_otp_screen.dart';
@@ -160,6 +161,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: CustomRoutes.verifiedScreen,
           page: VerifiedRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.analyticsScreen,
+          page: AnalyticsRoute.page,
         ),
       ];
 }

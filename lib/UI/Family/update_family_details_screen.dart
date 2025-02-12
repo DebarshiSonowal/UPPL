@@ -538,7 +538,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
             // mobile.text,
             null,
             selectedFile?.path,
-            data.profileData?.refId,
+            data.memberData?.personalDetails.memberId,
             aadhar.text,
             voterID.text);
     if (response.status == 1) {

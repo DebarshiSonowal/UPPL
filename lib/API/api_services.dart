@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
+import 'package:uppl/API/apis/analytics_api.dart';
 import 'package:uppl/API/apis/dropdown_api.dart';
 import 'package:uppl/API/apis/json_apis.dart';
 import 'package:uppl/API/apis/member_api.dart';
@@ -25,6 +26,7 @@ import '../Models/Referal/validate_referal_code_model.dart';
 import '../Models/Token/regenerate_token_model.dart';
 import '../Models/Verify/generate_verify_otp_model.dart';
 import '../Models/audience/audience_demography_model.dart';
+import '../Models/dashboard_stats_model.dart';
 import '../Models/family/family_details_model.dart';
 import '../Models/family/referred_family_details_model.dart';
 import '../Storage/config_storage.dart';
@@ -44,9 +46,9 @@ class ApiService {
     return _instance!;
   }
 
-  static const String baseUrl = "https://upplofficial.org";
+  // static const String baseUrl = "https://upplofficial.org";
 
-  // static const String baseUrl = "https://staging.upplofficial.org/";
+  static const String baseUrl = "https://staging.upplofficial.org/";
   static const String path = "api";
   static const String type = "member";
 
@@ -390,5 +392,11 @@ class ApiService {
         village,
         other_village,
         dio);
+  }
+
+  Future<DashboardStats> generateAnalytics(
+    context,
+  ) async {
+    return GetAnalyticsService.instance.generateAnalytics(context);
   }
 }

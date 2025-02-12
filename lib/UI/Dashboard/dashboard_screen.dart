@@ -244,6 +244,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               SizedBox(
+                height: 0.5.h,
+              ),
+              GestureDetector(
+                onTap: () {
+                  context.router.pushNamed(CustomRoutes.analyticsScreen);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 1.5.h,
+                  ),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 4.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Configuration.thirdColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.chartLine,
+                        size: 22.sp,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        "View Analytics",
+                        style: Configuration.primaryFont(
+                          fontSize: 18.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "Member Growth & Statistics",
+                        style: Configuration.primaryFont(
+                          fontSize: 14.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
                 height: 2.h,
               ),
               Container(
@@ -252,28 +299,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 margin: EdgeInsets.symmetric(
-                  horizontal: 4.w,
+                  horizontal: 3.w,
                 ),
                 padding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 2.h,
+                  horizontal: 3.w,
+                  vertical: 1.5.h,
                 ),
                 child: Column(
                   children: [
                     Text(
                       "Referred Members Demographic",
                       style: Configuration.primaryFont(
-                        fontSize: 17.5.sp,
+                        fontSize: 16.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        // Add other text styling as needed
                       ),
                     ),
                     SizedBox(
-                      height: 2.h,
+                      height: 1.5.h,
                     ),
                     SizedBox(
-                      height: 20.h,
+                      height: 18.h,
                       width: double.infinity,
                       child: const PieChartSample2(),
                     ),
@@ -283,6 +329,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 2.h,
               ),
+
               Container(
                 decoration: const BoxDecoration(
                   color: Color(0xfffff9b7),

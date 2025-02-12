@@ -178,7 +178,7 @@ class GetMemberService {
       String endpoint = '${ApiService.type}/profile-data';
       final Response response = await dio.get(endpoint);
       debugPrint(
-          "ProfileDataModel response: ${dio.options.baseUrl} ${response.data}");
+          "ProfileDataModel response: ${dio.options.baseUrl} ${response.data} ${ConfigStorage.instance.token}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         SVProgressHUD.dismiss();
         return ProfileDataModel.fromJson(response.data);

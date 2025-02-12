@@ -7,6 +7,7 @@ import '../Models/Member/member_details_model.dart';
 // import '../Models/Member/update_member_family_details_model.dart';
 import '../Models/Referal/joined_by_referral_model.dart';
 import '../Models/audience/audience_demography_model.dart';
+import '../Models/dashboard_stats_model.dart';
 import '../Models/family/family_details_model.dart';
 import '../Models/family/referred_family_details_model.dart';
 
@@ -43,8 +44,14 @@ class Repository extends ChangeNotifier {
   List<String> country = [];
   List<String> motherTounge = [];
   List<String> community = [];
+  DashboardStats? dashboardStats;
 
   //Methods
+  void setDashboardStats(DashboardStats? data) {
+    dashboardStats = data;
+    notifyListeners();
+  }
+
   void setMotherTounge(List<String> data) {
     motherTounge = data;
     notifyListeners();
