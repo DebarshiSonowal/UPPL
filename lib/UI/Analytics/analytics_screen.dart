@@ -1293,7 +1293,7 @@ Widget _buildDistrictsCard(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Top Performing Districts',
+                'Top Performing Party Districts',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -1585,7 +1585,7 @@ Widget _buildWorstPerformingDistrictsCard(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Worst Performing Districts',
+                'Worst Performing Party Districts',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

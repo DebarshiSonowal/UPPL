@@ -247,7 +247,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 0.5.h,
               ),
-              !ConfigStorage.instance.isAdmin
+              ConfigStorage.instance.isAdmin
                   ? GestureDetector(
                       onTap: () {
                         context.router.pushNamed(CustomRoutes.analyticsScreen);
