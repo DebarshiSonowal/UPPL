@@ -184,6 +184,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
           _buildConstituenciesCard(context, data?.topPerformingBtcConstituency),
           SizedBox(height: 3.h),
           _buildWorstPerformersCard(context, data?.worstPerformingPrimary),
+          SizedBox(height: 3.h),
+          _buildWorstPerformingBoothsCard(context, data?.worstPerformingBooth),
+          SizedBox(height: 3.h),
+          _buildWorstPerformingDistrictsCard(
+              context, data?.worstPerformingPartyDistrict),
+          SizedBox(height: 3.h),
+          _buildWorstPerformingConstituenciesCard(
+              context, data?.worstPerformingBtcConstituency),
         ],
       ),
     );
@@ -1433,6 +1441,392 @@ Widget _buildStatChip(
           ),
         ),
       ],
+    ),
+  );
+}
+
+Widget _buildWorstPerformingBoothsCard(
+    BuildContext context, List<TopPerformingBooth>? booths) {
+  return Card(
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    child: Padding(
+      padding: EdgeInsets.all(4.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Worst Performing Booths',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Handle view all action
+                },
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 2.h),
+          if (booths?.isEmpty ?? true)
+            Center(
+              child: Text(
+                'No data available',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
+              ),
+            )
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: booths!.length,
+              separatorBuilder: (context, index) => Divider(height: 3.h),
+              itemBuilder: (context, index) {
+                final booth = booths[index];
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.red.withOpacity(0.1),
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              booth.boothName ?? 'Unknown',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.sp,
+                                  ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildStatChip(
+                                  context,
+                                  'Verified',
+                                  booth.verifiedMemberCount?.toString() ?? '0',
+                                  Colors.green,
+                                ),
+                                _buildStatChip(
+                                  context,
+                                  'Unverified',
+                                  booth.nonVerifiedMemberCount?.toString() ??
+                                      '0',
+                                  Colors.orange,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildWorstPerformingDistrictsCard(
+    BuildContext context, List<TopPerformingPartyDistrict>? districts) {
+  return Card(
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    child: Padding(
+      padding: EdgeInsets.all(4.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Worst Performing Districts',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Handle view all action
+                },
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 2.h),
+          if (districts?.isEmpty ?? true)
+            Center(
+              child: Text(
+                'No data available',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
+              ),
+            )
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: districts!.length,
+              separatorBuilder: (context, index) => Divider(height: 3.h),
+              itemBuilder: (context, index) {
+                final district = districts[index];
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.red.withOpacity(0.1),
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 3.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              district.partyDistrictName ?? 'Unknown',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.sp,
+                                  ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildStatChip(
+                                  context,
+                                  'Verified',
+                                  district.verifiedMemberCount?.toString() ??
+                                      '0',
+                                  Colors.green,
+                                ),
+                                _buildStatChip(
+                                  context,
+                                  'Unverified',
+                                  district.nonVerifiedMemberCount?.toString() ??
+                                      '0',
+                                  Colors.orange,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildWorstPerformingConstituenciesCard(
+    BuildContext context, List<TopPerformingBtcConstituency>? constituencies) {
+  return Card(
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    child: Padding(
+      padding: EdgeInsets.all(4.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'Worst Performing Constituencies',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Handle view all action
+                },
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 2.h),
+          if (constituencies?.isEmpty ?? true)
+            Center(
+              child: Text(
+                'No data available',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
+              ),
+            )
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: constituencies!.length,
+              separatorBuilder: (context, index) => Divider(height: 3.h),
+              itemBuilder: (context, index) {
+                final constituency = constituencies[index];
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.red.withOpacity(0.1),
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 3.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              constituency.btcConstituencyName ?? 'Unknown',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.sp,
+                                  ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildStatChip(
+                                  context,
+                                  'Verified',
+                                  constituency.verifiedMemberCount
+                                          ?.toString() ??
+                                      '0',
+                                  Colors.green,
+                                ),
+                                _buildStatChip(
+                                  context,
+                                  'Unverified',
+                                  constituency.nonVerifiedMemberCount
+                                          ?.toString() ??
+                                      '0',
+                                  Colors.orange,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
     ),
   );
 }
