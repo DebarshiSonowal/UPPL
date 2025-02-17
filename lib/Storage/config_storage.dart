@@ -24,7 +24,13 @@ class ConfigStorage {
     await sharedpreferences.setString("accessToken", accessToken);
   }
 
+  Future<void> setIsAdmin(bool isAdmin) async {
+    await sharedpreferences.setBool("isAdmin", isAdmin);
+  }
+
   get isLoggedIn => sharedpreferences.getBool("isLoggedIn") ?? false;
+
+  get isAdmin => sharedpreferences.getBool("isAdmin") ?? false;
 
   get token => sharedpreferences.getString("accessToken") ?? "";
 

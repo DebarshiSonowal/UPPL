@@ -164,7 +164,8 @@ class _JoinedReferralViewDetailsMemberScreenState
                                         district:
                                             memberData?.districtName ?? "",
                                         photo: memberData?.photo ?? "",
-                                        memberId: memberData?.memberId ?? 0,
+                                        memberId:
+                                            memberData?.membershipNo ?? "0",
                                         joiningDate: DateFormat("dd MMM, yyyy")
                                             .format(memberData!.joiningDate));
                                   },
@@ -723,8 +724,9 @@ class _JoinedReferralViewDetailsMemberScreenState
                                                 photo:
                                                     item.membershipCard.photo ??
                                                         "",
-                                                memberId:
-                                                    item.membershipCard.id ?? 0,
+                                                memberId: item.membershipCard
+                                                        .membershipNo ??
+                                                    "0",
                                                 joiningDate: item.membershipCard
                                                     .joiningDate);
                                           }

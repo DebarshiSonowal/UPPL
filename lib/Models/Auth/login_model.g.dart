@@ -14,6 +14,7 @@ _$SuccessDataImpl _$$SuccessDataImplFromJson(Map<String, dynamic> json) =>
           ? null
           : MembershipCardData.fromJson(
               json['membershipCardData'] as Map<String, dynamic>),
+      role: json['role'] as String?,
       phoneNumber: json['phone_number'] as String?,
       errors: (json['errors'] as Map<String, dynamic>?)?.map(
         (k, e) =>
@@ -26,6 +27,7 @@ Map<String, dynamic> _$$SuccessDataImplToJson(_$SuccessDataImpl instance) =>
       'access_token': instance.accessToken,
       'refresh_token': instance.refreshToken,
       'membershipCardData': instance.membershipCardData,
+      'role': instance.role,
       'phone_number': instance.phoneNumber,
       'errors': instance.errors,
     };

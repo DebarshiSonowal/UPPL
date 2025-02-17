@@ -8,6 +8,7 @@ import '../../Models/Auth/login_model.dart';
 import '../../Storage/config_storage.dart';
 import '../api_services.dart';
 import '../errors/generic_error_handler.dart';
+import 'auth_api.dart';
 
 class GetAnalyticsService {
   GetAnalyticsService._(); // Private constructor to prevent direct instantiation
@@ -55,9 +56,11 @@ class GetAnalyticsService {
       } catch (e) {
         print(e);
       }
-      if (e.response?.statusCode == 401 ?? false) {
-        debugPrint("dashboard-stats error: ${e.response?.data}");
-        return DashboardStats.fromJson(e.response?.data);
+      if ((e.response?.statusCode == 401)) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return generateAnalytics(context);
       }
       // Re-throw the exception so the error handler can catch it
       debugPrint("dashboard-stats error1: ${e.message} ${e.response}");

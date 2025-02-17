@@ -114,7 +114,7 @@ class _ReferralFamilyViewDetailsMemberScreenState
                             height: 1.h,
                           ),
                           Text(
-                            "Membership ID: ${data?.membershipCard.id ?? "N/A"}",
+                            "Membership ID: ${data?.membershipCard.membershipNo ?? "N/A"}",
                             style: Configuration.primaryFont(
                               fontSize: 11.sp,
                               color: Colors.black,
@@ -152,7 +152,9 @@ class _ReferralFamilyViewDetailsMemberScreenState
                                         data?.membershipCard.district.name ??
                                             "",
                                     photo: data?.membershipCard.photo ?? "",
-                                    memberId: data?.membershipCard.id ?? 0,
+                                    memberId:
+                                        data?.membershipCard.membershipNo ??
+                                            "0",
                                     joiningDate:
                                         data!.membershipCard.joiningDate,
                                   );
@@ -540,8 +542,9 @@ class _ReferralFamilyViewDetailsMemberScreenState
                                               photo:
                                                   item.membershipCard.photo ??
                                                       "",
-                                              memberId:
-                                                  item.membershipCard.id ?? 0,
+                                              memberId: item.membershipCard
+                                                      .membershipNo ??
+                                                  "0",
                                               joiningDate: item
                                                   .membershipCard.joiningDate);
                                         }
@@ -650,7 +653,9 @@ class _ReferralFamilyViewDetailsMemberScreenState
             referredItem?.membershipCard.relationship,
             result,
             null,
-            referredItem?.membershipCard.refId,
+            FindTheHeadOfTheFamilyMember(
+                Provider.of<Repository>(context, listen: false)
+                    .referredMembersFamilyDetails),
             referredItem?.personalDetails.aadhaarNo,
             referredItem?.personalDetails.voterId);
     if (response.status == 1) {

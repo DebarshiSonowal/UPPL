@@ -34,6 +34,7 @@ class SuccessData with _$SuccessData {
     @JsonKey(name: "access_token") String? accessToken,
     @JsonKey(name: "refresh_token") String? refreshToken,
     MembershipCardData? membershipCardData,
+    String? role,
     @JsonKey(name: "phone_number") String? phoneNumber,
     @JsonKey(name: 'errors') Map<String, List<String>>? errors,
   }) = _SuccessData;

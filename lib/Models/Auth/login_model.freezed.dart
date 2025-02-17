@@ -225,6 +225,7 @@ mixin _$SuccessData {
   String? get refreshToken => throw _privateConstructorUsedError;
   MembershipCardData? get membershipCardData =>
       throw _privateConstructorUsedError;
+  String? get role => throw _privateConstructorUsedError;
   @JsonKey(name: "phone_number")
   String? get phoneNumber => throw _privateConstructorUsedError;
   @JsonKey(name: 'errors')
@@ -250,6 +251,7 @@ abstract class $SuccessDataCopyWith<$Res> {
       {@JsonKey(name: "access_token") String? accessToken,
       @JsonKey(name: "refresh_token") String? refreshToken,
       MembershipCardData? membershipCardData,
+      String? role,
       @JsonKey(name: "phone_number") String? phoneNumber,
       @JsonKey(name: 'errors') Map<String, List<String>>? errors});
 
@@ -274,6 +276,7 @@ class _$SuccessDataCopyWithImpl<$Res, $Val extends SuccessData>
     Object? accessToken = freezed,
     Object? refreshToken = freezed,
     Object? membershipCardData = freezed,
+    Object? role = freezed,
     Object? phoneNumber = freezed,
     Object? errors = freezed,
   }) {
@@ -290,6 +293,10 @@ class _$SuccessDataCopyWithImpl<$Res, $Val extends SuccessData>
           ? _value.membershipCardData
           : membershipCardData // ignore: cast_nullable_to_non_nullable
               as MembershipCardData?,
+      role: freezed == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
       phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -329,6 +336,7 @@ abstract class _$$SuccessDataImplCopyWith<$Res>
       {@JsonKey(name: "access_token") String? accessToken,
       @JsonKey(name: "refresh_token") String? refreshToken,
       MembershipCardData? membershipCardData,
+      String? role,
       @JsonKey(name: "phone_number") String? phoneNumber,
       @JsonKey(name: 'errors') Map<String, List<String>>? errors});
 
@@ -352,6 +360,7 @@ class __$$SuccessDataImplCopyWithImpl<$Res>
     Object? accessToken = freezed,
     Object? refreshToken = freezed,
     Object? membershipCardData = freezed,
+    Object? role = freezed,
     Object? phoneNumber = freezed,
     Object? errors = freezed,
   }) {
@@ -368,6 +377,10 @@ class __$$SuccessDataImplCopyWithImpl<$Res>
           ? _value.membershipCardData
           : membershipCardData // ignore: cast_nullable_to_non_nullable
               as MembershipCardData?,
+      role: freezed == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
       phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -387,6 +400,7 @@ class _$SuccessDataImpl implements _SuccessData {
       {@JsonKey(name: "access_token") this.accessToken,
       @JsonKey(name: "refresh_token") this.refreshToken,
       this.membershipCardData,
+      this.role,
       @JsonKey(name: "phone_number") this.phoneNumber,
       @JsonKey(name: 'errors') final Map<String, List<String>>? errors})
       : _errors = errors;
@@ -403,6 +417,8 @@ class _$SuccessDataImpl implements _SuccessData {
   @override
   final MembershipCardData? membershipCardData;
   @override
+  final String? role;
+  @override
   @JsonKey(name: "phone_number")
   final String? phoneNumber;
   final Map<String, List<String>>? _errors;
@@ -418,7 +434,7 @@ class _$SuccessDataImpl implements _SuccessData {
 
   @override
   String toString() {
-    return 'SuccessData(accessToken: $accessToken, refreshToken: $refreshToken, membershipCardData: $membershipCardData, phoneNumber: $phoneNumber, errors: $errors)';
+    return 'SuccessData(accessToken: $accessToken, refreshToken: $refreshToken, membershipCardData: $membershipCardData, role: $role, phoneNumber: $phoneNumber, errors: $errors)';
   }
 
   @override
@@ -432,6 +448,7 @@ class _$SuccessDataImpl implements _SuccessData {
                 other.refreshToken == refreshToken) &&
             (identical(other.membershipCardData, membershipCardData) ||
                 other.membershipCardData == membershipCardData) &&
+            (identical(other.role, role) || other.role == role) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             const DeepCollectionEquality().equals(other._errors, _errors));
@@ -444,6 +461,7 @@ class _$SuccessDataImpl implements _SuccessData {
       accessToken,
       refreshToken,
       membershipCardData,
+      role,
       phoneNumber,
       const DeepCollectionEquality().hash(_errors));
 
@@ -468,6 +486,7 @@ abstract class _SuccessData implements SuccessData {
           {@JsonKey(name: "access_token") final String? accessToken,
           @JsonKey(name: "refresh_token") final String? refreshToken,
           final MembershipCardData? membershipCardData,
+          final String? role,
           @JsonKey(name: "phone_number") final String? phoneNumber,
           @JsonKey(name: 'errors') final Map<String, List<String>>? errors}) =
       _$SuccessDataImpl;
@@ -483,6 +502,8 @@ abstract class _SuccessData implements SuccessData {
   String? get refreshToken;
   @override
   MembershipCardData? get membershipCardData;
+  @override
+  String? get role;
   @override
   @JsonKey(name: "phone_number")
   String? get phoneNumber;

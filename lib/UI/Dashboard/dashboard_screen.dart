@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:uppl/Constants/routes.dart';
 import 'package:uppl/Repository/repository.dart';
+import 'package:uppl/Storage/config_storage.dart';
 
 import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
@@ -246,53 +247,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 0.5.h,
               ),
-              GestureDetector(
-                onTap: () {
-                  context.router.pushNamed(CustomRoutes.analyticsScreen);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 1.5.h,
-                  ),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 4.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Configuration.thirdColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.chartLine,
-                        size: 22.sp,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 1.h),
-                      Text(
-                        "View Analytics",
-                        style: Configuration.primaryFont(
-                          fontSize: 18.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+              ConfigStorage.instance.isAdmin
+                  ? GestureDetector(
+                      onTap: () {
+                        context.router.pushNamed(CustomRoutes.analyticsScreen);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 1.5.h,
+                        ),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 4.w,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Configuration.thirdColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.chartLine,
+                              size: 22.sp,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 1.h),
+                            Text(
+                              "View Analytics",
+                              style: Configuration.primaryFont(
+                                fontSize: 18.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "Member Growth & Statistics",
+                              style: Configuration.primaryFont(
+                                fontSize: 14.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        "Member Growth & Statistics",
-                        style: Configuration.primaryFont(
-                          fontSize: 14.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
+                    )
+                  : Container(),
+              ConfigStorage.instance.isAdmin
+                  ? SizedBox(
+                      height: 2.h,
+                    )
+                  : Container(),
               Container(
                 decoration: BoxDecoration(
                   color: const Color(0xffE8F4FF),
@@ -437,7 +442,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             item.membershipCard.district.name ??
                                                 "",
                                         photo: item.membershipCard.photo ?? "",
-                                        memberId: item.membershipCard.id ?? 0,
+                                        memberId:
+                                            (item.membershipCard.membershipNo ??
+                                                "0"),
                                         joiningDate:
                                             item.membershipCard!.joiningDate);
                                   },

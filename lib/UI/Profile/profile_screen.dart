@@ -193,7 +193,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   name: current?.name ?? "N/A",
                   district: current?.district ?? "N/A",
                   photo: current?.photo ?? "",
-                  memberId: "${data.memberData?.personalDetails.memberId}",
+                  memberId:
+                      "${data.memberData?.membershipCardData.membershipNo}",
                   joiningDate: current?.joiningDate ?? "",
                 ),
               );

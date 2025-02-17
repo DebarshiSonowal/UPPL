@@ -677,7 +677,7 @@ class _AddFamilyMemberDetailsScreenState
             data.relationships.indexWhere((e) => e == selectedRelationship) + 1,
             mobile.text,
             selectedFile?.path,
-            data.profileData?.refId,
+            widget.id,
             aadhar.text ?? "",
             voterID.text);
     if (response.status == 1) {

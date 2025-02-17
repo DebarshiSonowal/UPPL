@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uppl/Constants/assets.dart';
 import 'package:uppl/Constants/routes.dart';
+import 'package:uppl/Storage/config_storage.dart';
 import 'package:uppl/UI/Common/membership_card_view.dart';
 
 class Configuration {
@@ -176,35 +177,130 @@ class Configuration {
   );
 
   static BottomNavigationBar bottomNavigationBar(BuildContext context) =>
-      BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.black,
-        backgroundColor: Configuration.primaryColor,
-        onTap: (index) async {
-          if (index != currentIndex) {
-            currentIndex = index;
-            switch (index) {
-              case 1:
-                AutoRouter.of(context).pushNamed(CustomRoutes.addMemberScreen);
-              case 2:
-                AutoRouter.of(context).pushNamed(CustomRoutes.dashboardScreen);
-              case 3:
-                AutoRouter.of(context).pushNamed(CustomRoutes.profileScreen);
-              default:
-                AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
-            }
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_add), label: "Add Person"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard), label: "Dashboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      );
+      ConfigStorage.instance.isAdmin
+          ? BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: currentIndex,
+              selectedItemColor: Colors.black,
+              backgroundColor: Configuration.primaryColor,
+              onTap: (index) async {
+                if (index != currentIndex) {
+                  currentIndex = index;
+                  switch (index) {
+                    case 1:
+                      AutoRouter.of(context)
+                          .pushNamed(CustomRoutes.addMemberScreen);
+                    case 2:
+                      AutoRouter.of(context)
+                          .pushNamed(CustomRoutes.dashboardScreen);
+                    case 3:
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CupertinoAlertDialog(
+                            title: Text(
+                              'Select Analytics',
+                              style: Configuration.primaryFont(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text(
+                                  'Member Analytics',
+                                  style: Configuration.primaryFont(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  AutoRouter.of(context)
+                                      .pushNamed(CustomRoutes.analyticsScreen);
+                                },
+                              ),
+                              // CupertinoDialogAction(
+                              //   child: Text(
+                              //     'Organization Analytics',
+                              //     style: Configuration.primaryFont(
+                              //       color: Colors.black,
+                              //     ),
+                              //   ),
+                              //   onPressed: () {
+                              //     Navigator.of(context).pop();
+                              //     // AutoRouter.of(context).pushNamed(
+                              //     //     CustomRoutes.organizationAnalyticsScreen);
+                              //   },
+                              // ),
+                              CupertinoDialogAction(
+                                child: Text(
+                                  'Cancel',
+                                  style: Configuration.primaryFont(
+                                    color: Configuration.errorColor,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      break;
+                    case 4:
+                      AutoRouter.of(context)
+                          .pushNamed(CustomRoutes.profileScreen);
+                    default:
+                      AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
+                  }
+                }
+              },
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person_add), label: "Add Person"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard), label: "Dashboard"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.analytics), label: "Analytics"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person), label: "Profile"),
+              ],
+            )
+          : BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: currentIndex,
+              selectedItemColor: Colors.black,
+              backgroundColor: Configuration.primaryColor,
+              onTap: (index) async {
+                if (index != currentIndex) {
+                  currentIndex = index;
+                  switch (index) {
+                    case 1:
+                      AutoRouter.of(context)
+                          .pushNamed(CustomRoutes.addMemberScreen);
+                    case 2:
+                      AutoRouter.of(context)
+                          .pushNamed(CustomRoutes.dashboardScreen);
+                    case 3:
+                      AutoRouter.of(context)
+                          .pushNamed(CustomRoutes.profileScreen);
+                    default:
+                      AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
+                  }
+                }
+              },
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person_add), label: "Add Person"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard), label: "Dashboard"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person), label: "Profile"),
+              ],
+            );
 
   static Widget upwardAronai = SvgPicture.asset(
     CustomAssets.aronaiUpwards,
@@ -259,7 +355,7 @@ class Configuration {
     required String name,
     required String district,
     required String photo,
-    required int memberId,
+    required String memberId,
     required String joiningDate,
   }) {
     return showDialog<void>(
