@@ -49,7 +49,7 @@ _$JoinedByReferralMemberImpl _$$JoinedByReferralMemberImplFromJson(
       updateCount: (json['update_count'] as num).toInt(),
       createdAt: _fromJson(json['created_at'] as String),
       updatedAt: _fromJson(json['updated_at'] as String),
-      photo: json['photo'] as String,
+      photo: json['photo'] as String?,
       district: (json['district'] as num).toInt(),
       memberName: json['member_name'] as String,
       mobileNo: json['mobile_no'] as String?,

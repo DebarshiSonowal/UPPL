@@ -1195,7 +1195,7 @@ mixin _$MemberPersonalDetails {
   String? get email => throw _privateConstructorUsedError;
   int? get religion => throw _privateConstructorUsedError;
   String? get caste => throw _privateConstructorUsedError;
-  String? get community => throw _privateConstructorUsedError;
+  int? get community => throw _privateConstructorUsedError;
   String? get other_community => throw _privateConstructorUsedError;
   int? get category => throw _privateConstructorUsedError;
   int? get profession => throw _privateConstructorUsedError;
@@ -1231,7 +1231,7 @@ abstract class $MemberPersonalDetailsCopyWith<$Res> {
       String? email,
       int? religion,
       String? caste,
-      String? community,
+      int? community,
       String? other_community,
       int? category,
       int? profession,
@@ -1305,7 +1305,7 @@ class _$MemberPersonalDetailsCopyWithImpl<$Res,
       community: freezed == community
           ? _value.community
           : community // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       other_community: freezed == other_community
           ? _value.other_community
           : other_community // ignore: cast_nullable_to_non_nullable
@@ -1355,7 +1355,7 @@ abstract class _$$MemberPersonalDetailsImplCopyWith<$Res>
       String? email,
       int? religion,
       String? caste,
-      String? community,
+      int? community,
       String? other_community,
       int? category,
       int? profession,
@@ -1427,7 +1427,7 @@ class __$$MemberPersonalDetailsImplCopyWithImpl<$Res>
       community: freezed == community
           ? _value.community
           : community // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       other_community: freezed == other_community
           ? _value.other_community
           : other_community // ignore: cast_nullable_to_non_nullable
@@ -1500,7 +1500,7 @@ class _$MemberPersonalDetailsImpl implements _MemberPersonalDetails {
   @override
   final String? caste;
   @override
-  final String? community;
+  final int? community;
   @override
   final String? other_community;
   @override
@@ -1602,7 +1602,7 @@ abstract class _MemberPersonalDetails implements MemberPersonalDetails {
           final String? email,
           final int? religion,
           final String? caste,
-          final String? community,
+          final int? community,
           final String? other_community,
           final int? category,
           final int? profession,
@@ -1632,7 +1632,7 @@ abstract class _MemberPersonalDetails implements MemberPersonalDetails {
   @override
   String? get caste;
   @override
-  String? get community;
+  int? get community;
   @override
   String? get other_community;
   @override

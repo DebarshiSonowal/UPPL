@@ -1618,7 +1618,7 @@ mixin _$PersonalDetails {
   @JsonKey(name: 'mobile_no')
   String get mobileNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'community')
-  String get community => throw _privateConstructorUsedError;
+  int get community => throw _privateConstructorUsedError;
   @JsonKey(name: 'other_community')
   String? get otherCommunity => throw _privateConstructorUsedError;
   @JsonKey(name: 'mother_tounge')
@@ -1660,7 +1660,7 @@ abstract class $PersonalDetailsCopyWith<$Res> {
       @JsonKey(name: 'aadhaar_no') String? aadhaarNo,
       @JsonKey(name: 'voter_id') String voterId,
       @JsonKey(name: 'mobile_no') String mobileNo,
-      @JsonKey(name: 'community') String community,
+      @JsonKey(name: 'community') int community,
       @JsonKey(name: 'other_community') String? otherCommunity,
       @JsonKey(name: 'mother_tounge') int motherTongue,
       @JsonKey(name: 'other_mother_tounge') String? otherMotherTongue});
@@ -1770,7 +1770,7 @@ class _$PersonalDetailsCopyWithImpl<$Res, $Val extends PersonalDetails>
       community: null == community
           ? _value.community
           : community // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       otherCommunity: freezed == otherCommunity
           ? _value.otherCommunity
           : otherCommunity // ignore: cast_nullable_to_non_nullable
@@ -1812,7 +1812,7 @@ abstract class _$$PersonalDetailsImplCopyWith<$Res>
       @JsonKey(name: 'aadhaar_no') String? aadhaarNo,
       @JsonKey(name: 'voter_id') String voterId,
       @JsonKey(name: 'mobile_no') String mobileNo,
-      @JsonKey(name: 'community') String community,
+      @JsonKey(name: 'community') int community,
       @JsonKey(name: 'other_community') String? otherCommunity,
       @JsonKey(name: 'mother_tounge') int motherTongue,
       @JsonKey(name: 'other_mother_tounge') String? otherMotherTongue});
@@ -1920,7 +1920,7 @@ class __$$PersonalDetailsImplCopyWithImpl<$Res>
       community: null == community
           ? _value.community
           : community // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       otherCommunity: freezed == otherCommunity
           ? _value.otherCommunity
           : otherCommunity // ignore: cast_nullable_to_non_nullable
@@ -2017,7 +2017,7 @@ class _$PersonalDetailsImpl implements _PersonalDetails {
   final String mobileNo;
   @override
   @JsonKey(name: 'community')
-  final String community;
+  final int community;
   @override
   @JsonKey(name: 'other_community')
   final String? otherCommunity;
@@ -2137,7 +2137,7 @@ abstract class _PersonalDetails implements PersonalDetails {
       @JsonKey(name: 'aadhaar_no') final String? aadhaarNo,
       @JsonKey(name: 'voter_id') required final String voterId,
       @JsonKey(name: 'mobile_no') required final String mobileNo,
-      @JsonKey(name: 'community') required final String community,
+      @JsonKey(name: 'community') required final int community,
       @JsonKey(name: 'other_community') final String? otherCommunity,
       @JsonKey(name: 'mother_tounge') required final int motherTongue,
       @JsonKey(name: 'other_mother_tounge')
@@ -2188,7 +2188,7 @@ abstract class _PersonalDetails implements PersonalDetails {
   String get mobileNo;
   @override
   @JsonKey(name: 'community')
-  String get community;
+  int get community;
   @override
   @JsonKey(name: 'other_community')
   String? get otherCommunity;

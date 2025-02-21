@@ -62,7 +62,7 @@ class JoinedByReferralMember with _$JoinedByReferralMember {
     required DateTime createdAt,
     @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
     required DateTime updatedAt,
-    required String photo,
+    required String? photo,
     required int district,
     @JsonKey(name: 'member_name') required String memberName,
     @JsonKey(name: 'mobile_no') String? mobileNo,

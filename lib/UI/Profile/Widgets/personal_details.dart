@@ -765,7 +765,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Profession",
+                    "Profession*",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black87,
@@ -813,6 +813,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   onChanged: (value) {
                     setState(() {
                       profession = value;
+                      errorMessages.remove('profession');
                     });
                   },
                   value: profession,
@@ -827,7 +828,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Education",
+                    "Education*",
                     style: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black87,
@@ -884,6 +885,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   onChanged: (value) {
                     setState(() {
                       education = value;
+                      errorMessages.remove('education');
                     });
                   },
                   selectedItem: education,
@@ -1177,7 +1179,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                           context,
                           "Missing Information",
                           "Please specify your other profession");
-                    } else if (education != "") {
+                    } else if (education == "") {
                       CustomToast.showWarningToast(
                           context,
                           "Missing Information",
@@ -1486,9 +1488,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         selectedTitle = data?.personalDetails.gender == 1 ? "Mr." : "Miss.";
         selectedGender = (data?.personalDetails.gender ?? 1) - 1;
       }
+      debugPrint(
+          "Please ${data?.personalDetails.community} ${data?.personalDetails.other_community}");
       if (data?.personalDetails.community != null ||
           (data?.personalDetails.other_community ?? "").isNotEmpty) {
-        community = data?.personalDetails.community;
+        debugPrint("Please ${data?.personalDetails.community}");
+        community = Provider.of<Repository>(context, listen: false)
+            .community[data?.personalDetails.community ?? 0];
         otherCommunity = (data?.personalDetails.other_community);
       }
       if (data?.personalDetails.religion != null) {

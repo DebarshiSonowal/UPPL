@@ -494,7 +494,7 @@ mixin _$JoinedByReferralMember {
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
   DateTime get updatedAt => throw _privateConstructorUsedError;
-  String get photo => throw _privateConstructorUsedError;
+  String? get photo => throw _privateConstructorUsedError;
   int get district => throw _privateConstructorUsedError;
   @JsonKey(name: 'member_name')
   String get memberName => throw _privateConstructorUsedError;
@@ -566,7 +566,7 @@ abstract class $JoinedByReferralMemberCopyWith<$Res> {
       DateTime createdAt,
       @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
       DateTime updatedAt,
-      String photo,
+      String? photo,
       int district,
       @JsonKey(name: 'member_name') String memberName,
       @JsonKey(name: 'mobile_no') String? mobileNo,
@@ -623,7 +623,7 @@ class _$JoinedByReferralMemberCopyWithImpl<$Res,
     Object? updateCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? photo = null,
+    Object? photo = freezed,
     Object? district = null,
     Object? memberName = null,
     Object? mobileNo = freezed,
@@ -716,10 +716,10 @@ class _$JoinedByReferralMemberCopyWithImpl<$Res,
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      photo: null == photo
+      photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       district: null == district
           ? _value.district
           : district // ignore: cast_nullable_to_non_nullable
@@ -827,7 +827,7 @@ abstract class _$$JoinedByReferralMemberImplCopyWith<$Res>
       DateTime createdAt,
       @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
       DateTime updatedAt,
-      String photo,
+      String? photo,
       int district,
       @JsonKey(name: 'member_name') String memberName,
       @JsonKey(name: 'mobile_no') String? mobileNo,
@@ -883,7 +883,7 @@ class __$$JoinedByReferralMemberImplCopyWithImpl<$Res>
     Object? updateCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? photo = null,
+    Object? photo = freezed,
     Object? district = null,
     Object? memberName = null,
     Object? mobileNo = freezed,
@@ -976,10 +976,10 @@ class __$$JoinedByReferralMemberImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      photo: null == photo
+      photo: freezed == photo
           ? _value.photo
           : photo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       district: null == district
           ? _value.district
           : district // ignore: cast_nullable_to_non_nullable
@@ -1160,7 +1160,7 @@ class _$JoinedByReferralMemberImpl implements _JoinedByReferralMember {
   @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
   final DateTime updatedAt;
   @override
-  final String photo;
+  final String? photo;
   @override
   final int district;
   @override
@@ -1372,7 +1372,7 @@ abstract class _JoinedByReferralMember implements JoinedByReferralMember {
       required final DateTime createdAt,
       @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
       required final DateTime updatedAt,
-      required final String photo,
+      required final String? photo,
       required final int district,
       @JsonKey(name: 'member_name') required final String memberName,
       @JsonKey(name: 'mobile_no') final String? mobileNo,
@@ -1452,7 +1452,7 @@ abstract class _JoinedByReferralMember implements JoinedByReferralMember {
   @JsonKey(name: 'updated_at', fromJson: _fromJson, toJson: _toJson)
   DateTime get updatedAt;
   @override
-  String get photo;
+  String? get photo;
   @override
   int get district;
   @override

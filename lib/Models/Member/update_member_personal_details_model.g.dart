@@ -151,7 +151,7 @@ _$PersonalDetailsImpl _$$PersonalDetailsImplFromJson(
       aadhaarNo: json['aadhaar_no'] as String?,
       voterId: json['voter_id'] as String,
       mobileNo: json['mobile_no'] as String,
-      community: json['community'] as String,
+      community: (json['community'] as num).toInt(),
       otherCommunity: json['other_community'] as String?,
       motherTongue: (json['mother_tounge'] as num).toInt(),
       otherMotherTongue: json['other_mother_tounge'] as String?,

@@ -8,7 +8,9 @@ import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:uppl/Models/family/referred_family_details_model.dart';
 
 import '../../Models/family/family_details_model.dart';
+import '../../Storage/config_storage.dart';
 import '../errors/generic_error_handler.dart';
+import 'auth_api.dart';
 
 class GetFamilyService {
   GetFamilyService._(); // Private constructor to prevent direct instantiation
@@ -33,6 +35,12 @@ class GetFamilyService {
         return FamilyDetailsModel.fromJson(response.data);
       }
     } on DioError catch (e) {
+      if ((e.response?.statusCode == 401)) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return getFamilyDetails(context, dio);
+      }
       SVProgressHUD.dismiss();
       debugPrint(
           "get-family-members-details error: ${e.message} ${e.response}");
@@ -61,6 +69,12 @@ class GetFamilyService {
 
       return ReferredFamilyDetailsModel.fromJson(response.data);
     } on DioError catch (e) {
+      if (e.response?.statusCode == 401 ?? false) {
+        debugPrint("Unauthorized. Regenerating token and retrying request...");
+        await GetAuthService.instance
+            .regenerateToken(ConfigStorage.instance.refreshToken, context);
+        return getReferredFamilyDetails(context, memberId, dio);
+      }
       SVProgressHUD.dismiss();
       debugPrint(
           "get-referred-member-amily-members-details error: ${e.message} ${e.response?.data}");

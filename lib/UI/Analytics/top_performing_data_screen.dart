@@ -16,24 +16,19 @@ class TopPerformingDataScreen extends StatefulWidget {
 }
 
 class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
-  final ScrollController _scrollController = ScrollController();
   final List<TopPerformingData> _data = [];
   bool _isLoading = false;
   int _currentPage = 1;
-  bool _hasMoreData = true;
-  static const int _pageSize = 10;
+  int _totalPages = 1;
+  int _recordsTotal = 0;
+  int _recordsFiltered = 0;
+  String? _lastFetchedType;
+  int? _lastFetchedPage;
 
   @override
   void initState() {
     super.initState();
     _loadInitialData();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 
   Future<void> _loadInitialData() async {
@@ -41,37 +36,48 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   }
 
   Future<void> _fetchData() async {
-    if (_isLoading || !_hasMoreData) return;
+    if (_isLoading) return;
+
+    if (_lastFetchedType == widget.type && _lastFetchedPage == _currentPage) {
+      return;
+    }
 
     setState(() => _isLoading = true);
 
-    try {
-      final response =
-          await ApiService.instance(context).generateTopPerformingDataAnalytics(
-        context,
-        _currentPage, // draw
-        (_currentPage - 1) * _pageSize, // start
-        _pageSize, // length
-        widget.type, // type
-      );
+    // Start from 0 and increment by 10 for each page
+    final int start = (_currentPage - 1) * 10;
+    // Length starts at 10 and increments by 10
+    final int length = 10 * _currentPage;
 
-      if (response.data?.isNotEmpty ?? false) {
-        setState(() {
-          _data.addAll(response.data!);
-          _currentPage++;
-          _hasMoreData = response.data!.length >= _pageSize;
-        });
-      } else {
-        setState(() => _hasMoreData = false);
-        if (_data.isEmpty) {
-          _showMessage('No data available');
+    final response =
+        await ApiService.instance(context).generateTopPerformingDataAnalytics(
+      context,
+      1,
+      start,
+      length,
+      widget.type,
+    );
+
+    _lastFetchedType = widget.type;
+    _lastFetchedPage = _currentPage;
+
+    if (response.data?.isNotEmpty ?? false) {
+      setState(() {
+        if (_currentPage == 1 || _lastFetchedType != widget.type) {
+          _data.clear();
         }
+        _data.addAll(response.data);
+        _recordsTotal = response.recordsTotal;
+        _recordsFiltered = response.recordsFiltered;
+        _totalPages = (_recordsFiltered / 10).ceil();
+      });
+    } else {
+      if (_data.isEmpty) {
+        _showMessage('No data available');
       }
-    } catch (e) {
-      _showMessage('Error: ${e.toString()}');
-    } finally {
-      setState(() => _isLoading = false);
     }
+
+    setState(() => _isLoading = false);
   }
 
   void _showMessage(String message) {
@@ -84,19 +90,21 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
     );
   }
 
-  void _onScroll() {
-    final position = _scrollController.position;
-    if (position.pixels >= position.maxScrollExtent - 200) {
-      _fetchData();
-    }
-  }
-
   Future<void> _refreshData() async {
+    _lastFetchedType = null;
+    _lastFetchedPage = null;
     setState(() {
       _data.clear();
       _currentPage = 1;
-      _hasMoreData = true;
+      _recordsTotal = 0;
+      _recordsFiltered = 0;
     });
+    await _fetchData();
+  }
+
+  Future<void> _navigateToPage(int page) async {
+    if (page < 1 || page > _totalPages || page == _currentPage) return;
+    setState(() => _currentPage = page);
     await _fetchData();
   }
 
@@ -115,9 +123,52 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
     );
   }
 
+  Widget _buildPagination() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Text(
+            'Showing ${(_currentPage - 1) * 10 + 1} to ${_currentPage * 10 > _recordsFiltered ? _recordsFiltered : _currentPage * 10} of $_recordsFiltered entries',
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: _currentPage > 1
+                    ? () => _navigateToPage(_currentPage - 1)
+                    : null,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Page $_currentPage of $_totalPages',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_ios),
+                onPressed: _currentPage < _totalPages
+                    ? () => _navigateToPage(_currentPage + 1)
+                    : null,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDataItem(TopPerformingData item) {
     return Card(
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -126,33 +177,53 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Rank ${item.slno}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                Badge(
+                  label: Text('#${item.slno}'),
+                  backgroundColor: Colors.blue,
                 ),
-                Text(
-                  item.btcConstituencyName,
-                  style: const TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      item.name ?? "",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.end,
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text('Representative: ${item.name}'),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const CircleAvatar(
+                child: Icon(Icons.person),
+              ),
+              title: Text(
+                item.name ?? "N/A",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              subtitle: Text(
+                'Representative',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
             const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatColumn('Total Members', item.memberCount.toString()),
-                _buildStatColumn('Verified', item.verifiedMemberCount),
-                _buildStatColumn('Non-Verified', item.nonVerifiedMemberCount),
-              ],
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildStatColumn(
+                      'Total\nMembers', item.memberCount.toString()),
+                  const VerticalDivider(),
+                  _buildStatColumn('Verified', item.verifiedMemberCount ?? "0"),
+                  const VerticalDivider(),
+                  _buildStatColumn(
+                      'Non-Verified', item.nonVerifiedMemberCount ?? "0"),
+                ],
+              ),
             ),
           ],
         ),
@@ -186,22 +257,33 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Top Performing Constituencies'),
+        title: Text(widget.type
+            .replaceFirst('worst', 'Worst')
+            .replaceFirst('top', 'Top')
+            .replaceFirst('Primary', ' Primary')
+            .replaceFirst('Booth', ' Booth')
+            .replaceAll(RegExp(r'(?<!^)(?=[A-Z])'), ' ')),
       ),
       body: RefreshIndicator(
         onRefresh: _refreshData,
-        child: _data.isEmpty && !_isLoading
-            ? _buildEmptyState()
-            : ListView.builder(
-                controller: _scrollController,
-                itemCount: _data.length + (_isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == _data.length) {
-                    return _buildLoadingIndicator();
-                  }
-                  return _buildDataItem(_data[index]);
-                },
-              ),
+        child: Column(
+          children: [
+            Expanded(
+              child: _data.isEmpty && !_isLoading
+                  ? _buildEmptyState()
+                  : ListView.builder(
+                      itemCount: _data.length + (_isLoading ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == _data.length) {
+                          return _buildLoadingIndicator();
+                        }
+                        return _buildDataItem(_data[index]);
+                      },
+                    ),
+            ),
+            _buildPagination(),
+          ],
+        ),
       ),
     );
   }

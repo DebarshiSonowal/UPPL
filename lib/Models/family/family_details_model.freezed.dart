@@ -664,7 +664,7 @@ mixin _$FamilyMembershipCard {
   int? get districtId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'mobile_no')
-  String get mobileNo => throw _privateConstructorUsedError;
+  String? get mobileNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'membership_no')
   String get membershipNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'ref_code')
@@ -721,7 +721,7 @@ abstract class $FamilyMembershipCardCopyWith<$Res> {
       FamilyDistrict district,
       @JsonKey(name: 'district_id') int? districtId,
       String name,
-      @JsonKey(name: 'mobile_no') String mobileNo,
+      @JsonKey(name: 'mobile_no') String? mobileNo,
       @JsonKey(name: 'membership_no') String membershipNo,
       @JsonKey(name: 'ref_code') String refCode,
       int gender,
@@ -774,7 +774,7 @@ class _$FamilyMembershipCardCopyWithImpl<$Res,
     Object? district = null,
     Object? districtId = freezed,
     Object? name = null,
-    Object? mobileNo = null,
+    Object? mobileNo = freezed,
     Object? membershipNo = null,
     Object? refCode = null,
     Object? gender = null,
@@ -881,10 +881,10 @@ class _$FamilyMembershipCardCopyWithImpl<$Res,
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      mobileNo: null == mobileNo
+      mobileNo: freezed == mobileNo
           ? _value.mobileNo
           : mobileNo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       membershipNo: null == membershipNo
           ? _value.membershipNo
           : membershipNo // ignore: cast_nullable_to_non_nullable
@@ -965,7 +965,7 @@ abstract class _$$FamilyMembershipCardImplCopyWith<$Res>
       FamilyDistrict district,
       @JsonKey(name: 'district_id') int? districtId,
       String name,
-      @JsonKey(name: 'mobile_no') String mobileNo,
+      @JsonKey(name: 'mobile_no') String? mobileNo,
       @JsonKey(name: 'membership_no') String membershipNo,
       @JsonKey(name: 'ref_code') String refCode,
       int gender,
@@ -1016,7 +1016,7 @@ class __$$FamilyMembershipCardImplCopyWithImpl<$Res>
     Object? district = null,
     Object? districtId = freezed,
     Object? name = null,
-    Object? mobileNo = null,
+    Object? mobileNo = freezed,
     Object? membershipNo = null,
     Object? refCode = null,
     Object? gender = null,
@@ -1123,10 +1123,10 @@ class __$$FamilyMembershipCardImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      mobileNo: null == mobileNo
+      mobileNo: freezed == mobileNo
           ? _value.mobileNo
           : mobileNo // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       membershipNo: null == membershipNo
           ? _value.membershipNo
           : membershipNo // ignore: cast_nullable_to_non_nullable
@@ -1273,7 +1273,7 @@ class _$FamilyMembershipCardImpl implements _FamilyMembershipCard {
   final String name;
   @override
   @JsonKey(name: 'mobile_no')
-  final String mobileNo;
+  final String? mobileNo;
   @override
   @JsonKey(name: 'membership_no')
   final String membershipNo;
@@ -1446,7 +1446,7 @@ abstract class _FamilyMembershipCard implements FamilyMembershipCard {
           required final FamilyDistrict district,
           @JsonKey(name: 'district_id') final int? districtId,
           required final String name,
-          @JsonKey(name: 'mobile_no') required final String mobileNo,
+          @JsonKey(name: 'mobile_no') required final String? mobileNo,
           @JsonKey(name: 'membership_no') required final String membershipNo,
           @JsonKey(name: 'ref_code') required final String refCode,
           required final int gender,
@@ -1527,7 +1527,7 @@ abstract class _FamilyMembershipCard implements FamilyMembershipCard {
   String get name;
   @override
   @JsonKey(name: 'mobile_no')
-  String get mobileNo;
+  String? get mobileNo;
   @override
   @JsonKey(name: 'membership_no')
   String get membershipNo;

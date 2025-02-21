@@ -102,7 +102,7 @@ class PersonalDetails with _$PersonalDetails {
     @JsonKey(name: 'aadhaar_no') String? aadhaarNo,
     @JsonKey(name: 'voter_id') required String voterId,
     @JsonKey(name: 'mobile_no') required String mobileNo,
-    @JsonKey(name: 'community') required String community,
+    @JsonKey(name: 'community') required int community,
     @JsonKey(name: 'other_community') String? otherCommunity,
     @JsonKey(name: 'mother_tounge')
     required int motherTongue, // Changed from String to int

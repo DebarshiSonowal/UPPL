@@ -14,20 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-TopPerformingDataModel _$TopPerformingDataModelFromJson(
-    Map<String, dynamic> json) {
-  return _TopPerformingDataModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$TopPerformingDataModel {
+  List<TopPerformingData> get data => throw _privateConstructorUsedError;
   int get draw => throw _privateConstructorUsedError;
   int get recordsTotal => throw _privateConstructorUsedError;
   int get recordsFiltered => throw _privateConstructorUsedError;
-  List<TopPerformingData> get data => throw _privateConstructorUsedError;
-
-  /// Serializes this TopPerformingDataModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of TopPerformingDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -43,10 +35,10 @@ abstract class $TopPerformingDataModelCopyWith<$Res> {
       _$TopPerformingDataModelCopyWithImpl<$Res, TopPerformingDataModel>;
   @useResult
   $Res call(
-      {int draw,
+      {List<TopPerformingData> data,
+      int draw,
       int recordsTotal,
-      int recordsFiltered,
-      List<TopPerformingData> data});
+      int recordsFiltered});
 }
 
 /// @nodoc
@@ -65,12 +57,16 @@ class _$TopPerformingDataModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? data = null,
     Object? draw = null,
     Object? recordsTotal = null,
     Object? recordsFiltered = null,
-    Object? data = null,
   }) {
     return _then(_value.copyWith(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<TopPerformingData>,
       draw: null == draw
           ? _value.draw
           : draw // ignore: cast_nullable_to_non_nullable
@@ -83,10 +79,6 @@ class _$TopPerformingDataModelCopyWithImpl<$Res,
           ? _value.recordsFiltered
           : recordsFiltered // ignore: cast_nullable_to_non_nullable
               as int,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as List<TopPerformingData>,
     ) as $Val);
   }
 }
@@ -101,10 +93,10 @@ abstract class _$$TopPerformingDataModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int draw,
+      {List<TopPerformingData> data,
+      int draw,
       int recordsTotal,
-      int recordsFiltered,
-      List<TopPerformingData> data});
+      int recordsFiltered});
 }
 
 /// @nodoc
@@ -122,12 +114,16 @@ class __$$TopPerformingDataModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? data = null,
     Object? draw = null,
     Object? recordsTotal = null,
     Object? recordsFiltered = null,
-    Object? data = null,
   }) {
     return _then(_$TopPerformingDataModelImpl(
+      data: null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<TopPerformingData>,
       draw: null == draw
           ? _value.draw
           : draw // ignore: cast_nullable_to_non_nullable
@@ -140,33 +136,20 @@ class __$$TopPerformingDataModelImplCopyWithImpl<$Res>
           ? _value.recordsFiltered
           : recordsFiltered // ignore: cast_nullable_to_non_nullable
               as int,
-      data: null == data
-          ? _value._data
-          : data // ignore: cast_nullable_to_non_nullable
-              as List<TopPerformingData>,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$TopPerformingDataModelImpl implements _TopPerformingDataModel {
   const _$TopPerformingDataModelImpl(
-      {required this.draw,
+      {required final List<TopPerformingData> data,
+      required this.draw,
       required this.recordsTotal,
-      required this.recordsFiltered,
-      required final List<TopPerformingData> data})
+      required this.recordsFiltered})
       : _data = data;
 
-  factory _$TopPerformingDataModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TopPerformingDataModelImplFromJson(json);
-
-  @override
-  final int draw;
-  @override
-  final int recordsTotal;
-  @override
-  final int recordsFiltered;
   final List<TopPerformingData> _data;
   @override
   List<TopPerformingData> get data {
@@ -176,8 +159,15 @@ class _$TopPerformingDataModelImpl implements _TopPerformingDataModel {
   }
 
   @override
+  final int draw;
+  @override
+  final int recordsTotal;
+  @override
+  final int recordsFiltered;
+
+  @override
   String toString() {
-    return 'TopPerformingDataModel(draw: $draw, recordsTotal: $recordsTotal, recordsFiltered: $recordsFiltered, data: $data)';
+    return 'TopPerformingDataModel(data: $data, draw: $draw, recordsTotal: $recordsTotal, recordsFiltered: $recordsFiltered)';
   }
 
   @override
@@ -185,18 +175,21 @@ class _$TopPerformingDataModelImpl implements _TopPerformingDataModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TopPerformingDataModelImpl &&
+            const DeepCollectionEquality().equals(other._data, _data) &&
             (identical(other.draw, draw) || other.draw == draw) &&
             (identical(other.recordsTotal, recordsTotal) ||
                 other.recordsTotal == recordsTotal) &&
             (identical(other.recordsFiltered, recordsFiltered) ||
-                other.recordsFiltered == recordsFiltered) &&
-            const DeepCollectionEquality().equals(other._data, _data));
+                other.recordsFiltered == recordsFiltered));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, draw, recordsTotal,
-      recordsFiltered, const DeepCollectionEquality().hash(_data));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_data),
+      draw,
+      recordsTotal,
+      recordsFiltered);
 
   /// Create a copy of TopPerformingDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -206,34 +199,23 @@ class _$TopPerformingDataModelImpl implements _TopPerformingDataModel {
   _$$TopPerformingDataModelImplCopyWith<_$TopPerformingDataModelImpl>
       get copyWith => __$$TopPerformingDataModelImplCopyWithImpl<
           _$TopPerformingDataModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$TopPerformingDataModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _TopPerformingDataModel implements TopPerformingDataModel {
   const factory _TopPerformingDataModel(
-          {required final int draw,
-          required final int recordsTotal,
-          required final int recordsFiltered,
-          required final List<TopPerformingData> data}) =
-      _$TopPerformingDataModelImpl;
+      {required final List<TopPerformingData> data,
+      required final int draw,
+      required final int recordsTotal,
+      required final int recordsFiltered}) = _$TopPerformingDataModelImpl;
 
-  factory _TopPerformingDataModel.fromJson(Map<String, dynamic> json) =
-      _$TopPerformingDataModelImpl.fromJson;
-
+  @override
+  List<TopPerformingData> get data;
   @override
   int get draw;
   @override
   int get recordsTotal;
   @override
   int get recordsFiltered;
-  @override
-  List<TopPerformingData> get data;
 
   /// Create a copy of TopPerformingDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -250,17 +232,15 @@ TopPerformingData _$TopPerformingDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TopPerformingData {
   @JsonKey(name: 'btc_constituency')
-  int get btcConstituency => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'btc_constituency_name')
-  String get btcConstituencyName => throw _privateConstructorUsedError;
+  int? get btcConstituency => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'member_count')
-  int get memberCount => throw _privateConstructorUsedError;
+  int? get memberCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'verified_member_count')
-  String get verifiedMemberCount => throw _privateConstructorUsedError;
+  String? get verifiedMemberCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'non_verified_member_count')
-  String get nonVerifiedMemberCount => throw _privateConstructorUsedError;
-  int get slno => throw _privateConstructorUsedError;
+  String? get nonVerifiedMemberCount => throw _privateConstructorUsedError;
+  int? get slno => throw _privateConstructorUsedError;
 
   /// Serializes this TopPerformingData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -279,13 +259,13 @@ abstract class $TopPerformingDataCopyWith<$Res> {
       _$TopPerformingDataCopyWithImpl<$Res, TopPerformingData>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'btc_constituency') int btcConstituency,
-      String name,
-      @JsonKey(name: 'btc_constituency_name') String btcConstituencyName,
-      @JsonKey(name: 'member_count') int memberCount,
-      @JsonKey(name: 'verified_member_count') String verifiedMemberCount,
-      @JsonKey(name: 'non_verified_member_count') String nonVerifiedMemberCount,
-      int slno});
+      {@JsonKey(name: 'btc_constituency') int? btcConstituency,
+      String? name,
+      @JsonKey(name: 'member_count') int? memberCount,
+      @JsonKey(name: 'verified_member_count') String? verifiedMemberCount,
+      @JsonKey(name: 'non_verified_member_count')
+      String? nonVerifiedMemberCount,
+      int? slno});
 }
 
 /// @nodoc
@@ -303,43 +283,38 @@ class _$TopPerformingDataCopyWithImpl<$Res, $Val extends TopPerformingData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? btcConstituency = null,
-    Object? name = null,
-    Object? btcConstituencyName = null,
-    Object? memberCount = null,
-    Object? verifiedMemberCount = null,
-    Object? nonVerifiedMemberCount = null,
-    Object? slno = null,
+    Object? btcConstituency = freezed,
+    Object? name = freezed,
+    Object? memberCount = freezed,
+    Object? verifiedMemberCount = freezed,
+    Object? nonVerifiedMemberCount = freezed,
+    Object? slno = freezed,
   }) {
     return _then(_value.copyWith(
-      btcConstituency: null == btcConstituency
+      btcConstituency: freezed == btcConstituency
           ? _value.btcConstituency
           : btcConstituency // ignore: cast_nullable_to_non_nullable
-              as int,
-      name: null == name
+              as int?,
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      btcConstituencyName: null == btcConstituencyName
-          ? _value.btcConstituencyName
-          : btcConstituencyName // ignore: cast_nullable_to_non_nullable
-              as String,
-      memberCount: null == memberCount
+              as String?,
+      memberCount: freezed == memberCount
           ? _value.memberCount
           : memberCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      verifiedMemberCount: null == verifiedMemberCount
+              as int?,
+      verifiedMemberCount: freezed == verifiedMemberCount
           ? _value.verifiedMemberCount
           : verifiedMemberCount // ignore: cast_nullable_to_non_nullable
-              as String,
-      nonVerifiedMemberCount: null == nonVerifiedMemberCount
+              as String?,
+      nonVerifiedMemberCount: freezed == nonVerifiedMemberCount
           ? _value.nonVerifiedMemberCount
           : nonVerifiedMemberCount // ignore: cast_nullable_to_non_nullable
-              as String,
-      slno: null == slno
+              as String?,
+      slno: freezed == slno
           ? _value.slno
           : slno // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -353,13 +328,13 @@ abstract class _$$TopPerformingDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'btc_constituency') int btcConstituency,
-      String name,
-      @JsonKey(name: 'btc_constituency_name') String btcConstituencyName,
-      @JsonKey(name: 'member_count') int memberCount,
-      @JsonKey(name: 'verified_member_count') String verifiedMemberCount,
-      @JsonKey(name: 'non_verified_member_count') String nonVerifiedMemberCount,
-      int slno});
+      {@JsonKey(name: 'btc_constituency') int? btcConstituency,
+      String? name,
+      @JsonKey(name: 'member_count') int? memberCount,
+      @JsonKey(name: 'verified_member_count') String? verifiedMemberCount,
+      @JsonKey(name: 'non_verified_member_count')
+      String? nonVerifiedMemberCount,
+      int? slno});
 }
 
 /// @nodoc
@@ -375,43 +350,38 @@ class __$$TopPerformingDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? btcConstituency = null,
-    Object? name = null,
-    Object? btcConstituencyName = null,
-    Object? memberCount = null,
-    Object? verifiedMemberCount = null,
-    Object? nonVerifiedMemberCount = null,
-    Object? slno = null,
+    Object? btcConstituency = freezed,
+    Object? name = freezed,
+    Object? memberCount = freezed,
+    Object? verifiedMemberCount = freezed,
+    Object? nonVerifiedMemberCount = freezed,
+    Object? slno = freezed,
   }) {
     return _then(_$TopPerformingDataImpl(
-      btcConstituency: null == btcConstituency
+      btcConstituency: freezed == btcConstituency
           ? _value.btcConstituency
           : btcConstituency // ignore: cast_nullable_to_non_nullable
-              as int,
-      name: null == name
+              as int?,
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      btcConstituencyName: null == btcConstituencyName
-          ? _value.btcConstituencyName
-          : btcConstituencyName // ignore: cast_nullable_to_non_nullable
-              as String,
-      memberCount: null == memberCount
+              as String?,
+      memberCount: freezed == memberCount
           ? _value.memberCount
           : memberCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      verifiedMemberCount: null == verifiedMemberCount
+              as int?,
+      verifiedMemberCount: freezed == verifiedMemberCount
           ? _value.verifiedMemberCount
           : verifiedMemberCount // ignore: cast_nullable_to_non_nullable
-              as String,
-      nonVerifiedMemberCount: null == nonVerifiedMemberCount
+              as String?,
+      nonVerifiedMemberCount: freezed == nonVerifiedMemberCount
           ? _value.nonVerifiedMemberCount
           : nonVerifiedMemberCount // ignore: cast_nullable_to_non_nullable
-              as String,
-      slno: null == slno
+              as String?,
+      slno: freezed == slno
           ? _value.slno
           : slno // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -422,7 +392,6 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
   const _$TopPerformingDataImpl(
       {@JsonKey(name: 'btc_constituency') required this.btcConstituency,
       required this.name,
-      @JsonKey(name: 'btc_constituency_name') required this.btcConstituencyName,
       @JsonKey(name: 'member_count') required this.memberCount,
       @JsonKey(name: 'verified_member_count') required this.verifiedMemberCount,
       @JsonKey(name: 'non_verified_member_count')
@@ -434,27 +403,24 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
 
   @override
   @JsonKey(name: 'btc_constituency')
-  final int btcConstituency;
+  final int? btcConstituency;
   @override
-  final String name;
-  @override
-  @JsonKey(name: 'btc_constituency_name')
-  final String btcConstituencyName;
+  final String? name;
   @override
   @JsonKey(name: 'member_count')
-  final int memberCount;
+  final int? memberCount;
   @override
   @JsonKey(name: 'verified_member_count')
-  final String verifiedMemberCount;
+  final String? verifiedMemberCount;
   @override
   @JsonKey(name: 'non_verified_member_count')
-  final String nonVerifiedMemberCount;
+  final String? nonVerifiedMemberCount;
   @override
-  final int slno;
+  final int? slno;
 
   @override
   String toString() {
-    return 'TopPerformingData(btcConstituency: $btcConstituency, name: $name, btcConstituencyName: $btcConstituencyName, memberCount: $memberCount, verifiedMemberCount: $verifiedMemberCount, nonVerifiedMemberCount: $nonVerifiedMemberCount, slno: $slno)';
+    return 'TopPerformingData(btcConstituency: $btcConstituency, name: $name, memberCount: $memberCount, verifiedMemberCount: $verifiedMemberCount, nonVerifiedMemberCount: $nonVerifiedMemberCount, slno: $slno)';
   }
 
   @override
@@ -465,8 +431,6 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
             (identical(other.btcConstituency, btcConstituency) ||
                 other.btcConstituency == btcConstituency) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.btcConstituencyName, btcConstituencyName) ||
-                other.btcConstituencyName == btcConstituencyName) &&
             (identical(other.memberCount, memberCount) ||
                 other.memberCount == memberCount) &&
             (identical(other.verifiedMemberCount, verifiedMemberCount) ||
@@ -478,15 +442,8 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      btcConstituency,
-      name,
-      btcConstituencyName,
-      memberCount,
-      verifiedMemberCount,
-      nonVerifiedMemberCount,
-      slno);
+  int get hashCode => Object.hash(runtimeType, btcConstituency, name,
+      memberCount, verifiedMemberCount, nonVerifiedMemberCount, slno);
 
   /// Create a copy of TopPerformingData
   /// with the given fields replaced by the non-null parameter values.
@@ -507,39 +464,34 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
 
 abstract class _TopPerformingData implements TopPerformingData {
   const factory _TopPerformingData(
-      {@JsonKey(name: 'btc_constituency') required final int btcConstituency,
-      required final String name,
-      @JsonKey(name: 'btc_constituency_name')
-      required final String btcConstituencyName,
-      @JsonKey(name: 'member_count') required final int memberCount,
+      {@JsonKey(name: 'btc_constituency') required final int? btcConstituency,
+      required final String? name,
+      @JsonKey(name: 'member_count') required final int? memberCount,
       @JsonKey(name: 'verified_member_count')
-      required final String verifiedMemberCount,
+      required final String? verifiedMemberCount,
       @JsonKey(name: 'non_verified_member_count')
-      required final String nonVerifiedMemberCount,
-      required final int slno}) = _$TopPerformingDataImpl;
+      required final String? nonVerifiedMemberCount,
+      required final int? slno}) = _$TopPerformingDataImpl;
 
   factory _TopPerformingData.fromJson(Map<String, dynamic> json) =
       _$TopPerformingDataImpl.fromJson;
 
   @override
   @JsonKey(name: 'btc_constituency')
-  int get btcConstituency;
+  int? get btcConstituency;
   @override
-  String get name;
-  @override
-  @JsonKey(name: 'btc_constituency_name')
-  String get btcConstituencyName;
+  String? get name;
   @override
   @JsonKey(name: 'member_count')
-  int get memberCount;
+  int? get memberCount;
   @override
   @JsonKey(name: 'verified_member_count')
-  String get verifiedMemberCount;
+  String? get verifiedMemberCount;
   @override
   @JsonKey(name: 'non_verified_member_count')
-  String get nonVerifiedMemberCount;
+  String? get nonVerifiedMemberCount;
   @override
-  int get slno;
+  int? get slno;
 
   /// Create a copy of TopPerformingData
   /// with the given fields replaced by the non-null parameter values.

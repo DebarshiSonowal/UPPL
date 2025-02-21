@@ -80,7 +80,7 @@ _$FamilyMembershipCardImpl _$$FamilyMembershipCardImplFromJson(
           FamilyDistrict.fromJson(json['district'] as Map<String, dynamic>),
       districtId: (json['district_id'] as num?)?.toInt(),
       name: json['name'] as String,
-      mobileNo: json['mobile_no'] as String,
+      mobileNo: json['mobile_no'] as String?,
       membershipNo: json['membership_no'] as String,
       refCode: json['ref_code'] as String,
       gender: (json['gender'] as num).toInt(),

@@ -88,7 +88,7 @@ class MemberPersonalDetails with _$MemberPersonalDetails {
     String? email,
     int? religion,
     String? caste,
-    String? community,
+    int? community,
     String? other_community,
     int? category,
     int? profession,

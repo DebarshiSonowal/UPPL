@@ -388,7 +388,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 (item.membershipCard.userId == 0)
                                     ? SizedBox(
-                                        width: 22.w,
+                                        // width: 24.w,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             try {
@@ -404,13 +404,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.symmetric(
-                                              horizontal: 2.w,
-                                              vertical: 1.h,
+                                              horizontal: 1.5.w,
+                                              vertical: 0.5.h,
                                             ),
                                             child: Text(
                                               "Validate",
                                               style: Configuration.primaryFont(
-                                                fontSize: 14.sp,
+                                                fontSize: 12.sp,
                                                 color: Colors.green,
                                                 fontWeight: FontWeight.bold,
                                                 // Add other text styling as needed
@@ -425,7 +425,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           child: Text(
                                             "Verified",
                                             style: Configuration.primaryFont(
-                                              fontSize: 14.sp,
+                                              fontSize: 12.sp,
                                               color: Colors.green,
                                               fontWeight: FontWeight.bold,
                                               // Add other text styling as needed

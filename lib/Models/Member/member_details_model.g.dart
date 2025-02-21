@@ -66,7 +66,7 @@ _$MemberPersonalDetailsImpl _$$MemberPersonalDetailsImplFromJson(
       email: json['email'] as String?,
       religion: (json['religion'] as num?)?.toInt(),
       caste: json['caste'] as String?,
-      community: json['community'] as String?,
+      community: (json['community'] as num?)?.toInt(),
       other_community: json['other_community'] as String?,
       category: (json['category'] as num?)?.toInt(),
       profession: (json['profession'] as num?)?.toInt(),

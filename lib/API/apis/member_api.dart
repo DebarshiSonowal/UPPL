@@ -343,7 +343,9 @@ class GetMemberService {
     }
 
     // Always add education regardless of its value
-    requestBody["education"] = education;
+    if (education != null && education != "" && education != -1) {
+      requestBody["education"] = education;
+    }
 
     if (aadhaar_no != null && aadhaar_no != "" && aadhaar_no != 0) {
       requestBody["aadhaar_no"] = aadhaar_no;

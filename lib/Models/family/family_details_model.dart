@@ -66,7 +66,7 @@ class FamilyMembershipCard with _$FamilyMembershipCard {
     required FamilyDistrict district,
     @JsonKey(name: 'district_id') int? districtId,
     required String name,
-    @JsonKey(name: 'mobile_no') required String mobileNo,
+    @JsonKey(name: 'mobile_no') required String? mobileNo,
     @JsonKey(name: 'membership_no') required String membershipNo,
     @JsonKey(name: 'ref_code') required String refCode,
     required int gender,
