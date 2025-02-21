@@ -820,6 +820,90 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TopPerformerScreen]
+class TopPerformerRoute extends PageRouteInfo<void> {
+  const TopPerformerRoute({List<PageRouteInfo>? children})
+      : super(
+          TopPerformerRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TopPerformerRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TopPerformerScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [TopPerformingBTCConstituencyScreen]
+class TopPerformingBTCConstituencyRoute extends PageRouteInfo<void> {
+  const TopPerformingBTCConstituencyRoute({List<PageRouteInfo>? children})
+      : super(
+          TopPerformingBTCConstituencyRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TopPerformingBTCConstituencyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TopPerformingBTCConstituencyScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [TopPerformingDataScreen]
+class TopPerformingDataRoute extends PageRouteInfo<TopPerformingDataRouteArgs> {
+  TopPerformingDataRoute({
+    Key? key,
+    required String type,
+    List<PageRouteInfo>? children,
+  }) : super(
+          TopPerformingDataRoute.name,
+          args: TopPerformingDataRouteArgs(
+            key: key,
+            type: type,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'TopPerformingDataRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TopPerformingDataRouteArgs>();
+      return TopPerformingDataScreen(
+        key: args.key,
+        type: args.type,
+      );
+    },
+  );
+}
+
+class TopPerformingDataRouteArgs {
+  const TopPerformingDataRouteArgs({
+    this.key,
+    required this.type,
+  });
+
+  final Key? key;
+
+  final String type;
+
+  @override
+  String toString() {
+    return 'TopPerformingDataRouteArgs{key: $key, type: $type}';
+  }
+}
+
+/// generated route for
 /// [UpdateFamilyDetailsScreen]
 class UpdateFamilyDetailsRoute extends PageRouteInfo<void> {
   const UpdateFamilyDetailsRoute({List<PageRouteInfo>? children})

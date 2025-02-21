@@ -467,6 +467,7 @@ class _AddFamilyMemberDetailsScreenState
                   controller: voterID,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.characters,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,

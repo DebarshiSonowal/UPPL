@@ -6,6 +6,9 @@ import '../Models/JSON/generate_json_model.dart';
 import '../Models/Member/member_details_model.dart';
 // import '../Models/Member/update_member_family_details_model.dart';
 import '../Models/Referal/joined_by_referral_model.dart';
+import '../Models/analytics/top_performer_model.dart';
+import '../Models/analytics/top_performing_btc_model.dart';
+import '../Models/analytics/top_performing_data_model.dart';
 import '../Models/audience/audience_demography_model.dart';
 import '../Models/dashboard_stats_model.dart';
 import '../Models/family/family_details_model.dart';
@@ -44,6 +47,9 @@ class Repository extends ChangeNotifier {
   List<String> country = [];
   List<String> motherTounge = [];
   List<String> community = [];
+  List<BtcData> topPerformingBtcConstituency = [];
+  List<TopPerformerData> topPerformers = [];
+  List<TopPerformingData> topPerformingData = [];
   DashboardStats? dashboardStats;
 
   //Methods
@@ -54,6 +60,26 @@ class Repository extends ChangeNotifier {
 
   void setMotherTounge(List<String> data) {
     motherTounge = data;
+    notifyListeners();
+  }
+
+  void setTopPerformingData(List<TopPerformingData> data) {
+    topPerformingData = data;
+    notifyListeners();
+  }
+
+  void clearTopPerformers() {
+    topPerformers = [];
+    notifyListeners();
+  }
+
+  void setTopPerformingBtcConstituency(List<BtcData> data) {
+    topPerformingBtcConstituency = data;
+    notifyListeners();
+  }
+
+  void setTopPerformers(List<TopPerformerData> data) {
+    topPerformers = data;
     notifyListeners();
   }
 

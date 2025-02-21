@@ -25,6 +25,9 @@ import '../Models/Referal/joined_by_referral_model.dart';
 import '../Models/Referal/validate_referal_code_model.dart';
 import '../Models/Token/regenerate_token_model.dart';
 import '../Models/Verify/generate_verify_otp_model.dart';
+import '../Models/analytics/top_performer_model.dart';
+import '../Models/analytics/top_performing_btc_model.dart';
+import '../Models/analytics/top_performing_data_model.dart';
 import '../Models/audience/audience_demography_model.dart';
 import '../Models/dashboard_stats_model.dart';
 import '../Models/family/family_details_model.dart';
@@ -46,9 +49,9 @@ class ApiService {
     return _instance!;
   }
 
-  static const String baseUrl = "https://upplofficial.org";
+  // static const String baseUrl = "https://upplofficial.org";
 
-  // static const String baseUrl = "https://staging.upplofficial.org/";
+  static const String baseUrl = "https://staging.upplofficial.org/";
   static const String path = "api";
   static const String type = "member";
 
@@ -398,5 +401,23 @@ class ApiService {
     context,
   ) async {
     return GetAnalyticsService.instance.generateAnalytics(context);
+  }
+
+  Future<TopPerformingBtcModel> generateBtcConsituencyAnalytics(
+      context, draw, start, length) async {
+    return GetAnalyticsService.instance
+        .generateBtcConsituencyAnalytics(context, draw, start, length);
+  }
+
+  Future<TopPerformerModel> generateTopPerformerAnalytics(
+      context, draw, start, length) async {
+    return GetAnalyticsService.instance
+        .generateTopPerformerAnalytics(context, draw, start, length);
+  }
+
+  Future<TopPerformingDataModel> generateTopPerformingDataAnalytics(
+      context, draw, start, length, type) async {
+    return GetAnalyticsService.instance
+        .generateTopPerformingDataAnalytics(context, draw, start, length, type);
   }
 }

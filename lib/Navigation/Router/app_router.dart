@@ -7,6 +7,9 @@ import '../../UI/AddMember/add_member_details_screen.dart';
 import '../../UI/AddMember/add_member_screen.dart';
 import '../../UI/AddMember/save_member_details_screen.dart';
 import '../../UI/Analytics/analytics_screen.dart';
+import '../../UI/Analytics/top_performer_screen.dart';
+import '../../UI/Analytics/top_performing_btc_constituency_screen.dart';
+import '../../UI/Analytics/top_performing_data_screen.dart';
 import '../../UI/Auth/edit_profile_screen.dart';
 import '../../UI/Auth/forget_password_screen.dart';
 import '../../UI/Auth/forgot_password_otp_screen.dart';
@@ -162,9 +165,24 @@ class AppRouter extends RootStackRouter {
           path: CustomRoutes.verifiedScreen,
           page: VerifiedRoute.page,
         ),
+        //analytics
+
         AutoRoute(
           path: CustomRoutes.analyticsScreen,
           page: AnalyticsRoute.page,
+        ),
+
+        AutoRoute(
+          path: CustomRoutes.topPerformerAnalyticsScreen,
+          page: TopPerformerRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.topPerformingDataAnalyticsScreen,
+          page: TopPerformingDataRoute.page,
+        ),
+        AutoRoute(
+          path: CustomRoutes.topPerformingBtcConstituencyAnalyticsScreen,
+          page: TopPerformingBTCConstituencyRoute.page,
         ),
       ];
 }

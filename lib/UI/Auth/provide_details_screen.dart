@@ -74,6 +74,7 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
       mobile.text = widget.mobile;
       setState(() {});
       fetchDetails();
+      fetchDropdown(context);
     });
   }
 
@@ -1592,10 +1593,10 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
     //   return false;
     // }
     // Validate email format
-    final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegExp.hasMatch(email.text)) {
-      return false;
-    }
+    // final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    // if (!emailRegExp.hasMatch(email.text)) {
+    //   return false;
+    // }
 
     // Validate pincode (assuming 6 digits)
     if (pincode.text.length != 6 || int.tryParse(pincode.text) == null) {
@@ -1716,6 +1717,39 @@ class _ProvideDetailsScreenState extends State<ProvideDetailsScreen> {
           context, "Verification Failed", "Member Not Found");
     }
     //selectedValidateMemberData
+  }
+
+  void fetchDropdown(BuildContext context) async {
+    final response =
+        await ApiService.instance(context).getDropdownData(context);
+    response.map(
+        success: (val) {
+          if (response.status == 1) {
+            Provider.of<Repository>(context, listen: false)
+                .setCastes(val.data.castes ?? []);
+            var list = val.data.categories.values.toList();
+            Provider.of<Repository>(context, listen: false)
+                .setCategories(list ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setReligions(val.data.religions);
+            Provider.of<Repository>(context, listen: false)
+                .setProfessions(val.data.professions ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setCountry(val.data.country.values.toList() ?? []);
+            Provider.of<Repository>(context, listen: false)
+                .setMotherTounge(val.data.motherTongue);
+            Provider.of<Repository>(context, listen: false)
+                .setCommunity(val.data.community);
+            Provider.of<Repository>(context, listen: false)
+                .setEducationLevels(val.data.educationLevels);
+            Provider.of<Repository>(context, listen: false).setRelationship(val
+                    .data.relationships.values
+                    .map((e) => e.toString())
+                    .toList() ??
+                []);
+          }
+        },
+        error: (err) {});
   }
 
   Future<void> fetchDetails() async {

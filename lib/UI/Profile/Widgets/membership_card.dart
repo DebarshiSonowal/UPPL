@@ -68,7 +68,7 @@ class _MembershipCardState extends State<MembershipCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "United People's Party Liberal (UPPL)1",
+                                "United People's Party Liberal (UPPL)",
                                 style: Configuration.copyrightFont(
                                   fontSize: 16.sp,
                                   color: const Color(0xff254510),

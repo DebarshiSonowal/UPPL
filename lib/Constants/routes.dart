@@ -35,4 +35,9 @@ class CustomRoutes {
   static const customImageViewer = "/custom_image_viewer_screen";
   static const verifiedScreen = "/verified_screen";
   static const analyticsScreen = "/analytics_screen";
+  static const topPerformerAnalyticsScreen = "/top_performer_analytics_screen";
+  static const topPerformingDataAnalyticsScreen =
+      "/top_performing_data_analytics_screen";
+  static const topPerformingBtcConstituencyAnalyticsScreen =
+      "/top_performing_btc_constituency_analytics_screen";
 }

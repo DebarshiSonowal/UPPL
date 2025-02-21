@@ -1,14 +1,16 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:uppl/Models/dashboard_stats_model.dart';
+import 'package:uppl/Navigation/Router/app_router.dart';
 import 'package:uppl/Repository/repository.dart';
 
 import '../../API/api_services.dart';
 import '../../Constants/configuration.dart';
+import '../../Constants/routes.dart';
 
 @RoutePage()
 class AnalyticsScreen extends StatefulWidget {
@@ -402,6 +404,8 @@ Widget _buildTopPerformersCard(
               TextButton(
                 onPressed: () {
                   // Handle view more action
+                  AutoRouter.of(context)
+                      .pushNamed(CustomRoutes.topPerformerAnalyticsScreen);
                 },
                 child: Text(
                   'View More',
@@ -1043,6 +1047,8 @@ Widget _buildConstituenciesCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context).pushNamed(
+                      CustomRoutes.topPerformingBtcConstituencyAnalyticsScreen);
                 },
                 child: Text(
                   'View All',
@@ -1292,11 +1298,14 @@ Widget _buildDistrictsCard(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Top Performing Party Districts',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+              SizedBox(
+                width: 50.w,
+                child: Text(
+                  'Top Performing Party Districts',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
               ),
               TextButton(
                 onPressed: () {
@@ -1584,11 +1593,14 @@ Widget _buildWorstPerformingDistrictsCard(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Worst Performing Party Districts',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+              SizedBox(
+                width: 50.w,
+                child: Text(
+                  'Worst Performing Party Districts',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
               ),
               TextButton(
                 onPressed: () {
@@ -1724,6 +1736,8 @@ Widget _buildWorstPerformingConstituenciesCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context).push(
+                      TopPerformingDataRoute(type: 'worstBtcConstituency'));
                 },
                 child: Text(
                   'View All',

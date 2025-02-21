@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
@@ -980,6 +979,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 controller: voterId,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -1143,7 +1143,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               ),
               child: Configuration.rectangleButton(
                   onPressed: () {
-                    if (fullname.text.isEmpty) {
+                    if (!isValidMobile(mobileController.text)) {
+                      CustomToast.showWarningToast(context, "Invalid Format",
+                          "Please enter a valid 10 digit mobile number");
+                    } else if (fullname.text.isEmpty) {
                       CustomToast.showWarningToast(context,
                           "Missing Information", "Please enter your full name");
                     } else if (dob.text.isEmpty) {
@@ -1151,21 +1154,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                           context,
                           "Missing Information",
                           "Please select your date of birth");
-                    } else if (voterId.text.isEmpty) {
-                      CustomToast.showWarningToast(context,
-                          "Missing Information", "Please enter your voter ID");
                     } else if (email.text.isNotEmpty &&
                         !isValidEmail(email.text)) {
                       CustomToast.showWarningToast(context, "Invalid Format",
                           "Please enter a valid email address");
-                    } else if (!isValidMobile(mobileController.text)) {
-                      CustomToast.showWarningToast(context, "Invalid Format",
-                          "Please enter a valid 10 digit mobile number");
-                    } else if (motherTongue == null) {
-                      CustomToast.showWarningToast(
-                          context,
-                          "Missing Information",
-                          "Please select your mother tongue");
                     } else if (religion == null) {
                       CustomToast.showWarningToast(context,
                           "Missing Information", "Please select your religion");
@@ -1174,18 +1166,36 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                           context,
                           "Missing Information",
                           "Please select your caste/category");
+                    } else if (community == null) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please select your community");
                     } else if (profession == 'Other' &&
                         otherProfession.text.isEmpty) {
                       CustomToast.showWarningToast(
                           context,
                           "Missing Information",
                           "Please specify your other profession");
+                    } else if (education != "") {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please specify your education");
                     } else if (education == 'Other' &&
                         otherEducation.text.isEmpty) {
                       CustomToast.showWarningToast(
                           context,
                           "Missing Information",
                           "Please specify your other education");
+                    } else if (motherTongue == null) {
+                      CustomToast.showWarningToast(
+                          context,
+                          "Missing Information",
+                          "Please select your mother tongue");
+                    } else if (voterId.text.isEmpty) {
+                      CustomToast.showWarningToast(context,
+                          "Missing Information", "Please enter your voter ID");
                     } else {
                       saveDetails();
                     }
