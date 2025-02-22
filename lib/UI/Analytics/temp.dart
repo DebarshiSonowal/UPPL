@@ -1,7 +1,9 @@
 // import 'package:auto_route/annotations.dart';
 // import 'package:flutter/material.dart';
+// import 'package:sizer/sizer.dart';
 // import 'package:uppl/API/api_services.dart';
 //
+// import '../../Constants/configuration.dart';
 // import '../../Models/analytics/top_performing_data_model.dart';
 //
 // @RoutePage()
@@ -22,8 +24,8 @@
 //   int _totalPages = 1;
 //   int _recordsTotal = 0;
 //   int _recordsFiltered = 0;
-//   int _draw = 0;
-//   static const int _pageSize = 10;
+//   String? _lastFetchedType;
+//   int? _lastFetchedPage;
 //
 //   @override
 //   void initState() {
@@ -38,26 +40,38 @@
 //   Future<void> _fetchData() async {
 //     if (_isLoading) return;
 //
+//     if (_lastFetchedType == widget.type && _lastFetchedPage == _currentPage) {
+//       return;
+//     }
+//
 //     setState(() => _isLoading = true);
+//
+//     // Start from 0 and increment by 10 for each page
+//     final int start = (_currentPage - 1) * 10;
+//     // Length starts at 10 and increments by 10
+//     final int length = 10 * _currentPage;
 //
 //     final response =
 //     await ApiService.instance(context).generateTopPerformingDataAnalytics(
 //       context,
-//       _currentPage,
-//       (_currentPage - 1) * _pageSize,
-//       _pageSize,
+//       1,
+//       start,
+//       length,
 //       widget.type,
 //     );
 //
+//     _lastFetchedType = widget.type;
+//     _lastFetchedPage = _currentPage;
+//
 //     if (response.data?.isNotEmpty ?? false) {
-//       debugPrint("Rrs ${response.data.length}");
 //       setState(() {
-//         _data.clear();
-//         _data.addAll(response.data); // Convert Map values to List
+//         if (_currentPage == 1 || _lastFetchedType != widget.type) {
+//           _data.clear();
+//         }
+//         _data.addAll(response.data);
 //         _recordsTotal = response.recordsTotal;
 //         _recordsFiltered = response.recordsFiltered;
-//         _draw = response.draw;
-//         _totalPages = (_recordsFiltered / _pageSize).ceil();
+//         _totalPages = (_recordsFiltered / 10).ceil();
 //       });
 //     } else {
 //       if (_data.isEmpty) {
@@ -79,12 +93,13 @@
 //   }
 //
 //   Future<void> _refreshData() async {
+//     _lastFetchedType = null;
+//     _lastFetchedPage = null;
 //     setState(() {
 //       _data.clear();
 //       _currentPage = 1;
 //       _recordsTotal = 0;
 //       _recordsFiltered = 0;
-//       _draw = 0;
 //     });
 //     await _fetchData();
 //   }
@@ -116,7 +131,7 @@
 //       child: Column(
 //         children: [
 //           Text(
-//             'Showing ${(_currentPage - 1) * _pageSize + 1} to ${_currentPage * _pageSize > _recordsFiltered ? _recordsFiltered : _currentPage * _pageSize} of $_recordsFiltered entries',
+//             'Showing ${(_currentPage - 1) * 10 + 1} to ${_currentPage * 10 > _recordsFiltered ? _recordsFiltered : _currentPage * 10} of $_recordsFiltered entries',
 //             style: const TextStyle(fontSize: 14),
 //           ),
 //           const SizedBox(height: 8),
@@ -126,7 +141,12 @@
 //               IconButton(
 //                 icon: const Icon(Icons.arrow_back_ios),
 //                 onPressed: _currentPage > 1
-//                     ? () => _navigateToPage(_currentPage - 1)
+//                     ? () {
+//                   setState(() {
+//                     _currentPage = _currentPage - 1;
+//                   });
+//                   _navigateToPage(_currentPage);
+//                 }
 //                     : null,
 //               ),
 //               Container(
@@ -139,7 +159,12 @@
 //               IconButton(
 //                 icon: const Icon(Icons.arrow_forward_ios),
 //                 onPressed: _currentPage < _totalPages
-//                     ? () => _navigateToPage(_currentPage + 1)
+//                     ? () {
+//                   setState(() {
+//                     _currentPage = _currentPage + 1;
+//                     _navigateToPage(_currentPage);
+//                   });
+//                 }
 //                     : null,
 //               ),
 //             ],
@@ -151,6 +176,7 @@
 //
 //   Widget _buildDataItem(TopPerformingData item) {
 //     return Card(
+//       color: Colors.white,
 //       margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
 //       elevation: 2,
 //       shape: RoundedRectangleBorder(
@@ -221,11 +247,17 @@
 //   Widget _buildStatColumn(String label, String value) {
 //     return Column(
 //       children: [
-//         Text(
-//           label,
-//           style: const TextStyle(
-//             fontSize: 12,
-//             color: Colors.grey,
+//         SizedBox(
+//           height: 5.h,
+//           child: Center(
+//             child: Text(
+//               label,
+//               style: const TextStyle(
+//                 fontSize: 12,
+//                 color: Colors.grey,
+//               ),
+//               textAlign: TextAlign.center,
+//             ),
 //           ),
 //         ),
 //         const SizedBox(height: 4),
@@ -243,6 +275,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
+//       backgroundColor: Configuration.homeBgColor,
 //       appBar: AppBar(
 //         title: Text(widget.type
 //             .replaceFirst('worst', 'Worst')

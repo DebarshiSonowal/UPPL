@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:uppl/API/api_services.dart';
 
+import '../../Constants/configuration.dart';
 import '../../Models/analytics/top_performing_data_model.dart';
 
 @RoutePage()
@@ -38,46 +40,46 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   Future<void> _fetchData() async {
     if (_isLoading) return;
 
-    if (_lastFetchedType == widget.type && _lastFetchedPage == _currentPage) {
-      return;
-    }
-
     setState(() => _isLoading = true);
 
     // Start from 0 and increment by 10 for each page
     final int start = (_currentPage - 1) * 10;
-    // Length starts at 10 and increments by 10
-    final int length = 10 * _currentPage;
+    // Fixed length to always fetch 10 items per page
+    const int length = 10;
+    debugPrint("_loadInitialData $start");
+    try {
+      final response =
+          await ApiService.instance(context).generateTopPerformingDataAnalytics(
+        context,
+        1,
+        start,
+        length,
+        widget.type,
+      );
 
-    final response =
-        await ApiService.instance(context).generateTopPerformingDataAnalytics(
-      context,
-      1,
-      start,
-      length,
-      widget.type,
-    );
+      _lastFetchedType = widget.type;
+      _lastFetchedPage = _currentPage;
 
-    _lastFetchedType = widget.type;
-    _lastFetchedPage = _currentPage;
-
-    if (response.data?.isNotEmpty ?? false) {
-      setState(() {
-        if (_currentPage == 1 || _lastFetchedType != widget.type) {
-          _data.clear();
+      if (response.data?.isNotEmpty ?? false) {
+        setState(() {
+          if (_currentPage == 1 || _lastFetchedType != widget.type) {
+            _data.clear();
+          }
+          _data.addAll(response.data);
+          _recordsTotal = response.recordsTotal;
+          _recordsFiltered = response.recordsFiltered;
+          _totalPages = (_recordsFiltered / 10).ceil();
+        });
+      } else {
+        if (_data.isEmpty) {
+          _showMessage('No data available');
         }
-        _data.addAll(response.data);
-        _recordsTotal = response.recordsTotal;
-        _recordsFiltered = response.recordsFiltered;
-        _totalPages = (_recordsFiltered / 10).ceil();
-      });
-    } else {
-      if (_data.isEmpty) {
-        _showMessage('No data available');
       }
+    } catch (e) {
+      _showMessage('Error loading data');
+    } finally {
+      setState(() => _isLoading = false);
     }
-
-    setState(() => _isLoading = false);
   }
 
   void _showMessage(String message) {
@@ -103,8 +105,9 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   }
 
   Future<void> _navigateToPage(int page) async {
-    if (page < 1 || page > _totalPages || page == _currentPage) return;
+    // if (page < 1 || page > _totalPages || page == _currentPage) return;
     setState(() => _currentPage = page);
+    debugPrint("_loadInitialData initiated");
     await _fetchData();
   }
 
@@ -129,7 +132,7 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
       child: Column(
         children: [
           Text(
-            'Showing ${(_currentPage - 1) * 10 + 1} to ${_currentPage * 10 > _recordsFiltered ? _recordsFiltered : _currentPage * 10} of $_recordsFiltered entries',
+            'Showing ${1} to ${_currentPage * 10 > _recordsFiltered ? _recordsFiltered : _currentPage * 10} of $_recordsFiltered entries',
             style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 8),
@@ -139,7 +142,12 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
               IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: _currentPage > 1
-                    ? () => _navigateToPage(_currentPage - 1)
+                    ? () {
+                        setState(() {
+                          _currentPage = _currentPage - 1;
+                        });
+                        _navigateToPage(_currentPage);
+                      }
                     : null,
               ),
               Container(
@@ -152,7 +160,12 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
               IconButton(
                 icon: const Icon(Icons.arrow_forward_ios),
                 onPressed: _currentPage < _totalPages
-                    ? () => _navigateToPage(_currentPage + 1)
+                    ? () {
+                        setState(() {
+                          _currentPage = _currentPage + 1;
+                          _navigateToPage(_currentPage);
+                        });
+                      }
                     : null,
               ),
             ],
@@ -164,6 +177,7 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
 
   Widget _buildDataItem(TopPerformingData item) {
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -206,7 +220,7 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               subtitle: Text(
-                'Representative',
+                '',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -234,11 +248,17 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   Widget _buildStatColumn(String label, String value) {
     return Column(
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
+        SizedBox(
+          height: 5.h,
+          child: Center(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         const SizedBox(height: 4),
@@ -256,6 +276,7 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Configuration.homeBgColor,
       appBar: AppBar(
         title: Text(widget.type
             .replaceFirst('worst', 'Worst')

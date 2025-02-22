@@ -35,9 +35,9 @@ _$ProfileDataImpl _$$ProfileDataImplFromJson(Map<String, dynamic> json) =>
       address: json['address'] as String,
       pinCode: json['pin_code'] as String,
       btcAssemblyConstituencyId:
-          (json['btc_assembly_constituency_id'] as num).toInt(),
-      btcConstituency: (json['btc_constituency'] as num).toInt(),
-      partyDistrict: (json['party_district'] as num).toInt(),
+          (json['btc_assembly_constituency_id'] as num?)?.toInt(),
+      btcConstituency: (json['btc_constituency'] as num?)?.toInt(),
+      partyDistrict: (json['party_district'] as num?)?.toInt(),
       assemblyConstituency: (json['assembly_constituency'] as num).toInt(),
       primaryId: (json['primary_id'] as num).toInt(),
       boothId: (json['booth_id'] as num).toInt(),

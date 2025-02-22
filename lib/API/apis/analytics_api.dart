@@ -217,16 +217,33 @@ class GetAnalyticsService {
         'Accept': 'application/json',
         // 'APP-KEY': ConstanceData.app_key
       };
-      final requestBody = {
-        "draw": "1",
-        "start": "0",
-        "length": "10",
-        "search": {"value": null},
-        "order": [
-          {"column": "6", "dir": "asc"}
-        ],
-        "type": type,
-      };
+      Map<String, dynamic> requestBody;
+      if (type == "worstPrimary" ||
+          type == "worstBooth" ||
+          type == "worstPartyDistrict" ||
+          type == "worstBtcConstituency") {
+        requestBody = {
+          "draw": "1",
+          "start": start,
+          "length": length,
+          "search": {"value": null},
+          "order": [
+            {"column": "6", "dir": "asc"}
+          ],
+          "type": type,
+        };
+      } else {
+        requestBody = {
+          "draw": "1",
+          "start": start,
+          "length": length,
+          "search": {"value": null},
+          "order": [
+            {"column": "6", "dir": "desc"}
+          ],
+          "type": type,
+        };
+      }
       debugPrint("requestBody $requestBody");
       final dio = Dio(
           BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"));

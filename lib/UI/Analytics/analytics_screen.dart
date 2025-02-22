@@ -528,7 +528,7 @@ Widget _buildPrimaryMembersCard(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Top Primary',
+                'Top Performing Primary',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -536,6 +536,8 @@ Widget _buildPrimaryMembersCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context)
+                      .push(TopPerformingDataRoute(type: 'topPrimary'));
                 },
                 child: Text(
                   'View All',
@@ -915,6 +917,8 @@ Widget _buildTopBoothsCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context)
+                      .push(TopPerformingDataRoute(type: 'topBooth'));
                 },
                 child: Text(
                   'View All',
@@ -1034,13 +1038,14 @@ Widget _buildConstituenciesCard(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              SizedBox(
+                width: 50.w,
                 child: Text(
-                  'Top Performing Constituencies',
+                  'Top Performing BTC Constituencies',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -1179,6 +1184,8 @@ Widget _buildWorstPerformersCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context)
+                      .push(TopPerformingDataRoute(type: 'worstPrimary'));
                 },
                 child: Text(
                   'View All',
@@ -1310,6 +1317,8 @@ Widget _buildDistrictsCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context)
+                      .push(TopPerformingDataRoute(type: 'topPartyDistrict'));
                 },
                 child: Text(
                   'View All',
@@ -1476,6 +1485,8 @@ Widget _buildWorstPerformingBoothsCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context)
+                      .push(TopPerformingDataRoute(type: 'worstBooth'));
                 },
                 child: Text(
                   'View All',
@@ -1605,6 +1616,8 @@ Widget _buildWorstPerformingDistrictsCard(
               TextButton(
                 onPressed: () {
                   // Handle view all action
+                  AutoRouter.of(context)
+                      .push(TopPerformingDataRoute(type: 'worstPartyDistrict'));
                 },
                 child: Text(
                   'View All',
@@ -1723,13 +1736,14 @@ Widget _buildWorstPerformingConstituenciesCard(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              SizedBox(
+                width: 50.w,
                 child: Text(
                   'Worst Performing Constituencies',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

@@ -47,9 +47,9 @@ class ProfileData with _$ProfileData {
     required String address,
     @JsonKey(name: 'pin_code') required String pinCode,
     @JsonKey(name: 'btc_assembly_constituency_id')
-    required int btcAssemblyConstituencyId,
-    @JsonKey(name: 'btc_constituency') required int btcConstituency,
-    @JsonKey(name: 'party_district') required int partyDistrict,
+    required int? btcAssemblyConstituencyId,
+    @JsonKey(name: 'btc_constituency') required int? btcConstituency,
+    @JsonKey(name: 'party_district') required int? partyDistrict,
     @JsonKey(name: 'assembly_constituency') required int assemblyConstituency,
     @JsonKey(name: 'primary_id') required int primaryId,
     @JsonKey(name: 'booth_id') required int boothId,

@@ -486,11 +486,11 @@ mixin _$ProfileData {
   @JsonKey(name: 'pin_code')
   String get pinCode => throw _privateConstructorUsedError;
   @JsonKey(name: 'btc_assembly_constituency_id')
-  int get btcAssemblyConstituencyId => throw _privateConstructorUsedError;
+  int? get btcAssemblyConstituencyId => throw _privateConstructorUsedError;
   @JsonKey(name: 'btc_constituency')
-  int get btcConstituency => throw _privateConstructorUsedError;
+  int? get btcConstituency => throw _privateConstructorUsedError;
   @JsonKey(name: 'party_district')
-  int get partyDistrict => throw _privateConstructorUsedError;
+  int? get partyDistrict => throw _privateConstructorUsedError;
   @JsonKey(name: 'assembly_constituency')
   int get assemblyConstituency => throw _privateConstructorUsedError;
   @JsonKey(name: 'primary_id')
@@ -554,9 +554,9 @@ abstract class $ProfileDataCopyWith<$Res> {
       String address,
       @JsonKey(name: 'pin_code') String pinCode,
       @JsonKey(name: 'btc_assembly_constituency_id')
-      int btcAssemblyConstituencyId,
-      @JsonKey(name: 'btc_constituency') int btcConstituency,
-      @JsonKey(name: 'party_district') int partyDistrict,
+      int? btcAssemblyConstituencyId,
+      @JsonKey(name: 'btc_constituency') int? btcConstituency,
+      @JsonKey(name: 'party_district') int? partyDistrict,
       @JsonKey(name: 'assembly_constituency') int assemblyConstituency,
       @JsonKey(name: 'primary_id') int primaryId,
       @JsonKey(name: 'booth_id') int boothId,
@@ -602,9 +602,9 @@ class _$ProfileDataCopyWithImpl<$Res, $Val extends ProfileData>
     Object? title = null,
     Object? address = null,
     Object? pinCode = null,
-    Object? btcAssemblyConstituencyId = null,
-    Object? btcConstituency = null,
-    Object? partyDistrict = null,
+    Object? btcAssemblyConstituencyId = freezed,
+    Object? btcConstituency = freezed,
+    Object? partyDistrict = freezed,
     Object? assemblyConstituency = null,
     Object? primaryId = null,
     Object? boothId = null,
@@ -656,18 +656,18 @@ class _$ProfileDataCopyWithImpl<$Res, $Val extends ProfileData>
           ? _value.pinCode
           : pinCode // ignore: cast_nullable_to_non_nullable
               as String,
-      btcAssemblyConstituencyId: null == btcAssemblyConstituencyId
+      btcAssemblyConstituencyId: freezed == btcAssemblyConstituencyId
           ? _value.btcAssemblyConstituencyId
           : btcAssemblyConstituencyId // ignore: cast_nullable_to_non_nullable
-              as int,
-      btcConstituency: null == btcConstituency
+              as int?,
+      btcConstituency: freezed == btcConstituency
           ? _value.btcConstituency
           : btcConstituency // ignore: cast_nullable_to_non_nullable
-              as int,
-      partyDistrict: null == partyDistrict
+              as int?,
+      partyDistrict: freezed == partyDistrict
           ? _value.partyDistrict
           : partyDistrict // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       assemblyConstituency: null == assemblyConstituency
           ? _value.assemblyConstituency
           : assemblyConstituency // ignore: cast_nullable_to_non_nullable
@@ -773,9 +773,9 @@ abstract class _$$ProfileDataImplCopyWith<$Res>
       String address,
       @JsonKey(name: 'pin_code') String pinCode,
       @JsonKey(name: 'btc_assembly_constituency_id')
-      int btcAssemblyConstituencyId,
-      @JsonKey(name: 'btc_constituency') int btcConstituency,
-      @JsonKey(name: 'party_district') int partyDistrict,
+      int? btcAssemblyConstituencyId,
+      @JsonKey(name: 'btc_constituency') int? btcConstituency,
+      @JsonKey(name: 'party_district') int? partyDistrict,
       @JsonKey(name: 'assembly_constituency') int assemblyConstituency,
       @JsonKey(name: 'primary_id') int primaryId,
       @JsonKey(name: 'booth_id') int boothId,
@@ -819,9 +819,9 @@ class __$$ProfileDataImplCopyWithImpl<$Res>
     Object? title = null,
     Object? address = null,
     Object? pinCode = null,
-    Object? btcAssemblyConstituencyId = null,
-    Object? btcConstituency = null,
-    Object? partyDistrict = null,
+    Object? btcAssemblyConstituencyId = freezed,
+    Object? btcConstituency = freezed,
+    Object? partyDistrict = freezed,
     Object? assemblyConstituency = null,
     Object? primaryId = null,
     Object? boothId = null,
@@ -873,18 +873,18 @@ class __$$ProfileDataImplCopyWithImpl<$Res>
           ? _value.pinCode
           : pinCode // ignore: cast_nullable_to_non_nullable
               as String,
-      btcAssemblyConstituencyId: null == btcAssemblyConstituencyId
+      btcAssemblyConstituencyId: freezed == btcAssemblyConstituencyId
           ? _value.btcAssemblyConstituencyId
           : btcAssemblyConstituencyId // ignore: cast_nullable_to_non_nullable
-              as int,
-      btcConstituency: null == btcConstituency
+              as int?,
+      btcConstituency: freezed == btcConstituency
           ? _value.btcConstituency
           : btcConstituency // ignore: cast_nullable_to_non_nullable
-              as int,
-      partyDistrict: null == partyDistrict
+              as int?,
+      partyDistrict: freezed == partyDistrict
           ? _value.partyDistrict
           : partyDistrict // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       assemblyConstituency: null == assemblyConstituency
           ? _value.assemblyConstituency
           : assemblyConstituency // ignore: cast_nullable_to_non_nullable
@@ -1034,13 +1034,13 @@ class _$ProfileDataImpl implements _ProfileData {
   final String pinCode;
   @override
   @JsonKey(name: 'btc_assembly_constituency_id')
-  final int btcAssemblyConstituencyId;
+  final int? btcAssemblyConstituencyId;
   @override
   @JsonKey(name: 'btc_constituency')
-  final int btcConstituency;
+  final int? btcConstituency;
   @override
   @JsonKey(name: 'party_district')
-  final int partyDistrict;
+  final int? partyDistrict;
   @override
   @JsonKey(name: 'assembly_constituency')
   final int assemblyConstituency;
@@ -1225,9 +1225,9 @@ abstract class _ProfileData implements ProfileData {
       required final String address,
       @JsonKey(name: 'pin_code') required final String pinCode,
       @JsonKey(name: 'btc_assembly_constituency_id')
-      required final int btcAssemblyConstituencyId,
-      @JsonKey(name: 'btc_constituency') required final int btcConstituency,
-      @JsonKey(name: 'party_district') required final int partyDistrict,
+      required final int? btcAssemblyConstituencyId,
+      @JsonKey(name: 'btc_constituency') required final int? btcConstituency,
+      @JsonKey(name: 'party_district') required final int? partyDistrict,
       @JsonKey(name: 'assembly_constituency')
       required final int assemblyConstituency,
       @JsonKey(name: 'primary_id') required final int primaryId,
@@ -1275,13 +1275,13 @@ abstract class _ProfileData implements ProfileData {
   String get pinCode;
   @override
   @JsonKey(name: 'btc_assembly_constituency_id')
-  int get btcAssemblyConstituencyId;
+  int? get btcAssemblyConstituencyId;
   @override
   @JsonKey(name: 'btc_constituency')
-  int get btcConstituency;
+  int? get btcConstituency;
   @override
   @JsonKey(name: 'party_district')
-  int get partyDistrict;
+  int? get partyDistrict;
   @override
   @JsonKey(name: 'assembly_constituency')
   int get assemblyConstituency;
