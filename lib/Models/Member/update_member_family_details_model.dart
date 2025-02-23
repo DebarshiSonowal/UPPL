@@ -9,7 +9,7 @@ class UpdateMemberFamilyDetailsModel with _$UpdateMemberFamilyDetailsModel {
     required int status,
     required String message,
     @JsonKey(name: 'data', fromJson: _dataFromJson)
-    MemberData? data, // Dynamic type to handle Map or List
+    dynamic data, // Dynamic type to handle Map, List or null
     required int code,
   }) = _UpdateMemberFamilyDetailsModel;
 
@@ -19,14 +19,30 @@ class UpdateMemberFamilyDetailsModel with _$UpdateMemberFamilyDetailsModel {
 
 // Custom function to handle dynamic `data` field
 dynamic _dataFromJson(Object? json) {
+  if (json == null) return null;
+
   if (json is List) {
+    if (json.isEmpty) return [];
     return json
         .map((e) => MemberData.fromJson(e as Map<String, dynamic>))
         .toList();
   } else if (json is Map<String, dynamic>) {
+    if (json.containsKey('errors')) {
+      return ErrorData.fromJson(json);
+    }
     return MemberData.fromJson(json);
   }
   return null;
+}
+
+@freezed
+class ErrorData with _$ErrorData {
+  const factory ErrorData({
+    @JsonKey(name: 'errors') required Map<String, List<String>> errors,
+  }) = _ErrorData;
+
+  factory ErrorData.fromJson(Map<String, dynamic> json) =>
+      _$ErrorDataFromJson(json);
 }
 
 @freezed

@@ -461,6 +461,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.name,
                 textCapitalization: TextCapitalization.characters,
+                maxLength: 10,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -518,6 +519,9 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               ),
               child: Configuration.rectangleButton(
                   onPressed: () {
+                    setState(() {
+                      errorMessages.clear();
+                    });
                     if (name.text.isEmpty) {
                       CustomToast.showFailureToast(
                           context, "Error", "Please enter a name");
@@ -731,7 +735,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           duration: const Duration(seconds: 5),
-          margin: EdgeInsets.all(8),
+          margin: const EdgeInsets.all(8),
         ),
       );
     }
@@ -861,6 +865,11 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
       setState(() {
         mobileValidated = true;
         mobile.text = "$result";
+      });
+    } else {
+      setState(() {
+        mobileValidated = true;
+        mobile.text = "$text";
       });
     }
   }

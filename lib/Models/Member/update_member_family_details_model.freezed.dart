@@ -24,8 +24,8 @@ mixin _$UpdateMemberFamilyDetailsModel {
   int get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
   @JsonKey(name: 'data', fromJson: _dataFromJson)
-  MemberData? get data =>
-      throw _privateConstructorUsedError; // Dynamic type to handle Map or List
+  dynamic get data =>
+      throw _privateConstructorUsedError; // Dynamic type to handle Map, List or null
   int get code => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateMemberFamilyDetailsModel to a JSON map.
@@ -49,10 +49,8 @@ abstract class $UpdateMemberFamilyDetailsModelCopyWith<$Res> {
   $Res call(
       {int status,
       String message,
-      @JsonKey(name: 'data', fromJson: _dataFromJson) MemberData? data,
+      @JsonKey(name: 'data', fromJson: _dataFromJson) dynamic data,
       int code});
-
-  $MemberDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -88,26 +86,12 @@ class _$UpdateMemberFamilyDetailsModelCopyWithImpl<$Res,
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as MemberData?,
+              as dynamic,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
-  }
-
-  /// Create a copy of UpdateMemberFamilyDetailsModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MemberDataCopyWith<$Res>? get data {
-    if (_value.data == null) {
-      return null;
-    }
-
-    return $MemberDataCopyWith<$Res>(_value.data!, (value) {
-      return _then(_value.copyWith(data: value) as $Val);
-    });
   }
 }
 
@@ -123,11 +107,8 @@ abstract class _$$UpdateMemberFamilyDetailsModelImplCopyWith<$Res>
   $Res call(
       {int status,
       String message,
-      @JsonKey(name: 'data', fromJson: _dataFromJson) MemberData? data,
+      @JsonKey(name: 'data', fromJson: _dataFromJson) dynamic data,
       int code});
-
-  @override
-  $MemberDataCopyWith<$Res>? get data;
 }
 
 /// @nodoc
@@ -162,7 +143,7 @@ class __$$UpdateMemberFamilyDetailsModelImplCopyWithImpl<$Res>
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as MemberData?,
+              as dynamic,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -191,8 +172,8 @@ class _$UpdateMemberFamilyDetailsModelImpl
   final String message;
   @override
   @JsonKey(name: 'data', fromJson: _dataFromJson)
-  final MemberData? data;
-// Dynamic type to handle Map or List
+  final dynamic data;
+// Dynamic type to handle Map, List or null
   @override
   final int code;
 
@@ -208,13 +189,14 @@ class _$UpdateMemberFamilyDetailsModelImpl
             other is _$UpdateMemberFamilyDetailsModelImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data) &&
+            const DeepCollectionEquality().equals(other.data, data) &&
             (identical(other.code, code) || other.code == code));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, message, data, code);
+  int get hashCode => Object.hash(runtimeType, status, message,
+      const DeepCollectionEquality().hash(data), code);
 
   /// Create a copy of UpdateMemberFamilyDetailsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -239,7 +221,7 @@ abstract class _UpdateMemberFamilyDetailsModel
   const factory _UpdateMemberFamilyDetailsModel(
       {required final int status,
       required final String message,
-      @JsonKey(name: 'data', fromJson: _dataFromJson) final MemberData? data,
+      @JsonKey(name: 'data', fromJson: _dataFromJson) final dynamic data,
       required final int code}) = _$UpdateMemberFamilyDetailsModelImpl;
 
   factory _UpdateMemberFamilyDetailsModel.fromJson(Map<String, dynamic> json) =
@@ -251,7 +233,7 @@ abstract class _UpdateMemberFamilyDetailsModel
   String get message;
   @override
   @JsonKey(name: 'data', fromJson: _dataFromJson)
-  MemberData? get data; // Dynamic type to handle Map or List
+  dynamic get data; // Dynamic type to handle Map, List or null
   @override
   int get code;
 
@@ -262,6 +244,168 @@ abstract class _UpdateMemberFamilyDetailsModel
   _$$UpdateMemberFamilyDetailsModelImplCopyWith<
           _$UpdateMemberFamilyDetailsModelImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+ErrorData _$ErrorDataFromJson(Map<String, dynamic> json) {
+  return _ErrorData.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ErrorData {
+  @JsonKey(name: 'errors')
+  Map<String, List<String>> get errors => throw _privateConstructorUsedError;
+
+  /// Serializes this ErrorData to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ErrorData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ErrorDataCopyWith<ErrorData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ErrorDataCopyWith<$Res> {
+  factory $ErrorDataCopyWith(ErrorData value, $Res Function(ErrorData) then) =
+      _$ErrorDataCopyWithImpl<$Res, ErrorData>;
+  @useResult
+  $Res call({@JsonKey(name: 'errors') Map<String, List<String>> errors});
+}
+
+/// @nodoc
+class _$ErrorDataCopyWithImpl<$Res, $Val extends ErrorData>
+    implements $ErrorDataCopyWith<$Res> {
+  _$ErrorDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ErrorData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? errors = null,
+  }) {
+    return _then(_value.copyWith(
+      errors: null == errors
+          ? _value.errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ErrorDataImplCopyWith<$Res>
+    implements $ErrorDataCopyWith<$Res> {
+  factory _$$ErrorDataImplCopyWith(
+          _$ErrorDataImpl value, $Res Function(_$ErrorDataImpl) then) =
+      __$$ErrorDataImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@JsonKey(name: 'errors') Map<String, List<String>> errors});
+}
+
+/// @nodoc
+class __$$ErrorDataImplCopyWithImpl<$Res>
+    extends _$ErrorDataCopyWithImpl<$Res, _$ErrorDataImpl>
+    implements _$$ErrorDataImplCopyWith<$Res> {
+  __$$ErrorDataImplCopyWithImpl(
+      _$ErrorDataImpl _value, $Res Function(_$ErrorDataImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ErrorData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? errors = null,
+  }) {
+    return _then(_$ErrorDataImpl(
+      errors: null == errors
+          ? _value._errors
+          : errors // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ErrorDataImpl implements _ErrorData {
+  const _$ErrorDataImpl(
+      {@JsonKey(name: 'errors')
+      required final Map<String, List<String>> errors})
+      : _errors = errors;
+
+  factory _$ErrorDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ErrorDataImplFromJson(json);
+
+  final Map<String, List<String>> _errors;
+  @override
+  @JsonKey(name: 'errors')
+  Map<String, List<String>> get errors {
+    if (_errors is EqualUnmodifiableMapView) return _errors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_errors);
+  }
+
+  @override
+  String toString() {
+    return 'ErrorData(errors: $errors)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ErrorDataImpl &&
+            const DeepCollectionEquality().equals(other._errors, _errors));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_errors));
+
+  /// Create a copy of ErrorData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ErrorDataImplCopyWith<_$ErrorDataImpl> get copyWith =>
+      __$$ErrorDataImplCopyWithImpl<_$ErrorDataImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ErrorDataImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ErrorData implements ErrorData {
+  const factory _ErrorData(
+      {@JsonKey(name: 'errors')
+      required final Map<String, List<String>> errors}) = _$ErrorDataImpl;
+
+  factory _ErrorData.fromJson(Map<String, dynamic> json) =
+      _$ErrorDataImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'errors')
+  Map<String, List<String>> get errors;
+
+  /// Create a copy of ErrorData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ErrorDataImplCopyWith<_$ErrorDataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 MemberData _$MemberDataFromJson(Map<String, dynamic> json) {

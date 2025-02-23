@@ -176,6 +176,168 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
   }
 
   Widget _buildDataItem(TopPerformingData item) {
+    if (widget.type == "topPrimary") {
+      return Card(
+        color: Colors.white,
+        margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Badge(
+                    label: Text('#${item.slno}'),
+                    backgroundColor: Colors.blue,
+                  ),
+                  Container(
+                    width: 40.w,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      item.name?.trim() ?? "",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  item.btcConstituencyName ?? "N/A",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                ),
+                subtitle: Text(
+                  'BTC Constituency',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+              const Divider(),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStatColumn(
+                        'Total\nMembers', item.memberCount.toString()),
+                    const VerticalDivider(),
+                    _buildStatColumn(
+                        'Verified', item.verifiedMemberCount ?? "0"),
+                    const VerticalDivider(),
+                    _buildStatColumn(
+                        'Non-Verified', item.nonVerifiedMemberCount ?? "0"),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    if (widget.type == "topBooth") {
+      return Card(
+        color: Colors.white,
+        margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Badge(
+                    label: Text('#${item.slno}'),
+                    backgroundColor: Colors.blue,
+                  ),
+                  Container(
+                    width: 80.w,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      item.name?.trim() ?? "",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  item.btcConstituencyName ?? "N/A",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                subtitle: Text(
+                  'BTC Constituency',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+              const Divider(),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStatColumn('Primary', item.primary_name.toString()),
+                    const VerticalDivider(),
+                    _buildStatColumn(
+                        'Party\nDistrict', item.party_district_name ?? "0"),
+                    const VerticalDivider(),
+                    _buildStatColumn('Assembly\nConstituency',
+                        item.assembly_constituency_name ?? "0"),
+                  ],
+                ),
+              ),
+              const Divider(),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStatColumn(
+                        'Total\nMembers', item.memberCount.toString()),
+                    const VerticalDivider(),
+                    _buildStatColumn(
+                        'Verified', item.verifiedMemberCount ?? "0"),
+                    const VerticalDivider(),
+                    _buildStatColumn(
+                        'Non-Verified', item.nonVerifiedMemberCount ?? "0"),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return Card(
       color: Colors.white,
       margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
@@ -189,22 +351,20 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Badge(
                   label: Text('#${item.slno}'),
                   backgroundColor: Colors.blue,
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      item.name ?? "",
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.end,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    item.name ?? "",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                    textAlign: TextAlign.start,
                   ),
                 ),
               ],
@@ -249,6 +409,7 @@ class _TopPerformingDataScreenState extends State<TopPerformingDataScreen> {
     return Column(
       children: [
         SizedBox(
+          width: 20.w,
           height: 5.h,
           child: Center(
             child: Text(

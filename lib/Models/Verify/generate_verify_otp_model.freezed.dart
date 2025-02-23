@@ -390,7 +390,6 @@ class _$ErrorResponseImpl implements ErrorResponse {
   final String message;
   @override
   final int? code;
-// Code can be optional in case of errors
   @override
   final Data? data;
 
@@ -499,7 +498,7 @@ abstract class ErrorResponse implements GenerateVerifyOtpModel {
   @override
   String get message;
   @override
-  int? get code; // Code can be optional in case of errors
+  int? get code;
   @override
   Data? get data;
 
@@ -520,10 +519,9 @@ mixin _$Data {
   @JsonKey(name: 'errors')
   Map<String, List<String>>? get errors => throw _privateConstructorUsedError;
   @JsonKey(name: "phone_number")
-  String get phoneNumber =>
-      throw _privateConstructorUsedError; // Ensure phoneNumber is String
-  int? get status =>
-      throw _privateConstructorUsedError; // Optional, but keep it if needed for other logic
+  String? get phoneNumber => throw _privateConstructorUsedError;
+  int? get status => throw _privateConstructorUsedError;
+  @JsonKey(name: "registered")
   bool? get registered => throw _privateConstructorUsedError;
 
   /// Serializes this Data to a JSON map.
@@ -542,9 +540,9 @@ abstract class $DataCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'errors') Map<String, List<String>>? errors,
-      @JsonKey(name: "phone_number") String phoneNumber,
+      @JsonKey(name: "phone_number") String? phoneNumber,
       int? status,
-      bool? registered});
+      @JsonKey(name: "registered") bool? registered});
 }
 
 /// @nodoc
@@ -563,7 +561,7 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
   @override
   $Res call({
     Object? errors = freezed,
-    Object? phoneNumber = null,
+    Object? phoneNumber = freezed,
     Object? status = freezed,
     Object? registered = freezed,
   }) {
@@ -572,10 +570,10 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
           ? _value.errors
           : errors // ignore: cast_nullable_to_non_nullable
               as Map<String, List<String>>?,
-      phoneNumber: null == phoneNumber
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -597,9 +595,9 @@ abstract class _$$DataImplCopyWith<$Res> implements $DataCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'errors') Map<String, List<String>>? errors,
-      @JsonKey(name: "phone_number") String phoneNumber,
+      @JsonKey(name: "phone_number") String? phoneNumber,
       int? status,
-      bool? registered});
+      @JsonKey(name: "registered") bool? registered});
 }
 
 /// @nodoc
@@ -615,7 +613,7 @@ class __$$DataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? errors = freezed,
-    Object? phoneNumber = null,
+    Object? phoneNumber = freezed,
     Object? status = freezed,
     Object? registered = freezed,
   }) {
@@ -624,10 +622,10 @@ class __$$DataImplCopyWithImpl<$Res>
           ? _value._errors
           : errors // ignore: cast_nullable_to_non_nullable
               as Map<String, List<String>>?,
-      phoneNumber: null == phoneNumber
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -645,9 +643,9 @@ class __$$DataImplCopyWithImpl<$Res>
 class _$DataImpl implements _Data {
   const _$DataImpl(
       {@JsonKey(name: 'errors') final Map<String, List<String>>? errors,
-      @JsonKey(name: "phone_number") required this.phoneNumber,
+      @JsonKey(name: "phone_number") this.phoneNumber,
       this.status,
-      this.registered})
+      @JsonKey(name: "registered") this.registered})
       : _errors = errors;
 
   factory _$DataImpl.fromJson(Map<String, dynamic> json) =>
@@ -666,12 +664,11 @@ class _$DataImpl implements _Data {
 
   @override
   @JsonKey(name: "phone_number")
-  final String phoneNumber;
-// Ensure phoneNumber is String
+  final String? phoneNumber;
   @override
   final int? status;
-// Optional, but keep it if needed for other logic
   @override
+  @JsonKey(name: "registered")
   final bool? registered;
 
   @override
@@ -720,9 +717,9 @@ class _$DataImpl implements _Data {
 abstract class _Data implements Data {
   const factory _Data(
       {@JsonKey(name: 'errors') final Map<String, List<String>>? errors,
-      @JsonKey(name: "phone_number") required final String phoneNumber,
+      @JsonKey(name: "phone_number") final String? phoneNumber,
       final int? status,
-      final bool? registered}) = _$DataImpl;
+      @JsonKey(name: "registered") final bool? registered}) = _$DataImpl;
 
   factory _Data.fromJson(Map<String, dynamic> json) = _$DataImpl.fromJson;
 
@@ -731,10 +728,11 @@ abstract class _Data implements Data {
   Map<String, List<String>>? get errors;
   @override
   @JsonKey(name: "phone_number")
-  String get phoneNumber; // Ensure phoneNumber is String
+  String? get phoneNumber;
   @override
-  int? get status; // Optional, but keep it if needed for other logic
+  int? get status;
   @override
+  @JsonKey(name: "registered")
   bool? get registered;
 
   /// Create a copy of Data

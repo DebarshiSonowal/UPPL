@@ -15,26 +15,34 @@ class GenerateVerifyOtpModel with _$GenerateVerifyOtpModel {
   const factory GenerateVerifyOtpModel.error({
     required int status,
     required String message,
-    int? code, // Code can be optional in case of errors
-    Data? data, // Optional data field for additional error details
-    // List<String>? errors, // Optional list of error messages
-    // String? errorType, // Optional error type classification
+    int? code,
+    Data? data,
   }) = ErrorResponse;
 
-  /// Custom `fromJson` to determine success or error based on `status`
   factory GenerateVerifyOtpModel.fromJson(Map<String, dynamic> json) {
     if (json['status'] == 1) {
+      final dataJson = json['data'];
+      final Data? parsedData = dataJson != null
+          ? Data.fromJson(dataJson as Map<String, dynamic>)
+          : null;
+
       return GenerateVerifyOtpModel.success(
         status: json['status'] as int,
         message: json['message'] as String,
-        data: Data.fromJson(json['data'] as Map<String, dynamic>),
+        data: parsedData,
         code: json['code'] as int,
       );
     } else {
+      final dataJson = json['data'];
+      final Data? parsedData = dataJson != null
+          ? Data.fromJson(dataJson as Map<String, dynamic>)
+          : null;
+
       return GenerateVerifyOtpModel.error(
         status: json['status'] as int,
         message: json['message'] as String,
         code: json['code'] as int?,
+        data: parsedData,
       );
     }
   }
@@ -44,10 +52,9 @@ class GenerateVerifyOtpModel with _$GenerateVerifyOtpModel {
 class Data with _$Data {
   const factory Data({
     @JsonKey(name: 'errors') Map<String, List<String>>? errors,
-    @JsonKey(name: "phone_number")
-    required String phoneNumber, // Ensure phoneNumber is String
-    int? status, // Optional, but keep it if needed for other logic
-    bool? registered, // Optional, add if required
+    @JsonKey(name: "phone_number") String? phoneNumber,
+    int? status,
+    @JsonKey(name: "registered") bool? registered,
   }) = _Data;
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);

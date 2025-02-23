@@ -122,6 +122,7 @@ class GetAuthService {
         return GenerateVerifyOtpModel.fromJson(response.data);
       }
     } on DioException catch (e) {
+      debugPrint("VerifyOtpModel ${e.message}");
       SVProgressHUD.dismiss();
       try {
         CustomToast.showFailureToast(

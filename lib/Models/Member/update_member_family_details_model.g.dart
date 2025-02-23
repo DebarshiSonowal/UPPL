@@ -24,6 +24,19 @@ Map<String, dynamic> _$$UpdateMemberFamilyDetailsModelImplToJson(
       'code': instance.code,
     };
 
+_$ErrorDataImpl _$$ErrorDataImplFromJson(Map<String, dynamic> json) =>
+    _$ErrorDataImpl(
+      errors: (json['errors'] as Map<String, dynamic>).map(
+        (k, e) =>
+            MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
+      ),
+    );
+
+Map<String, dynamic> _$$ErrorDataImplToJson(_$ErrorDataImpl instance) =>
+    <String, dynamic>{
+      'errors': instance.errors,
+    };
+
 _$MemberDataImpl _$$MemberDataImplFromJson(Map<String, dynamic> json) =>
     _$MemberDataImpl(
       profileData: json['profile_data'] == null

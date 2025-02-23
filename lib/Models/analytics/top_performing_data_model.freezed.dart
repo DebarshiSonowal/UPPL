@@ -233,9 +233,21 @@ TopPerformingData _$TopPerformingDataFromJson(Map<String, dynamic> json) {
 mixin _$TopPerformingData {
   @JsonKey(name: 'btc_constituency')
   int? get btcConstituency => throw _privateConstructorUsedError;
+  @JsonKey(name: 'btc_constituency_name')
+  String? get btcConstituencyName => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'member_count')
   int? get memberCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'primary_id')
+  int? get primary_id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'primary_name')
+  String? get primary_name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'assembly_constituency')
+  int? get assembly_constituency => throw _privateConstructorUsedError;
+  @JsonKey(name: 'assembly_constituency_name')
+  String? get assembly_constituency_name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'party_district_name')
+  String? get party_district_name => throw _privateConstructorUsedError;
   @JsonKey(name: 'verified_member_count')
   String? get verifiedMemberCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'non_verified_member_count')
@@ -260,8 +272,15 @@ abstract class $TopPerformingDataCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: 'btc_constituency') int? btcConstituency,
+      @JsonKey(name: 'btc_constituency_name') String? btcConstituencyName,
       String? name,
       @JsonKey(name: 'member_count') int? memberCount,
+      @JsonKey(name: 'primary_id') int? primary_id,
+      @JsonKey(name: 'primary_name') String? primary_name,
+      @JsonKey(name: 'assembly_constituency') int? assembly_constituency,
+      @JsonKey(name: 'assembly_constituency_name')
+      String? assembly_constituency_name,
+      @JsonKey(name: 'party_district_name') String? party_district_name,
       @JsonKey(name: 'verified_member_count') String? verifiedMemberCount,
       @JsonKey(name: 'non_verified_member_count')
       String? nonVerifiedMemberCount,
@@ -284,8 +303,14 @@ class _$TopPerformingDataCopyWithImpl<$Res, $Val extends TopPerformingData>
   @override
   $Res call({
     Object? btcConstituency = freezed,
+    Object? btcConstituencyName = freezed,
     Object? name = freezed,
     Object? memberCount = freezed,
+    Object? primary_id = freezed,
+    Object? primary_name = freezed,
+    Object? assembly_constituency = freezed,
+    Object? assembly_constituency_name = freezed,
+    Object? party_district_name = freezed,
     Object? verifiedMemberCount = freezed,
     Object? nonVerifiedMemberCount = freezed,
     Object? slno = freezed,
@@ -295,6 +320,10 @@ class _$TopPerformingDataCopyWithImpl<$Res, $Val extends TopPerformingData>
           ? _value.btcConstituency
           : btcConstituency // ignore: cast_nullable_to_non_nullable
               as int?,
+      btcConstituencyName: freezed == btcConstituencyName
+          ? _value.btcConstituencyName
+          : btcConstituencyName // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -303,6 +332,26 @@ class _$TopPerformingDataCopyWithImpl<$Res, $Val extends TopPerformingData>
           ? _value.memberCount
           : memberCount // ignore: cast_nullable_to_non_nullable
               as int?,
+      primary_id: freezed == primary_id
+          ? _value.primary_id
+          : primary_id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      primary_name: freezed == primary_name
+          ? _value.primary_name
+          : primary_name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      assembly_constituency: freezed == assembly_constituency
+          ? _value.assembly_constituency
+          : assembly_constituency // ignore: cast_nullable_to_non_nullable
+              as int?,
+      assembly_constituency_name: freezed == assembly_constituency_name
+          ? _value.assembly_constituency_name
+          : assembly_constituency_name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      party_district_name: freezed == party_district_name
+          ? _value.party_district_name
+          : party_district_name // ignore: cast_nullable_to_non_nullable
+              as String?,
       verifiedMemberCount: freezed == verifiedMemberCount
           ? _value.verifiedMemberCount
           : verifiedMemberCount // ignore: cast_nullable_to_non_nullable
@@ -329,8 +378,15 @@ abstract class _$$TopPerformingDataImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: 'btc_constituency') int? btcConstituency,
+      @JsonKey(name: 'btc_constituency_name') String? btcConstituencyName,
       String? name,
       @JsonKey(name: 'member_count') int? memberCount,
+      @JsonKey(name: 'primary_id') int? primary_id,
+      @JsonKey(name: 'primary_name') String? primary_name,
+      @JsonKey(name: 'assembly_constituency') int? assembly_constituency,
+      @JsonKey(name: 'assembly_constituency_name')
+      String? assembly_constituency_name,
+      @JsonKey(name: 'party_district_name') String? party_district_name,
       @JsonKey(name: 'verified_member_count') String? verifiedMemberCount,
       @JsonKey(name: 'non_verified_member_count')
       String? nonVerifiedMemberCount,
@@ -351,8 +407,14 @@ class __$$TopPerformingDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? btcConstituency = freezed,
+    Object? btcConstituencyName = freezed,
     Object? name = freezed,
     Object? memberCount = freezed,
+    Object? primary_id = freezed,
+    Object? primary_name = freezed,
+    Object? assembly_constituency = freezed,
+    Object? assembly_constituency_name = freezed,
+    Object? party_district_name = freezed,
     Object? verifiedMemberCount = freezed,
     Object? nonVerifiedMemberCount = freezed,
     Object? slno = freezed,
@@ -362,6 +424,10 @@ class __$$TopPerformingDataImplCopyWithImpl<$Res>
           ? _value.btcConstituency
           : btcConstituency // ignore: cast_nullable_to_non_nullable
               as int?,
+      btcConstituencyName: freezed == btcConstituencyName
+          ? _value.btcConstituencyName
+          : btcConstituencyName // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -370,6 +436,26 @@ class __$$TopPerformingDataImplCopyWithImpl<$Res>
           ? _value.memberCount
           : memberCount // ignore: cast_nullable_to_non_nullable
               as int?,
+      primary_id: freezed == primary_id
+          ? _value.primary_id
+          : primary_id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      primary_name: freezed == primary_name
+          ? _value.primary_name
+          : primary_name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      assembly_constituency: freezed == assembly_constituency
+          ? _value.assembly_constituency
+          : assembly_constituency // ignore: cast_nullable_to_non_nullable
+              as int?,
+      assembly_constituency_name: freezed == assembly_constituency_name
+          ? _value.assembly_constituency_name
+          : assembly_constituency_name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      party_district_name: freezed == party_district_name
+          ? _value.party_district_name
+          : party_district_name // ignore: cast_nullable_to_non_nullable
+              as String?,
       verifiedMemberCount: freezed == verifiedMemberCount
           ? _value.verifiedMemberCount
           : verifiedMemberCount // ignore: cast_nullable_to_non_nullable
@@ -391,8 +477,16 @@ class __$$TopPerformingDataImplCopyWithImpl<$Res>
 class _$TopPerformingDataImpl implements _TopPerformingData {
   const _$TopPerformingDataImpl(
       {@JsonKey(name: 'btc_constituency') required this.btcConstituency,
+      @JsonKey(name: 'btc_constituency_name') required this.btcConstituencyName,
       required this.name,
       @JsonKey(name: 'member_count') required this.memberCount,
+      @JsonKey(name: 'primary_id') required this.primary_id,
+      @JsonKey(name: 'primary_name') required this.primary_name,
+      @JsonKey(name: 'assembly_constituency')
+      required this.assembly_constituency,
+      @JsonKey(name: 'assembly_constituency_name')
+      required this.assembly_constituency_name,
+      @JsonKey(name: 'party_district_name') required this.party_district_name,
       @JsonKey(name: 'verified_member_count') required this.verifiedMemberCount,
       @JsonKey(name: 'non_verified_member_count')
       required this.nonVerifiedMemberCount,
@@ -405,10 +499,28 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
   @JsonKey(name: 'btc_constituency')
   final int? btcConstituency;
   @override
+  @JsonKey(name: 'btc_constituency_name')
+  final String? btcConstituencyName;
+  @override
   final String? name;
   @override
   @JsonKey(name: 'member_count')
   final int? memberCount;
+  @override
+  @JsonKey(name: 'primary_id')
+  final int? primary_id;
+  @override
+  @JsonKey(name: 'primary_name')
+  final String? primary_name;
+  @override
+  @JsonKey(name: 'assembly_constituency')
+  final int? assembly_constituency;
+  @override
+  @JsonKey(name: 'assembly_constituency_name')
+  final String? assembly_constituency_name;
+  @override
+  @JsonKey(name: 'party_district_name')
+  final String? party_district_name;
   @override
   @JsonKey(name: 'verified_member_count')
   final String? verifiedMemberCount;
@@ -420,7 +532,7 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
 
   @override
   String toString() {
-    return 'TopPerformingData(btcConstituency: $btcConstituency, name: $name, memberCount: $memberCount, verifiedMemberCount: $verifiedMemberCount, nonVerifiedMemberCount: $nonVerifiedMemberCount, slno: $slno)';
+    return 'TopPerformingData(btcConstituency: $btcConstituency, btcConstituencyName: $btcConstituencyName, name: $name, memberCount: $memberCount, primary_id: $primary_id, primary_name: $primary_name, assembly_constituency: $assembly_constituency, assembly_constituency_name: $assembly_constituency_name, party_district_name: $party_district_name, verifiedMemberCount: $verifiedMemberCount, nonVerifiedMemberCount: $nonVerifiedMemberCount, slno: $slno)';
   }
 
   @override
@@ -430,9 +542,23 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
             other is _$TopPerformingDataImpl &&
             (identical(other.btcConstituency, btcConstituency) ||
                 other.btcConstituency == btcConstituency) &&
+            (identical(other.btcConstituencyName, btcConstituencyName) ||
+                other.btcConstituencyName == btcConstituencyName) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.memberCount, memberCount) ||
                 other.memberCount == memberCount) &&
+            (identical(other.primary_id, primary_id) ||
+                other.primary_id == primary_id) &&
+            (identical(other.primary_name, primary_name) ||
+                other.primary_name == primary_name) &&
+            (identical(other.assembly_constituency, assembly_constituency) ||
+                other.assembly_constituency == assembly_constituency) &&
+            (identical(other.assembly_constituency_name,
+                    assembly_constituency_name) ||
+                other.assembly_constituency_name ==
+                    assembly_constituency_name) &&
+            (identical(other.party_district_name, party_district_name) ||
+                other.party_district_name == party_district_name) &&
             (identical(other.verifiedMemberCount, verifiedMemberCount) ||
                 other.verifiedMemberCount == verifiedMemberCount) &&
             (identical(other.nonVerifiedMemberCount, nonVerifiedMemberCount) ||
@@ -442,8 +568,20 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, btcConstituency, name,
-      memberCount, verifiedMemberCount, nonVerifiedMemberCount, slno);
+  int get hashCode => Object.hash(
+      runtimeType,
+      btcConstituency,
+      btcConstituencyName,
+      name,
+      memberCount,
+      primary_id,
+      primary_name,
+      assembly_constituency,
+      assembly_constituency_name,
+      party_district_name,
+      verifiedMemberCount,
+      nonVerifiedMemberCount,
+      slno);
 
   /// Create a copy of TopPerformingData
   /// with the given fields replaced by the non-null parameter values.
@@ -465,8 +603,18 @@ class _$TopPerformingDataImpl implements _TopPerformingData {
 abstract class _TopPerformingData implements TopPerformingData {
   const factory _TopPerformingData(
       {@JsonKey(name: 'btc_constituency') required final int? btcConstituency,
+      @JsonKey(name: 'btc_constituency_name')
+      required final String? btcConstituencyName,
       required final String? name,
       @JsonKey(name: 'member_count') required final int? memberCount,
+      @JsonKey(name: 'primary_id') required final int? primary_id,
+      @JsonKey(name: 'primary_name') required final String? primary_name,
+      @JsonKey(name: 'assembly_constituency')
+      required final int? assembly_constituency,
+      @JsonKey(name: 'assembly_constituency_name')
+      required final String? assembly_constituency_name,
+      @JsonKey(name: 'party_district_name')
+      required final String? party_district_name,
       @JsonKey(name: 'verified_member_count')
       required final String? verifiedMemberCount,
       @JsonKey(name: 'non_verified_member_count')
@@ -480,10 +628,28 @@ abstract class _TopPerformingData implements TopPerformingData {
   @JsonKey(name: 'btc_constituency')
   int? get btcConstituency;
   @override
+  @JsonKey(name: 'btc_constituency_name')
+  String? get btcConstituencyName;
+  @override
   String? get name;
   @override
   @JsonKey(name: 'member_count')
   int? get memberCount;
+  @override
+  @JsonKey(name: 'primary_id')
+  int? get primary_id;
+  @override
+  @JsonKey(name: 'primary_name')
+  String? get primary_name;
+  @override
+  @JsonKey(name: 'assembly_constituency')
+  int? get assembly_constituency;
+  @override
+  @JsonKey(name: 'assembly_constituency_name')
+  String? get assembly_constituency_name;
+  @override
+  @JsonKey(name: 'party_district_name')
+  String? get party_district_name;
   @override
   @JsonKey(name: 'verified_member_count')
   String? get verifiedMemberCount;

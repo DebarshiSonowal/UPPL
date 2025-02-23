@@ -106,8 +106,14 @@ class _VerifiedScreenState extends State<VerifiedScreen> {
         isOtpSent = true;
       });
     } else {
-      CustomToast.showWarningToast(
-          context, "Something Went Wrong", response.message ?? "Error");
+      if (response.data?.registered ?? false) {
+        CustomToast.showSuccessToast(
+            context, "Successful", "Number is already verified" ?? "");
+        AutoRouter.of(context).popForced(phoneController.text);
+      } else {
+        CustomToast.showWarningToast(
+            context, "Warning", response.message ?? "Error");
+      }
     }
   }
 
@@ -120,7 +126,7 @@ class _VerifiedScreenState extends State<VerifiedScreen> {
       AutoRouter.of(context).popForced(phoneController.text);
     } else {
       CustomToast.showWarningToast(
-          context, "Something Went Wrong", response.message ?? "Error");
+          context, "Warning", response.message ?? "Error");
     }
   }
 }

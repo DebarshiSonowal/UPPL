@@ -579,6 +579,7 @@ class GetMemberService {
       voter_id,
       dio,
       {bool shouldRetry = true}) async {
+    SVProgressHUD.show();
     try {
       String endpoint = 'member-family-details-create-or-update';
 
@@ -606,7 +607,7 @@ class GetMemberService {
           await MultipartFile.fromFile(photo, filename: photo.split('/').last),
         ));
       }
-      debugPrint("${formData.fields}");
+      debugPrint("Form : ${formData.fields}");
 
       final Response response = await dio.post(
         endpoint,
@@ -615,12 +616,15 @@ class GetMemberService {
       debugPrint(
           "UpdateMemberFamilyDetailsModel response: ${dio.options.baseUrl} ${response.data}");
       if (response.statusCode == 200 || response.statusCode == 201) {
+        SVProgressHUD.dismiss();
         return UpdateMemberFamilyDetailsModel.fromJson(response.data);
       } else {
+        SVProgressHUD.dismiss();
         debugPrint("UpdateMemberPersonalDetailsModel error: ${response.data}");
         return UpdateMemberFamilyDetailsModel.fromJson(response.data);
       }
     } on DioException catch (e) {
+      SVProgressHUD.dismiss();
       debugPrint(
           "UpdateMemberPersonalDetailsModel error1: ${e.message} ${e.response}");
       if ((e.response?.statusCode == 401) && shouldRetry) {

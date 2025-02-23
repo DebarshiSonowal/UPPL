@@ -94,9 +94,10 @@ class GetAnalyticsService {
         'length': length,
         'search[value]': '',
         "order": [
-          {"column": "6", "dir": "desc"}
+          {"column": "2", "dir": "desc"}
         ],
       };
+      debugPrint("requestBody ${requestBody}");
       final dio = Dio(
           BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"));
       // Handle the response based on status code

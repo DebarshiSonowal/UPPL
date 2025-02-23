@@ -200,7 +200,7 @@ class _LoginOtpVerifyScreenState extends State<LoginOtpVerifyScreen> {
     final response = await ApiService.instance(context)
         .login(widget.phonenumber, otp, context);
     if (response.status == 1) {
-      ConfigStorage.instance.setIsAdmin(response.data.role != "admin");
+      ConfigStorage.instance.setIsAdmin(response.data.role == "admin");
       AutoRouter.of(context).pushNamed(CustomRoutes.homeScreen);
     }
   }

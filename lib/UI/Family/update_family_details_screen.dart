@@ -40,29 +40,55 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
   @override
   void initState() {
     super.initState();
+
+    name.text = '';
+    mobile.text = '';
+    voterID.text = '';
+    aadhar.text = '';
+    dob.text = '';
+    age.text = '';
+    selectedGender = 0;
+    selectedRelationship = null;
+    selectedFile = null;
+
     Future.delayed(Duration.zero, () {
       final selectedFamilyMember =
           Provider.of<Repository>(context, listen: false)
               .selectedReferredFamilyDetailsModel;
+      debugPrint(
+          "selectedFamilyMember ${selectedFamilyMember?.membershipCard.relationship}");
       if (selectedFamilyMember != null) {
-        name.text = selectedFamilyMember.personalDetails.name ?? '';
-        mobile.text = selectedFamilyMember.personalDetails.mobileNo ?? '';
-        voterID.text = selectedFamilyMember.personalDetails.voterId ?? '';
-        aadhar.text = selectedFamilyMember.personalDetails.aadhaarNo ?? '';
+        final personalDetails = selectedFamilyMember.personalDetails;
+        final membershipCard = selectedFamilyMember.membershipCard;
+        name.text = personalDetails.name ?? '';
+        mobile.text = personalDetails.mobileNo ?? '';
+        voterID.text = personalDetails.voterId ?? '';
+        aadhar.text = personalDetails.aadhaarNo ?? '';
 
-        if (selectedFamilyMember.personalDetails.dateOfBirth != null) {
-          dob.text = selectedFamilyMember.personalDetails.dateOfBirth ?? "";
-          age.text = _calculateAge2(
-                  selectedFamilyMember.personalDetails.dateOfBirth!.toString())
-              .toString();
+        if (personalDetails.dateOfBirth != null) {
+          dob.text = personalDetails.dateOfBirth ?? '';
+          age.text = _calculateAge2(personalDetails.dateOfBirth!).toString();
         }
 
-        selectedGender = selectedFamilyMember.personalDetails.gender ?? 1;
-        debugPrint(
-            "Currrent Gender ${selectedFamilyMember.personalDetails.gender}");
-        selectedRelationship =
-            Provider.of<Repository>(context, listen: false).relationships[
-                (selectedFamilyMember.membershipCard.relationship ?? 1) - 1];
+        selectedGender = personalDetails.gender ?? 1;
+
+        final relationships =
+            Provider.of<Repository>(context, listen: false).relationships;
+        final relationshipIndex = (membershipCard.relationship ?? 1) - 1;
+        if (relationshipIndex >= 0 &&
+            relationshipIndex < relationships.length) {
+          selectedRelationship = relationships[relationshipIndex];
+        }
+        if (selectedFamilyMember.membershipCard.photo != null) {
+          try {
+            selectedFile = File(
+                Uri.parse(selectedFamilyMember.membershipCard.photo!)
+                    .toFilePath());
+          } on Exception catch (e) {
+            // TODO
+          }
+        }
+
         setState(() {});
       }
     });
@@ -79,244 +105,144 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
           color: Configuration.homeBgColor,
         ),
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 1.h,
-              ),
-              Text(
-                "Update Family Members",
-                style: Configuration.primaryFont(
-                  fontSize: 16.sp,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                  // Add other text styling as needed
+              Center(
+                child: Text(
+                  "Update Family Member Details",
+                  style: Configuration.primaryFont(
+                    fontSize: 18.sp,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Stack(
-                children: [
-                  Consumer<Repository>(
-                    builder: (context, data, _) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Configuration.primaryColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.black,
+              SizedBox(height: 3.h),
+              Center(
+                child: Stack(
+                  children: [
+                    Consumer<Repository>(
+                      builder: (context, data, _) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Configuration.primaryColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black54, width: 2),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 5,
+                                offset: Offset(0, 2),
+                              )
+                            ],
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: selectedFile != null
+                                  ? FileImage(selectedFile!)
+                                  : CachedNetworkImageProvider(Provider.of<
+                                                  Repository>(context,
+                                              listen: false)
+                                          .selectedReferredFamilyDetailsModel
+                                          ?.membershipCard
+                                          .photo ??
+                                      "") as ImageProvider,
+                            ),
                           ),
-                          image: DecorationImage(
-                            image: selectedFile != null
-                                ? FileImage(selectedFile!)
-                                : CachedNetworkImageProvider(
-                                    Provider.of<Repository>(context,
-                                                listen: false)
-                                            .selectedReferredFamilyDetailsModel
-                                            ?.membershipCard
-                                            .photo ??
-                                        ""),
-                          ),
-                        ),
-                        height: 22.w,
-                        width: 22.w,
-                      );
-                    },
-                  ),
-                  Positioned(
-                    bottom: 5.0,
-                    right: 5.0,
-                    child: GestureDetector(
-                      onTap: () {
-                        pickUpFile();
+                          height: 25.w,
+                          width: 25.w,
+                        );
                       },
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.black54,
-                          shape: BoxShape.circle,
-                        ),
-                        padding: EdgeInsets.all(8.0),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 20.0,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: pickUpFile,
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Configuration.primaryColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: Icon(Icons.camera_alt, size: 20),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
-                ),
-                child: TextFormField(
-                  controller: name,
-                  cursorColor: Colors.black,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Add Family Member Name',
-                    labelStyle: Configuration.primaryFont(
-                      fontSize: 14.sp,
-                      color: Colors.black54,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                    )
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 1.h,
+              SizedBox(height: 3.h),
+              buildInputField(
+                controller: name,
+                label: 'Family Member Name*',
+                keyboardType: TextInputType.name,
               ),
+              SizedBox(height: 2.h),
               Container(
-                decoration: const BoxDecoration(
+                padding: EdgeInsets.all(3.w),
+                decoration: BoxDecoration(
                   color: Color(0xffFFFAC2),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 3.w,
-                  vertical: 1.h,
-                ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                ),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    // color: Color(0xffFFFAC2),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 3.w,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Gender*",
-                        style: Configuration.primaryFont(
-                          fontSize: 16.sp,
-                          color: Configuration.secondaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Gender*",
+                      style: Configuration.primaryFont(
+                        fontSize: 16.sp,
+                        color: Configuration.secondaryColor,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      SizedBox(
-                        height: 5.h,
-                        child: ListView.separated(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              var item = genderOptions[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedGender = index;
-                                  });
-                                },
-                                child: Container(
-                                  width: 25.w,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black54,
-                                    ),
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: selectedGender == index
-                                        ? Configuration.primaryColor
-                                        : Colors.white,
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w,
-                                    vertical: 0.5.h,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      item,
-                                      style: Configuration.primaryFont(
-                                        color: Colors.black,
-                                      ),
+                    ),
+                    SizedBox(height: 1.h),
+                    Row(
+                      children: genderOptions.asMap().entries.map((entry) {
+                        return Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 1.w),
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => selectedGender = entry.key),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 1.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: selectedGender == entry.key
+                                      ? Configuration.primaryColor
+                                      : Colors.white,
+                                  border: Border.all(color: Colors.black26),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    entry.value,
+                                    style: Configuration.primaryFont(
+                                      color: Colors.black,
+                                      fontWeight: selectedGender == entry.key
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return SizedBox(
-                                width: 2.w,
-                              );
-                            },
-                            itemCount: 3),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Consumer<Repository>(builder: (context, data, _) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 6.w,
-                  ),
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Relationship',
-                      labelStyle: Configuration.primaryFont(
-                        fontSize: 14.sp,
-                        color: Colors.black54,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    value: selectedRelationship,
-                    items: data.relationships.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      // Handle the selected value
-                      setState(() {
-                        selectedRelationship = newValue;
-                      });
-                    },
-                  ),
-                );
-              }),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
+                  ],
                 ),
-                child: TextFormField(
-                  controller: mobile,
-                  cursorColor: Colors.black,
-                  keyboardType: TextInputType.phone,
+              ),
+              SizedBox(height: 2.h),
+              Consumer<Repository>(
+                builder: (context, data, _) => DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Mobile Number',
+                    labelText: 'Relationship*',
                     labelStyle: Configuration.primaryFont(
                       fontSize: 14.sp,
                       color: Colors.black54,
@@ -324,158 +250,79 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                   ),
+                  value: selectedRelationship,
+                  items: data.relationships
+                      .map((value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          ))
+                      .toList(),
+                  onChanged: (value) =>
+                      setState(() => selectedRelationship = value),
                 ),
               ),
-              SizedBox(
-                height: 1.h,
+              SizedBox(height: 2.h),
+              buildInputField(
+                controller: mobile,
+                label: 'Mobile Number',
+                keyboardType: TextInputType.phone,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
-                ),
-                child: SizedBox(
-                  height: 7.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 50.w,
-                        child: TextFormField(
-                          controller: dob,
-                          cursorColor: Colors.black,
-                          readOnly: true,
-                          onTap: () {
-                            DatePicker.showDatePicker(
-                              context,
-                              showTitleActions: true,
-                              maxTime: DateTime.now()
-                                  .subtract(const Duration(days: 6574)),
-                              onChanged: (date) {},
-                              onConfirm: (date) {
-                                setState(() {
-                                  dob.text =
-                                      DateFormat("dd-MM-yyyy").format(date);
-                                  age.text = "${_calculateAge(dob.text)}";
-                                });
-                              },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en,
-                            );
+              SizedBox(height: 2.h),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: buildInputField(
+                      controller: dob,
+                      label: 'Date of Birth*',
+                      readOnly: true,
+                      onTap: () {
+                        DatePicker.showDatePicker(
+                          context,
+                          showTitleActions: true,
+                          maxTime:
+                              DateTime.now().subtract(Duration(days: 6574)),
+                          onConfirm: (date) {
+                            setState(() {
+                              dob.text = DateFormat("dd-MM-yyyy").format(date);
+                              age.text = "${_calculateAge(dob.text)}";
+                            });
                           },
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            labelText: 'D.O.B',
-                            labelStyle: Configuration.primaryFont(
-                              fontSize: 14.sp,
-                              color: Colors.black54,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 35.w,
-                        child: TextFormField(
-                          controller: age,
-                          cursorColor: Colors.black,
-                          keyboardType: TextInputType.number,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            labelText: 'Age',
-                            labelStyle: Configuration.primaryFont(
-                              fontSize: 14.sp,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
-                ),
-                child: TextFormField(
-                  controller: voterID,
-                  cursorColor: Colors.black,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.characters,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Voter Id',
-                    labelStyle: Configuration.primaryFont(
-                      fontSize: 14.sp,
-                      color: Colors.black54,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                          currentTime: DateTime.now(),
+                          locale: LocaleType.en,
+                        );
+                      },
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
-                ),
-                child: TextFormField(
-                  controller: aadhar,
-                  cursorColor: Colors.black,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Aadhar*',
-                    labelStyle: Configuration.primaryFont(
-                      fontSize: 14.sp,
-                      color: Colors.black54,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  SizedBox(width: 2.w),
+                  Expanded(
+                    flex: 2,
+                    child: buildInputField(
+                      controller: age,
+                      label: 'Age',
+                      readOnly: true,
+                      keyboardType: TextInputType.number,
                     ),
                   ),
-                ),
+                ],
               ),
+              SizedBox(height: 2.h),
+              buildInputField(
+                controller: voterID,
+                label: 'Voter ID',
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.characters,
+              ),
+              SizedBox(height: 2.h),
+              buildInputField(
+                controller: aadhar,
+                label: 'Aadhar Number*',
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 3.h),
               SizedBox(
-                height: 2.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 5.w,
-                ),
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
                     if (name.text.isEmpty) {
@@ -487,19 +334,17 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                     } else if (dob.text.isEmpty) {
                       CustomToast.showFailureToast(
                           context, "Error", "Please enter a date of birth");
-                    } else if (mobile.text.isEmpty) {
-                      CustomToast.showFailureToast(
-                          context, "Error", "Please enter a mobile number");
                     } else {
                       addFamilyDetails(context);
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Configuration.primaryColor,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: 2.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    elevation: 2,
                   ),
                   child: Text(
                     "Update Details",
@@ -511,9 +356,7 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 1.h,
-              ),
+              SizedBox(height: 2.h),
             ],
           ),
         ),
@@ -521,46 +364,100 @@ class _UpdateFamilyDetailsScreenState extends State<UpdateFamilyDetailsScreen> {
     );
   }
 
-  void addFamilyDetails(BuildContext context) async {
-    final data = Provider.of<Repository>(context, listen: false);
-    final response = await ApiService.instance(context)
-        .updateFamilyMemberPersonalDetails(
-            context,
-            Provider.of<Repository>(context, listen: false)
-                .selectedReferredFamilyDetailsModel
-                ?.membershipCard
-                .id,
-            data.memberData?.personalDetails.memberId,
-            name.text,
-            DateFormat("yyyy-mm-dd")
-                .format(DateFormat("dd-mm-yyyy").parse(dob.text)),
-            selectedGender,
-            data.relationships.indexWhere((e) => e == selectedRelationship) + 1,
-            // mobile.text,
-            null,
-            selectedFile?.path,
-            data.memberData?.personalDetails.memberId,
-            aadhar.text,
-            voterID.text);
-    if (response.status == 1) {
-      CustomToast.showSuccessToast(
-          context, "Information Added", response.message);
-      AutoRouter.of(context).popForced();
-    } else {
-      debugPrint("Errors ${response.data?.errors?.keys}");
-      if (response.data?.errors?.keys.first == "mobile_no") {
-        final result = await AutoRouter.of(context)
-            .push(VerifiedRoute(mobile: mobile.text));
-        if (result != null) {
-          addFamilyDetails(context);
-        } else {
-          CustomToast.showFailureToast(
-              context, "Something Went Wrong", response.message);
-        }
-      } else {
-        CustomToast.showFailureToast(
-            context, "Something Went Wrong", response.message);
+  Widget buildInputField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    TextCapitalization textCapitalization = TextCapitalization.none,
+  }) {
+    return TextFormField(
+      controller: controller,
+      cursorColor: Colors.black,
+      keyboardType: keyboardType,
+      readOnly: readOnly,
+      onTap: onTap,
+      textCapitalization: textCapitalization,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        labelText: label,
+        labelStyle: Configuration.primaryFont(
+          fontSize: 14.sp,
+          color: Colors.black54,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  Future<void> addFamilyDetails(BuildContext context) async {
+    try {
+      final data = Provider.of<Repository>(context, listen: false);
+      final selectedMember = data.selectedReferredFamilyDetailsModel;
+      final memberId = data.memberData?.personalDetails.memberId;
+
+      final formattedDob = DateFormat("yyyy-MM-dd")
+          .format(DateFormat("dd-MM-yyyy").parse(dob.text));
+
+      final relationshipIndex =
+          data.relationships.indexWhere((e) => e == selectedRelationship) + 1;
+
+      final response = await ApiService.instance(context)
+          .updateFamilyMemberPersonalDetails(
+              context,
+              selectedMember?.membershipCard.id,
+              memberId,
+              name.text,
+              formattedDob,
+              selectedGender,
+              relationshipIndex,
+              mobile.text,
+              selectedFile?.path,
+              memberId,
+              aadhar.text,
+              voterID.text);
+
+      if (response.status == 1) {
+        CustomToast.showSuccessToast(
+            context, "Information Added", response.message);
+        AutoRouter.of(context).popForced();
+        return;
       }
+
+      if (response.data?.errors?.keys.firstOrNull == "mobile_no") {
+        final verificationResult = await AutoRouter.of(context)
+            .push(VerifiedRoute(mobile: mobile.text));
+
+        if (verificationResult != null) {
+          await addFamilyDetails(context);
+          return;
+        }
+      }
+
+      String errorMessage = '';
+      if (response.data?.errors != null) {
+        for (var key in response.data!.errors!.keys) {
+          final messages = response.data!.errors![key];
+          if (messages != null && messages.isNotEmpty) {
+            errorMessage += '${messages.join(", ")}\n';
+          }
+        }
+        CustomToast.showFailureToast(
+            context, "Validation Errors", errorMessage.trim());
+      } else {
+        CustomToast.showFailureToast(context, "Error", response.message);
+      }
+    } catch (e) {
+      debugPrint("Error updating family details: $e");
+      CustomToast.showFailureToast(
+          context, "Error", "Failed to update family details");
     }
   }
 

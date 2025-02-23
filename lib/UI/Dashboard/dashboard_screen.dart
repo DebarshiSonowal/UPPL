@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:uppl/Constants/routes.dart';
+import 'package:uppl/Models/JSON/generate_json_model.dart';
+import 'package:uppl/Models/family/referred_family_details_model.dart';
 import 'package:uppl/Repository/repository.dart';
 import 'package:uppl/Storage/config_storage.dart';
 
@@ -391,6 +393,95 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         // width: 24.w,
                                         child: ElevatedButton(
                                           onPressed: () {
+                                            Provider.of<Repository>(context,
+                                                    listen: false)
+                                                .setReferredMembersFamilyDetails(
+                                                    ReferredMemberFamilyDetails(
+                                              membershipCard: MembershipCard(
+                                                id: item.membershipCard.id,
+                                                userId:
+                                                    item.membershipCard.userId,
+                                                refId:
+                                                    item.membershipCard.refId,
+                                                title:
+                                                    item.membershipCard.title,
+                                                address:
+                                                    item.membershipCard.address,
+                                                pinCode:
+                                                    item.membershipCard.pinCode,
+                                                btcAssemblyConstituencyId: item
+                                                    .membershipCard
+                                                    .btcAssemblyConstituencyId,
+                                                btcConstituency: item
+                                                    .membershipCard
+                                                    .btcConstituency,
+                                                partyDistrict: item
+                                                    .membershipCard
+                                                    .partyDistrict,
+                                                assemblyConstituency: item
+                                                    .membershipCard
+                                                    .assemblyConstituency,
+                                                primaryId: item
+                                                    .membershipCard.primaryId,
+                                                boothId:
+                                                    item.membershipCard.boothId,
+                                                villageId: item
+                                                    .membershipCard.villageId,
+                                                createdBy: item
+                                                    .membershipCard.createdBy,
+                                                updateCount: item
+                                                    .membershipCard.updateCount,
+                                                createdAt: item
+                                                    .membershipCard.createdAt,
+                                                updatedAt: item
+                                                    .membershipCard.updatedAt,
+                                                village:
+                                                    item.membershipCard.village,
+                                                district: District(
+                                                  id: item.membershipCard
+                                                      .district.id,
+                                                  name: item.membershipCard
+                                                      .district.name,
+                                                ),
+                                                name: item.membershipCard.name,
+                                                mobileNo: item
+                                                    .membershipCard.mobileNo,
+                                                membershipNo: item
+                                                    .membershipCard
+                                                    .membershipNo,
+                                                refCode:
+                                                    item.membershipCard.refCode,
+                                                gender:
+                                                    item.membershipCard.gender,
+                                                dateOfBirth: item
+                                                    .membershipCard.dateOfBirth,
+                                                joiningDate: item
+                                                    .membershipCard.joiningDate,
+                                                relationship: item
+                                                    .membershipCard
+                                                    .relationship,
+                                              ),
+                                              personalDetails:
+                                                  ReferredPersonalDetails(
+                                                      memberId: item
+                                                          .personalDetails
+                                                          .memberId,
+                                                      name: item
+                                                          .personalDetails.name,
+                                                      dateOfBirth: item
+                                                          .personalDetails
+                                                          .dateOfBirth,
+                                                      mobileNo: item
+                                                          .personalDetails
+                                                          .mobileNo,
+                                                      gender: item
+                                                          .personalDetails
+                                                          .gender,
+                                                      voterId: item
+                                                              .personalDetails
+                                                              .voterId ??
+                                                          ""),
+                                            ));
                                             try {
                                               AutoRouter.of(context).pushNamed(
                                                   CustomRoutes

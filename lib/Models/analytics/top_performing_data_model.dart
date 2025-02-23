@@ -35,8 +35,16 @@ class TopPerformingDataModel with _$TopPerformingDataModel {
 class TopPerformingData with _$TopPerformingData {
   const factory TopPerformingData({
     @JsonKey(name: 'btc_constituency') required int? btcConstituency,
+    @JsonKey(name: 'btc_constituency_name')
+    required String? btcConstituencyName,
     required String? name,
     @JsonKey(name: 'member_count') required int? memberCount,
+    @JsonKey(name: 'primary_id') required int? primary_id,
+    @JsonKey(name: 'primary_name') required String? primary_name,
+    @JsonKey(name: 'assembly_constituency') required int? assembly_constituency,
+    @JsonKey(name: 'assembly_constituency_name')
+    required String? assembly_constituency_name,
+    @JsonKey(name: 'party_district_name') required String? party_district_name,
     @JsonKey(name: 'verified_member_count')
     required String? verifiedMemberCount,
     @JsonKey(name: 'non_verified_member_count')

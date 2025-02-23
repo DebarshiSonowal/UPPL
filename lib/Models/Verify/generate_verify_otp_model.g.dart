@@ -11,7 +11,7 @@ _$DataImpl _$$DataImplFromJson(Map<String, dynamic> json) => _$DataImpl(
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
       ),
-      phoneNumber: json['phone_number'] as String,
+      phoneNumber: json['phone_number'] as String?,
       status: (json['status'] as num?)?.toInt(),
       registered: json['registered'] as bool?,
     );
