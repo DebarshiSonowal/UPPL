@@ -17,6 +17,7 @@ class _TopPerformerScreenState extends State<TopPerformerScreen> {
   bool _isLoading = false;
   int _currentPage = 0;
   int _totalPages = 0;
+  int _totalRecords = 0;
 
   @override
   void initState() {
@@ -44,93 +45,105 @@ class _TopPerformerScreenState extends State<TopPerformerScreen> {
                 child: RefreshIndicator(
                   onRefresh: () async {
                     _currentPage = 0;
+                    _totalPages = 0;
+                    _totalRecords = 0;
                     repository.clearTopPerformers();
                     await _loadPage(0);
                   },
-                  child: ListView.builder(
-                    itemCount: performers.length,
-                    itemBuilder: (context, index) {
-                      if (index == performers.length - 1 &&
-                          _currentPage < _totalPages - 1) {
-                        _loadPage(_currentPage + 1);
-                      }
-                      final performer = performers[index];
-                      return Card(
-                        elevation: 4,
-                        margin: const EdgeInsets.all(12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                              colors: [Colors.white, Color(0xFFF5F5F5)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(Icons.person, color: Colors.blue),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      performer.memberName ?? "N/A",
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
+                  child: performers.isEmpty
+                      ? const Center(child: Text('No performers found'))
+                      : ListView.builder(
+                          itemCount: performers.length,
+                          itemBuilder: (context, index) {
+                            final performer = performers[index];
+                            if (index == performers.length - 1 &&
+                                _currentPage < _totalPages - 1) {
+                              _loadPage(_currentPage + 1);
+                            }
+                            return Card(
+                              elevation: 4,
+                              margin: const EdgeInsets.all(12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  gradient: const LinearGradient(
+                                    colors: [Colors.white, Color(0xFFF5F5F5)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                ],
-                              ),
-                              const Divider(height: 16),
-                              InfoRow(
-                                icon: Icons.location_on,
-                                label: 'Constituency',
-                                value: performer.btcConstituencyName ?? "N/A",
-                              ),
-                              const SizedBox(height: 8),
-                              InfoRow(
-                                icon: Icons.link,
-                                label: 'References',
-                                value: '${performer.refCount ?? 0}',
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: InfoRow(
-                                      icon: Icons.verified_user,
-                                      label: 'Verified',
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.person,
+                                            color: Colors.blue),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            performer.memberName?.trim() ??
+                                                "N/A",
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(height: 16),
+                                    InfoRow(
+                                      icon: Icons.location_on,
+                                      label: 'Constituency',
+                                      value: performer.btcConstituencyName
+                                              ?.trim() ??
+                                          "N/A",
+                                    ),
+                                    const SizedBox(height: 8),
+                                    InfoRow(
+                                      icon: Icons.link,
+                                      label: 'Total Referred Members',
                                       value:
-                                          '${performer.verifiedMemberCount ?? "0"}',
-                                      color: Colors.green,
+                                          performer.refCount?.toString() ?? "0",
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: InfoRow(
-                                      icon: Icons.pending,
-                                      label: 'Pending',
-                                      value:
-                                          '${performer.nonVerifiedMemberCount ?? "0"}',
-                                      color: Colors.orange,
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: InfoRow(
+                                            icon: Icons.verified_user,
+                                            label: 'Verified',
+                                            value: performer.verifiedMemberCount
+                                                    ?.toString() ??
+                                                "0",
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: InfoRow(
+                                            icon: Icons.pending,
+                                            label: 'Unverified',
+                                            value: performer
+                                                    .nonVerifiedMemberCount
+                                                    ?.toString() ??
+                                                "0",
+                                            color: Colors.orange,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
               ),
               if (_isLoading)
@@ -154,22 +167,18 @@ class _TopPerformerScreenState extends State<TopPerformerScreen> {
                             }
                           : null,
                     ),
-                    Text('${_currentPage + 1}/${_totalPages + 1}'),
+                    Text(
+                        'Page ${_currentPage + 1} of ${_totalPages == 0 ? 1 : _totalPages}'),
                     IconButton(
                       icon: const Icon(Icons.chevron_right),
-                      onPressed: _currentPage < _totalPages
+                      onPressed: _currentPage < _totalPages - 1
                           ? () async {
-                              debugPrint(
-                                  'Current page: $_currentPage New page: ${_currentPage + 1}  ');
                               setState(() {
                                 _currentPage++;
                               });
                               await _loadPage(_currentPage);
                             }
-                          : () {
-                              debugPrint(
-                                  'Current page: $_currentPage : ${_currentPage < _totalPages}  ');
-                            },
+                          : null,
                     ),
                   ],
                 ),
@@ -197,23 +206,22 @@ class _TopPerformerScreenState extends State<TopPerformerScreen> {
       if (data != null && data.isNotEmpty) {
         final repository = Provider.of<Repository>(context, listen: false);
 
-        // Clear performers list for any page change
-        repository.clearTopPerformers();
-        repository.setTopPerformers(data);
+        if (page == 0) {
+          repository.clearTopPerformers();
+          _totalRecords = response.recordsTotal ?? 0;
+          _totalPages = (_totalRecords + _pageSize - 1) ~/ _pageSize;
+        }
 
-        setState(() {
-          // Calculate total pages based on total items rather than current page data
-          _totalPages = (response.recordsTotal! + _pageSize - 1) ~/ _pageSize;
-        });
+        repository.setTopPerformers(data);
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('No data available'),
+            content: Text('No more data available'),
             behavior: SnackBarBehavior.floating,
           ),
         );
         if (page > 0) {
-          // If no data on next page, stay on current page
           setState(() {
             _currentPage--;
           });
@@ -221,10 +229,9 @@ class _TopPerformerScreenState extends State<TopPerformerScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error loading data: ${e.toString()}'),
+          content: Text('Error: ${e.toString()}'),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -283,7 +290,7 @@ class InfoRow extends StatelessWidget {
             ),
           ),
           const Text(
-            ': ',
+            ' : ',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey,

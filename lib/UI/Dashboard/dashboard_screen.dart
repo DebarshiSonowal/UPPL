@@ -448,17 +448,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         joiningDate:
                                             item.membershipCard!.joiningDate);
                                   },
-                                  child: (item.membershipCard.userId == 0)
-                                      ? Icon(
-                                          FontAwesomeIcons.download,
-                                          size: 16.sp,
-                                          color: Colors.grey,
-                                        )
-                                      : Icon(
-                                          FontAwesomeIcons.download,
-                                          size: 16.sp,
-                                          color: Configuration.thirdColor,
-                                        ),
+                                  child: Icon(
+                                    FontAwesomeIcons.download,
+                                    size: 16.sp,
+                                    color: Configuration.thirdColor,
+                                  ),
                                 ),
                                 GestureDetector(
                                   onTap: () {

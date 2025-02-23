@@ -343,7 +343,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                   ),
                                 ))
                             .toList() ??
-                        [Text('An error occurred')]
+                        [const Text('An error occurred')]
                   ],
                 ),
           backgroundColor: response.data?.errors?.isEmpty ?? true

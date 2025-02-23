@@ -510,9 +510,11 @@ class GetMemberService {
       "priamries": priamries,
       "booth": booth,
       "village": village,
-      "other_village": other_village
+      "other_village": other_village.toString().toLowerCase() == "unknown"
+          ? ""
+          : other_village
     };
-
+    debugPrint("Contact update ${requestBody}");
     try {
       final Response response = await dio.post(
         endpoint,

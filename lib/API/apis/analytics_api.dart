@@ -93,8 +93,9 @@ class GetAnalyticsService {
         'start': start,
         'length': length,
         'search[value]': '',
-        'order[0][column]': '6',
-        'order[0][dir]': 'asc',
+        "order": [
+          {"column": "6", "dir": "desc"}
+        ],
       };
       final dio = Dio(
           BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"));
@@ -154,13 +155,15 @@ class GetAnalyticsService {
         // 'APP-KEY': ConstanceData.app_key
       };
       final requestBody = {
-        'draw': draw,
+        // 'draw': draw,
         'start': start,
         'length': length,
         'search[value]': '',
-        'order[0][column]': 6,
-        'order[0][dir]': 'asc',
+        "order": [
+          {"column": "6", "dir": "asc"}
+        ],
       };
+      debugPrint("drawit ${requestBody}");
       final dio = Dio(
           BaseOptions(baseUrl: "${ApiService.baseUrl}/${ApiService.path}/"));
       // Handle the response based on status code

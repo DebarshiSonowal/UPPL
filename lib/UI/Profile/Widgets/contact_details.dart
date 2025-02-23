@@ -20,16 +20,23 @@ class _ContactDetailsState extends State<ContactDetails> {
   int? selectedDistrict,
       selectedPartyDistrict,
       selectedBtcConstituency,
-      selectedBtcAssemblyConstituency,
-      selectConstituency,
-      selectPrimary,
-      selectBooth;
-  int? selectVillage;
+      selectedConstituency,
+      selectedPrimary,
+      selectedBooth,
+      selectedAssembly;
+  int? selectedVillage;
   final address = TextEditingController();
   final pincode = TextEditingController();
   bool isAllDataAvailable = false;
   int indexBtcAssemblyConstituency = 0;
   int idBtcAssemblyConstituency = 0;
+  List<AssemblyConstituency> filteredAssemblyConstituencies = [];
+  List<Constituency> listOfConstituencies = [];
+  List<Primary> filteredPrimary = [];
+  List<Booth> filteredBooth = [];
+  List<District> filteredDistricts = [];
+  List<PartyDistrict> filteredPartyDistricts = [];
+  Constituency? currentConstituency;
   Map<String, String> errorMessages = {};
 
   @override
@@ -64,24 +71,24 @@ class _ContactDetailsState extends State<ContactDetails> {
         print(e);
       }
       try {
-        selectConstituency = data.assemblyConstituencies
+        selectedConstituency = data.assemblyConstituencies
             .firstWhere((e) => e.id == data.profileData!.assemblyConstituency)
             .id;
       } catch (e) {
         print(e);
       }
       try {
-        selectPrimary = data.profileData!.primaryId;
+        selectedPrimary = data.profileData!.primaryId;
       } catch (e) {
         print(e);
       }
       try {
-        selectBooth = data.profileData!.boothId;
+        selectedBooth = data.profileData!.boothId;
       } catch (e) {
         print(e);
       }
       try {
-        selectVillage = data.profileData!.villageId;
+        selectedVillage = data.profileData!.villageId;
       } catch (e) {
         print(e);
       }
@@ -89,10 +96,10 @@ class _ContactDetailsState extends State<ContactDetails> {
       if (selectedDistrict != null &&
           selectedPartyDistrict != null &&
           selectedBtcConstituency != null &&
-          selectConstituency != null &&
-          selectPrimary != null &&
-          selectBooth != null &&
-          selectVillage != null &&
+          selectedConstituency != null &&
+          selectedPrimary != null &&
+          selectedBooth != null &&
+          selectedVillage != null &&
           address.text.isNotEmpty &&
           pincode.text.isNotEmpty) {
         setState(() {
@@ -108,74 +115,87 @@ class _ContactDetailsState extends State<ContactDetails> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       final data = Provider.of<Repository>(context, listen: false);
+
+      // Initialize text controllers
       address.text = data.profileData?.address ?? "";
       pincode.text = data.profileData?.pinCode ?? "";
-      // pincode.text = data.membershipCardData.
+
+      // Initialize selections safely using try-catch
       try {
-        selectedDistrict = data.districts
-            .firstWhere((e) =>
-                e.name.toLowerCase() ==
-                data.profileData!.district.toLowerCase())
-            .id;
+        selectedBtcConstituency = data.profileData?.btcConstituency;
+        if (selectedBtcConstituency != null) {
+          listOfConstituencies = data.btcAssemblyConstituencies[
+              data.btcConstituency.indexWhere((constituency) =>
+                  constituency.id == selectedBtcConstituency)];
+
+          filteredAssemblyConstituencies = data.assemblyConstituencies
+              .where((e) => listOfConstituencies
+                  .any((f) => f.assemblyConstituencyId == e.id))
+              .toList();
+
+          selectedAssembly = data.profileData?.assemblyConstituency;
+          if (selectedAssembly != null) {
+            currentConstituency = listOfConstituencies.firstWhere(
+                (e) => e.assemblyConstituencyId == selectedAssembly);
+
+            selectedDistrict = currentConstituency?.districtId;
+            selectedPartyDistrict = currentConstituency?.partyDistrictId;
+
+            filteredDistricts = data.districts
+                .where((e) =>
+                    listOfConstituencies.any((f) => f.districtId == e.id))
+                .toList();
+
+            filteredPartyDistricts = data.partyDistricts
+                .where((e) =>
+                    listOfConstituencies.any((f) => f.partyDistrictId == e.id))
+                .toList();
+
+            selectedPrimary = data.profileData?.primaryId;
+            if (selectedPrimary != null) {
+              filteredPrimary =
+                  data.btcPrimariesList["${currentConstituency?.id}"]!.toList();
+              debugPrint(
+                  "data.profileData?.boothId ${data.profileData?.boothId}");
+              selectedBooth = data.profileData?.boothId;
+              if (selectedBooth != null) {
+                filteredBooth = data.booths
+                    .where((e) => e.btcPrimaryId == selectedPrimary)
+                    .toList();
+
+                selectedVillage = data.profileData?.villageId;
+                if (selectedVillage == 0) {
+                  otherVillage = data.profileData?.village;
+                }
+              }
+            }
+          }
+        }
       } catch (e) {
         print(e);
       }
-      try {
-        selectedPartyDistrict = data.partyDistricts
-            .firstWhere((e) => e.id == data.profileData!.partyDistrict)
-            .id;
-      } catch (e) {
-        print(e);
-      }
-      try {
-        selectedBtcConstituency = data.btcConstituency
-            .firstWhere((e) => e.id == data.profileData!.btcConstituency)
-            .id;
-      } catch (e) {
-        print(e);
-      }
-      try {
-        selectConstituency = data.assemblyConstituencies
-            .firstWhere((e) => e.id == data.profileData!.assemblyConstituency)
-            .id;
-      } catch (e) {
-        print(e);
-      }
-      try {
-        selectPrimary = data.profileData!.primaryId;
-      } catch (e) {
-        print(e);
-      }
-      try {
-        selectBooth = data.profileData!.boothId;
-      } catch (e) {
-        print(e);
-      }
-      try {
-        selectVillage = data.profileData!.villageId;
-      } catch (e) {
-        print(e);
+      setState(() {});
+      // Check if all required data is available
+      bool hasAllData = [
+            selectedDistrict,
+            selectedPartyDistrict,
+            selectedBtcConstituency,
+            selectedConstituency,
+            selectedPrimary,
+            selectedBooth,
+            selectedVillage
+          ].every((item) => item != null) &&
+          [address.text, pincode.text].every((text) => text.isNotEmpty);
+
+      if (mounted) {
+        setState(() {
+          isAllDataAvailable = hasAllData;
+          if (hasAllData) debugPrint("All data selected successfully");
+        });
       }
     });
-    if (selectedDistrict != null &&
-        selectedPartyDistrict != null &&
-        selectedBtcConstituency != null &&
-        selectConstituency != null &&
-        selectPrimary != null &&
-        selectBooth != null &&
-        selectVillage != null &&
-        address.text.isNotEmpty &&
-        pincode.text.isNotEmpty) {
-      setState(() {
-        debugPrint("all the selected");
-        isAllDataAvailable = true;
-      });
-    } else {
-      setState(() {});
-    }
-    setState(() {});
   }
 
   @override
@@ -301,7 +321,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                         child: DropdownSearch<String>(
                           items: (String filter, _) async {
                             return data.btcConstituency
-                                .map((constituency) => constituency.name)
+                                .map((BTCConstituency value) => value.name)
                                 .where((name) => name
                                     .toLowerCase()
                                     .contains(filter.toLowerCase()))
@@ -311,18 +331,18 @@ class _ContactDetailsState extends State<ContactDetails> {
                             showSearchBox: true,
                             searchFieldProps: const TextFieldProps(
                               decoration: InputDecoration(
-                                hintText: 'Search BTC constituency...',
+                                hintText: 'Search BTC Constituency...',
                                 prefixIcon: Icon(Icons.search),
                               ),
                             ),
                             showSelectedItems: true,
-                            disabledItemFn: (String s) => false,
+                            disabledItemFn: (String s) => s.startsWith('I'),
                           ),
                           decoratorProps: DropDownDecoratorProps(
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-                              labelText: 'BTC Constituency',
+                              labelText: 'BTC Constituency*',
                               errorText: errorMessages['btc_constituency'],
                               labelStyle: Configuration.primaryFont(
                                 fontSize: 14.sp,
@@ -336,162 +356,52 @@ class _ContactDetailsState extends State<ContactDetails> {
                               ),
                             ),
                           ),
-                          onChanged: (value) {
+                          onChanged: (String? value) {
+                            // "constituency_type": "ST",
+                            //                         "assembly_constituency_id": 11,
+                            //                         "district_id": 3,
+                            //                         "party_district_id": 7,
                             setState(() {
                               selectedBtcConstituency = data.btcConstituency
-                                  .firstWhere((c) => c.name == value)
+                                  .firstWhere((constituency) =>
+                                      constituency.name == value)
                                   .id;
-                              indexBtcAssemblyConstituency =
-                                  data.btcConstituency.indexWhere(
-                                      (e) => e.id == selectedBtcConstituency);
+                              listOfConstituencies =
+                                  data.btcAssemblyConstituencies[data
+                                      .btcConstituency
+                                      .indexWhere((constituency) =>
+                                          constituency.name == value)];
+                              filteredAssemblyConstituencies = data
+                                  .assemblyConstituencies
+                                  .where((e) => listOfConstituencies.any(
+                                      (f) => f.assemblyConstituencyId == e.id))
+                                  .toList();
+                              selectedAssembly = null;
+                              selectedDistrict = null;
+                              selectedPartyDistrict = null;
+                              selectedBooth = null;
+                              selectedPrimary = null;
                             });
-                            debugPrint(
-                                "selectedBtcAssemblyConstituency $indexBtcAssemblyConstituency");
+
+                            // setState(() {
+                            //   selectedDistrict = data.districts
+                            //       .firstWhere((e) => e.id == selected.)
+                            //       .id;
+                            //   selectedPartyDistrict = data.partyDistricts
+                            //       .firstWhere((e) => e.id == selected.id)
+                            //       .id;
+                            // });
                           },
                           selectedItem: selectedBtcConstituency != null
                               ? data.btcConstituency
                                   .firstWhere(
-                                      (c) => c.id == selectedBtcConstituency)
+                                      (constituency) =>
+                                          constituency.id ==
+                                          selectedBtcConstituency,
+                                      orElse: () => const BTCConstituency(
+                                          id: 0, name: '', status: 0))
                                   .name
-                              : null,
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 0.5.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.w,
-              ),
-              child: SizedBox(
-                height: 7.h,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Consumer<Repository>(
-                        builder: (context, Repository data, _) {
-                      return SizedBox(
-                        width: 50.w,
-                        child: DropdownSearch<String>(
-                          items: (String filter, _) async {
-                            return data.districts
-                                .map((district) => district.name)
-                                .where((name) => name
-                                    .toLowerCase()
-                                    .contains(filter.toLowerCase()))
-                                .toList();
-                          },
-                          popupProps: PopupProps.menu(
-                            showSearchBox: true,
-                            searchFieldProps: const TextFieldProps(
-                              decoration: InputDecoration(
-                                hintText: 'Search district...',
-                                prefixIcon: Icon(Icons.search),
-                              ),
-                            ),
-                            showSelectedItems: true,
-                            disabledItemFn: (String s) => false,
-                          ),
-                          decoratorProps: DropDownDecoratorProps(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'District*',
-                              errorText: errorMessages['district'],
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          onChanged: isAllDataAvailable
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    selectedDistrict = data.districts
-                                        .firstWhere((district) =>
-                                            district.name == value)
-                                        .id;
-                                  });
-                                },
-                          selectedItem: selectedDistrict != null
-                              ? data.districts
-                                  .firstWhere((district) =>
-                                      district.id == selectedDistrict)
-                                  .name
-                              : null,
-                        ),
-                      );
-                    }),
-                    Consumer<Repository>(
-                        builder: (context, Repository data, _) {
-                      return SizedBox(
-                        width: 40.w,
-                        child: DropdownSearch<String>(
-                          items: (String filter, _) async {
-                            return data.partyDistricts
-                                .map((district) => district.name)
-                                .where((name) => name
-                                    .toLowerCase()
-                                    .contains(filter.toLowerCase()))
-                                .toList();
-                          },
-                          popupProps: PopupProps.menu(
-                            showSearchBox: true,
-                            searchFieldProps: const TextFieldProps(
-                              decoration: InputDecoration(
-                                hintText: 'Search party district...',
-                                prefixIcon: Icon(Icons.search),
-                              ),
-                            ),
-                            showSelectedItems: true,
-                            disabledItemFn: (String s) => false,
-                          ),
-                          decoratorProps: DropDownDecoratorProps(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'Party District*',
-                              errorText: errorMessages['party_district'],
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          onChanged: isAllDataAvailable
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    selectedPartyDistrict = data.partyDistricts
-                                        .firstWhere((district) =>
-                                            district.name == value)
-                                        .id;
-                                  });
-                                },
-                          selectedItem: selectedPartyDistrict != null
-                              ? data.partyDistricts
-                                  .firstWhere((district) =>
-                                      district.id == selectedPartyDistrict)
-                                  .name
-                              : null,
+                              : '',
                         ),
                       );
                     }),
@@ -513,13 +423,8 @@ class _ContactDetailsState extends State<ContactDetails> {
                     child: Consumer<Repository>(builder: (context, data, _) {
                       return DropdownSearch<String>(
                         items: (String filter, _) async {
-                          return data.btcAssemblyConstituencies[
-                                  indexBtcAssemblyConstituency]
-                              .map((Constituency value) => data
-                                  .assemblyConstituencies
-                                  .firstWhere((e) =>
-                                      e.id == value.assemblyConstituencyId)
-                                  .name)
+                          return (filteredAssemblyConstituencies
+                                  .map((assembly) => assembly.name))
                               .where((name) => name
                                   .toLowerCase()
                                   .contains(filter.toLowerCase()))
@@ -529,12 +434,12 @@ class _ContactDetailsState extends State<ContactDetails> {
                           showSearchBox: true,
                           searchFieldProps: const TextFieldProps(
                             decoration: InputDecoration(
-                              hintText: 'Search Assembly Constituency...',
+                              hintText: 'Search assembly...',
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
                           showSelectedItems: true,
-                          disabledItemFn: (String s) => false,
+                          disabledItemFn: (String s) => s.startsWith('I'),
                         ),
                         decoratorProps: DropDownDecoratorProps(
                           decoration: InputDecoration(
@@ -554,129 +459,224 @@ class _ContactDetailsState extends State<ContactDetails> {
                             ),
                           ),
                         ),
-                        onChanged: (name) {
-                          if (name == null) return;
+                        onChanged: (String? value) {
                           setState(() {
-                            final constituency = data.assemblyConstituencies
-                                .firstWhere((e) => e.name == name);
-                            selectedBtcAssemblyConstituency = constituency.id;
-
-                            selectedDistrict = data.districts
-                                .firstWhere(
-                                  (district) =>
-                                      district.id ==
-                                      data.btcAssemblyConstituencies[
-                                          indexBtcAssemblyConstituency],
-                                )
-                                .id;
-                            debugPrint("selectedDistrict ");
+                            final selectedAssemblyObj =
+                                filteredAssemblyConstituencies.firstWhere(
+                              (assembly) => assembly.name == value,
+                              orElse: () =>
+                                  throw Exception("Assembly not found"),
+                            );
+                            currentConstituency =
+                                listOfConstituencies.firstWhere((e) =>
+                                    e.assemblyConstituencyId ==
+                                    selectedAssemblyObj.id);
+                            debugPrint(
+                                "selectedAssemblyObj ${selectedAssemblyObj.name}");
+                            selectedAssembly = selectedAssemblyObj.id;
+                            filteredDistricts = data.districts
+                                .where((e) => listOfConstituencies
+                                    .any((f) => f.districtId == e.id))
+                                .toList();
+                            filteredPartyDistricts = data.partyDistricts
+                                .where((e) => listOfConstituencies
+                                    .any((f) => f.partyDistrictId == e.id))
+                                .toList();
+                            selectedDistrict = listOfConstituencies
+                                .firstWhere((constituency) =>
+                                    constituency.assemblyConstituencyId ==
+                                    selectedAssemblyObj.id)
+                                .districtId;
+                            selectedPartyDistrict = listOfConstituencies
+                                .firstWhere((constituency) =>
+                                    constituency.assemblyConstituencyId ==
+                                    selectedAssemblyObj.id)
+                                .partyDistrictId;
+                            final assemblyConstituencyIds = listOfConstituencies
+                                .map((constituency) =>
+                                    constituency.assemblyConstituencyId)
+                                .toList();
+                            debugPrint(
+                                "Primaries $currentConstituency ! $selectedAssembly ${data.btcPrimariesList["${currentConstituency?.id}"]}");
+                            filteredPrimary = data
+                                .btcPrimariesList["${currentConstituency?.id}"]!
+                                .toList();
                           });
                         },
-                        onSaved: (String? name) {
-                          if (name == null) return;
-                          final tempList = data.btcAssemblyConstituencies[
-                                  indexBtcAssemblyConstituency]
-                              .map((Constituency value) => data
-                                  .assemblyConstituencies
-                                  .firstWhere((e) =>
-                                      e.id == value.assemblyConstituencyId)
-                                  .name)
-                              .toList();
-                          setState(() {});
-                        },
-                        selectedItem: selectedBtcAssemblyConstituency != null
-                            ? data.assemblyConstituencies
-                                .firstWhere((e) =>
-                                    e.id ==
-                                    data
-                                        .btcAssemblyConstituencies[
-                                            indexBtcAssemblyConstituency]
-                                        .first
-                                        .assemblyConstituencyId)
+                        selectedItem: selectedAssembly != null
+                            ? filteredAssemblyConstituencies
+                                .firstWhere(
+                                    (assembly) =>
+                                        assembly.id == selectedAssembly,
+                                    orElse: () => const AssemblyConstituency(
+                                        id: 0, name: ''))
                                 .name
-                            : null,
+                            : "",
                       );
                     }),
                   ),
                   SizedBox(
                     width: 2.w,
-                  ), // Add spacing between Expanded widgets
-                  Expanded(
-                    child: Consumer<Repository>(
-                      builder: (context, Repository data, _) {
-                        return DropdownSearch<String>(
-                          items: (String filter, _) async {
-                            var allPrimaries = data.btcPrimaries
-                                .expand((primaryList) => primaryList)
-                                .toList();
-                            return filter.isEmpty
-                                ? allPrimaries
-                                    .map((primary) => primary.name)
-                                    .toList()
-                                : allPrimaries
-                                    .map((primary) => primary.name)
-                                    .where((name) => name
-                                        .toLowerCase()
-                                        .contains(filter.toLowerCase()))
-                                    .toList();
+                  ), // Add spacing
+                  Consumer<Repository>(builder: (context, Repository data, _) {
+                    return SizedBox(
+                      width: 50.w,
+                      child: DropdownButtonFormField<int>(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'District*',
+                          errorText: errorMessages['district'],
+                          labelStyle: Configuration.primaryFont(
+                            fontSize: 14.sp,
+                            color: Colors.black54,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        items: filteredDistricts.map((District value) {
+                          return DropdownMenuItem<int>(
+                            value: value.id,
+                            child: Text(value.name),
+                          );
+                        }).toList(),
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            selectedDistrict = newValue;
+                          });
+                        },
+                        value: selectedDistrict,
+                      ),
+                    );
+                  }), // between Expanded widgets
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 0.5.h,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 4.w,
+              ),
+              child: SizedBox(
+                height: 7.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Consumer<Repository>(
+                        builder: (context, Repository data, _) {
+                      return SizedBox(
+                        width: 40.w,
+                        child: DropdownButtonFormField<int>(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'Party District *',
+                            errorText: errorMessages['party_district'],
+                            labelStyle: Configuration.primaryFont(
+                              fontSize: 14.sp,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          items:
+                              filteredPartyDistricts.map((PartyDistrict value) {
+                            return DropdownMenuItem<int>(
+                              value: value.id,
+                              child: Text(value.name),
+                            );
+                          }).toList(),
+                          onChanged: (int? newValue) {
+                            setState(() {
+                              selectedPartyDistrict = newValue;
+                            });
                           },
-                          popupProps: PopupProps.menu(
-                            showSearchBox: true,
-                            searchFieldProps: const TextFieldProps(
+                          value: selectedPartyDistrict,
+                        ),
+                      );
+                    }),
+                    Consumer<Repository>(
+                      builder: (context, Repository data, _) {
+                        return SizedBox(
+                          width: 50.w,
+                          child: DropdownSearch<String>(
+                            items: (String filter, _) async {
+                              return filteredPrimary
+                                  .map((Primary value) => value.name)
+                                  .where((name) => name
+                                      .toLowerCase()
+                                      .contains(filter.toLowerCase()))
+                                  .toList();
+                            },
+                            popupProps: PopupProps.menu(
+                              showSearchBox: true,
+                              searchFieldProps: const TextFieldProps(
+                                decoration: InputDecoration(
+                                  hintText: 'Search primary...',
+                                  prefixIcon: Icon(Icons.search),
+                                ),
+                              ),
+                              showSelectedItems: true,
+                              disabledItemFn: (String s) => s.startsWith('I'),
+                            ),
+                            decoratorProps: DropDownDecoratorProps(
                               decoration: InputDecoration(
-                                hintText: 'Search primary...',
-                                prefixIcon: Icon(Icons.search),
+                                filled: true,
+                                fillColor: Colors.white,
+                                labelText: 'Primary*',
+                                errorText: errorMessages['primary'],
+                                labelStyle: Configuration.primaryFont(
+                                  fontSize: 14.sp,
+                                  color: Colors.black54,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
-                            showSelectedItems: true,
-                            disabledItemFn: (String s) => false,
+                            onChanged: (String? value) {
+                              setState(() {
+                                selectedPrimary = filteredPrimary
+                                    .firstWhere(
+                                        (primary) => primary.name == value)
+                                    .id;
+                                filteredBooth = data.booths
+                                    .where((e) =>
+                                        e.btcPrimaryId == selectedPrimary)
+                                    .toList();
+                              });
+                            },
+                            selectedItem: selectedPrimary != null
+                                ? filteredPrimary
+                                    .firstWhere(
+                                        (primary) =>
+                                            primary.id == selectedPrimary,
+                                        orElse: () => Primary(
+                                            id: 0,
+                                            name: '',
+                                            btcAssemblyConstituencyId: 0))
+                                    .name
+                                : "",
                           ),
-                          decoratorProps: DropDownDecoratorProps(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'Primary',
-                              errorText: errorMessages['primary'],
-                              labelStyle: Configuration.primaryFont(
-                                fontSize: 14.sp,
-                                color: Colors.black54,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          onChanged: isAllDataAvailable
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    selectPrimary = data.btcPrimaries
-                                        .expand((primaryList) => primaryList)
-                                        .firstWhere(
-                                            (primary) => primary.name == value)
-                                        .id;
-                                  });
-                                },
-                          selectedItem: selectPrimary != null
-                              ? data.btcPrimaries
-                                  .expand((primaryList) => primaryList)
-                                  .firstWhere(
-                                    (primary) => primary.id == selectPrimary,
-                                    orElse: () => const Primary(
-                                        id: 0,
-                                        name: '',
-                                        btcAssemblyConstituencyId: 0),
-                                  )
-                                  .name
-                              : null,
                         );
                       },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -690,7 +690,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                 ),
                 child: DropdownSearch<String>(
                   items: (String filter, _) async {
-                    return data.booths
+                    return filteredBooth
                         .map((booth) => booth.name)
                         .where((name) =>
                             name.toLowerCase().contains(filter.toLowerCase()))
@@ -711,7 +711,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Enter Your Booth',
+                      labelText: 'Booth*',
                       errorText: errorMessages['booth'],
                       labelStyle: Configuration.primaryFont(
                         fontSize: 14.sp,
@@ -725,20 +725,20 @@ class _ContactDetailsState extends State<ContactDetails> {
                       ),
                     ),
                   ),
-                  onChanged: isAllDataAvailable
-                      ? null
-                      : (value) {
-                          setState(() {
-                            selectBooth = data.booths
-                                .firstWhere((booth) => booth.name == value)
-                                .id;
-                          });
-                        },
-                  selectedItem: data.booths
-                      .firstWhere((booth) => booth.id.toString() == selectBooth,
-                          orElse: () =>
-                              const Booth(id: 0, name: '', btcPrimaryId: 0))
-                      .name,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedBooth = filteredBooth
+                          .firstWhere((booth) => booth.name == value)
+                          .id;
+                    });
+                  },
+                  selectedItem: selectedBooth != null
+                      ? filteredBooth
+                          .firstWhere((booth) => booth.id == selectedBooth,
+                              orElse: () =>
+                                  const Booth(id: 0, name: '', btcPrimaryId: 0))
+                          .name
+                      : "",
                 ),
               );
             }),
@@ -752,19 +752,13 @@ class _ContactDetailsState extends State<ContactDetails> {
                 ),
                 child: DropdownSearch<String>(
                   items: (String filter, _) async {
-                    var filteredVillages = data.villages
-                        .where((village) => village.name
-                            .toLowerCase()
-                            .contains(filter.toLowerCase()))
+                    var villageNames = data.villages
                         .map((village) => village.name)
-                        .toList()
-                      ..sort();
-
-                    if (filter.isEmpty ||
-                        "Other".toLowerCase().contains(filter.toLowerCase())) {
-                      filteredVillages.add("Other");
-                    }
-                    return filteredVillages;
+                        .where((name) =>
+                            name.toLowerCase().contains(filter.toLowerCase()))
+                        .toList();
+                    villageNames.add("Other"); // Add "Other" option
+                    return villageNames;
                   },
                   popupProps: PopupProps.menu(
                     showSearchBox: true,
@@ -775,7 +769,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                       ),
                     ),
                     showSelectedItems: true,
-                    disabledItemFn: (String s) => false,
+                    disabledItemFn: (String s) => s.startsWith('I'),
                   ),
                   decoratorProps: DropDownDecoratorProps(
                     decoration: InputDecoration(
@@ -795,26 +789,23 @@ class _ContactDetailsState extends State<ContactDetails> {
                       ),
                     ),
                   ),
-                  onChanged: isAllDataAvailable
-                      ? null
-                      : (value) {
-                          setState(() {
-                            if (value == "Other") {
-                              selectVillage = 0; // Some identifier for "Other"
-                            } else {
-                              selectVillage = data.villages
-                                  .firstWhere(
-                                      (village) => village.name == value)
-                                  .id;
-                            }
-                          });
-                        },
-                  selectedItem: selectVillage == 0
+                  onChanged: (String? value) {
+                    setState(() {
+                      if (value == "Other") {
+                        selectedVillage = 0; // Some identifier for "Other"
+                      } else {
+                        selectedVillage = data.villages
+                            .firstWhere((village) => village.name == value)
+                            .id;
+                      }
+                    });
+                  },
+                  selectedItem: selectedVillage == 0
                       ? "Other"
-                      : selectVillage != null
+                      : selectedVillage != null
                           ? data.villages
                               .firstWhere(
-                                (village) => village.id == selectVillage,
+                                (village) => village.id == selectedVillage,
                                 orElse: () =>
                                     const Village(id: 0, name: '', vcdc: ""),
                               )
@@ -827,7 +818,7 @@ class _ContactDetailsState extends State<ContactDetails> {
               height: 1.5.h,
             ),
             Visibility(
-              visible: selectVillage == 0,
+              visible: selectedVillage == 0,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 4.w,
@@ -869,7 +860,7 @@ class _ContactDetailsState extends State<ContactDetails> {
               child: Configuration.rectangleButton(
                 onPressed: () {
                   updateContactDetails(context);
-                  debugPrint("${selectVillage}");
+                  debugPrint("${selectedVillage}");
                 },
                 text: "Save",
                 fontSize: 15.sp,
@@ -887,22 +878,25 @@ class _ContactDetailsState extends State<ContactDetails> {
     Future<void> attemptUpdate() async {
       final response = await ApiService.instance(context).updateContactDetails(
           context,
-          Provider.of<Repository>(context, listen: false).profileData?.userId,
+          Provider.of<Repository>(context, listen: false)
+              .memberData
+              ?.personalDetails
+              .memberId,
           "",
           address.text,
           pincode.text,
           selectedBtcConstituency,
-          selectConstituency,
+          selectedAssembly,
           selectedDistrict,
           selectedPartyDistrict,
-          selectPrimary,
-          selectBooth,
-          selectVillage == 0
+          selectedPrimary,
+          selectedBooth,
+          selectedVillage == 0
               ? "other"
               : Provider.of<Repository>(context, listen: false)
                   .villages
-                  .firstWhere((e) => e.id == selectVillage)
-                  .name,
+                  .firstWhere((e) => e.id == selectedVillage)
+                  .id,
           otherVillage ?? "");
 
       if (response.status == 1 ?? false) {
